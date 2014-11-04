@@ -6,5 +6,6 @@
 
     <style name="OpencbsActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#1e97ce</item>
+        <item name="android:icon">@drawable/icon</item>
     </style>
 </resources>
