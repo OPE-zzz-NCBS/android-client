@@ -14,7 +14,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EndpointFragment fragment = new EndpointFragment();
+//        EndpointFragment fragment = new EndpointFragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.mainFrameLayout, fragment);
+//        transaction.commit();
+
+        LoginFragment fragment = new LoginFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout, fragment);
         transaction.commit();

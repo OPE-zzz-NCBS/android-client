@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class EndpointFragment extends Fragment {
+public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,6 +15,6 @@ public class EndpointFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_endpoint, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 }
