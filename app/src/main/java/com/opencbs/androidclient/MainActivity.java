@@ -7,22 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnEndpointSaveListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        EndpointFragment fragment = new EndpointFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.mainFrameLayout, fragment);
-//        transaction.commit();
+        showEndpointFragment();
 
-        LoginFragment fragment = new LoginFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainFrameLayout, fragment);
-        transaction.commit();
     }
 
 
@@ -46,5 +39,26 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onEndpointSaved() {
+        showLoginFragment();
+    }
+
+    private void showEndpointFragment() {
+        setTitle("Configure");
+        EndpointFragment fragment = new EndpointFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, fragment);
+        transaction.commit();
+    }
+
+    private void showLoginFragment() {
+        setTitle("Login");
+        LoginFragment fragment = new LoginFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, fragment);
+        transaction.commit();
     }
 }
