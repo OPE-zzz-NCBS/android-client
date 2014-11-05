@@ -17,7 +17,13 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        updateState(State.ENDPOINT);
+
+        String endpoint = Settings.getEndpoint(this);
+        if (endpoint.isEmpty()) {
+            updateState(State.ENDPOINT);
+        } else {
+            updateState(State.LOGIN);
+        }
     }
 
     @Override
@@ -39,6 +45,10 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
         if (id == R.id.action_login_configure) {
             updateState(State.ENDPOINT);
             return true;
+        }
+
+        if (id == android.R.id.home && mState == State.ENDPOINT) {
+            updateState(State.LOGIN);
         }
 
         return super.onOptionsItemSelected(item);
@@ -69,10 +79,12 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
         mState = state;
         switch (mState) {
             case ENDPOINT:
+                getActionBar().setDisplayHomeAsUpEnabled(true);
                 showEndpointFragment();
                 break;
 
             case LOGIN:
+                getActionBar().setDisplayHomeAsUpEnabled(false);
                 showLoginFragment();
                 break;
 

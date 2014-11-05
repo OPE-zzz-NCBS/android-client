@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class EndpointFragment extends Fragment {
@@ -16,16 +17,24 @@ public class EndpointFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_endpoint, container, false);
+        final View view = inflater.inflate(R.layout.fragment_endpoint, container, false);
 
-        Button button = (Button) view.findViewById(R.id.saveAddressButton);
+        Button button = (Button) view.findViewById(R.id.endpoint_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText endpointEditText = (EditText) view.findViewById(R.id.endpoint_edit_text);
+                String endpoint = endpointEditText.getText().toString();
+                Settings.setEndpoint(getActivity(), endpoint);
+
                 OnEndpointSaveListener listener = (OnEndpointSaveListener) getActivity();
                 listener.onEndpointSaved();
             }
         });
+
+        String endpoint = Settings.getEndpoint(getActivity());
+        EditText endpointEditText = (EditText) view.findViewById(R.id.endpoint_edit_text);
+        endpointEditText.setText(endpoint);
 
         return view;
     }
