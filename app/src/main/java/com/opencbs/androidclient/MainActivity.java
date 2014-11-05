@@ -47,7 +47,7 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
     }
 
     private void showEndpointFragment() {
-        setTitle("Configure");
+        setTitle(getString(R.string.configure));
         EndpointFragment fragment = new EndpointFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout, fragment);
@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
     }
 
     private void showLoginFragment() {
-        setTitle("Login");
+        setTitle(getString(R.string.login));
         LoginFragment fragment = new LoginFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout, fragment);
