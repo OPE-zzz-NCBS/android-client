@@ -3,11 +3,17 @@ package com.opencbs.androidclient;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 
 
-public class MainActivity extends Activity implements OnEndpointSaveListener {
+public class MainActivity extends Activity implements OnEndpointSaveListener, OnLoginListener {
 
     private enum State {ENDPOINT, LOGIN, DASHBOARD}
 
@@ -59,6 +65,35 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
         updateState(State.LOGIN);
     }
 
+    @Override
+    public void onLogin(String username, String password) {
+        Session session = new Session();
+        session.username = username;
+        session.password = password;
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Settings.getEndpoint(this)).build();
+        SessionService sessionService = restAdapter.create(SessionService.class);
+        sessionService.login(session, new Callback<Session>() {
+            @Override
+            public void success(Session session, retrofit.client.Response response) {
+                Log.d("OPENCBS", session.token);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (error.getResponse() != null) {
+                    if (error.getResponse().getStatus() == 401) {
+                        showMessage(getString(R.string.invalid_username_or_password));
+                    } else {
+                        showMessage(getString(R.string.error_) + error.getResponse().getStatus());
+                    }
+                } else {
+                    showMessage(getString(R.string.unknown_error));
+                }
+            }
+        });
+    }
+
     private void showEndpointFragment() {
         setTitle(getString(R.string.configure));
         EndpointFragment fragment = new EndpointFragment();
@@ -73,6 +108,10 @@ public class MainActivity extends Activity implements OnEndpointSaveListener {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout, fragment);
         transaction.commit();
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void updateState(State state) {

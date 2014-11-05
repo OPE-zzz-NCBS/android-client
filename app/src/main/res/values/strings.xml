@@ -11,5 +11,8 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="configure">Configure</string>
+    <string name="invalid_username_or_password">Invalid username or password.</string>
+    <string name="unknown_error">Unknown error.</string>
+    <string name="error_">"Error: "</string>
 
 </resources>
