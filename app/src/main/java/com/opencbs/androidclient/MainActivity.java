@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
                         showMessage(getString(R.string.error_) + error.getResponse().getStatus());
                     }
                 } else {
-                    showMessage(getString(R.string.unknown_error));
+                    showMessage(error.getMessage());
                 }
             }
         });
