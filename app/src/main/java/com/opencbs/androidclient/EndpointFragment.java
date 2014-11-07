@@ -27,8 +27,8 @@ public class EndpointFragment extends Fragment {
                 String endpoint = endpointEditText.getText().toString();
                 Settings.setEndpoint(getActivity(), endpoint);
 
-                OnEndpointSaveListener listener = (OnEndpointSaveListener) getActivity();
-                listener.onEndpointSaved();
+                EndpointListener listener = (EndpointListener) getActivity();
+                listener.saveEndpoint();
             }
         });
 
