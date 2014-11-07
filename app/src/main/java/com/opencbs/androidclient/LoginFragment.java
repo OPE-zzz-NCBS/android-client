@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import retrofit.Callback;
@@ -15,6 +16,10 @@ import retrofit.RetrofitError;
 
 
 public class LoginFragment extends Fragment {
+
+    private Button mLoginButton;
+    private ProgressBar mProgressBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +29,10 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button button = (Button) view.findViewById(R.id.login_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        mLoginButton = (Button) view.findViewById(R.id.login_button);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.login_progress_bar);
+
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = ((EditText) view.findViewById(R.id.username_edit_text)).getText().toString();
@@ -37,6 +44,8 @@ public class LoginFragment extends Fragment {
     }
 
     public void login(String username, String password) {
+        startLogin();
+
         Session session = new Session();
         session.username = username;
         session.password = password;
@@ -46,6 +55,7 @@ public class LoginFragment extends Fragment {
         sessionService.login(session, new Callback<Session>() {
             @Override
             public void success(Session session, retrofit.client.Response response) {
+                stopLogin();
                 Settings.setAccessToken(getActivity(), session.token);
                 LoginListener listener = (LoginListener) getActivity();
                 listener.login();
@@ -53,6 +63,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError error) {
+                stopLogin();
                 if (error.getResponse() != null) {
                     if (error.getResponse().getStatus() == 401) {
                         showMessage(getString(R.string.invalid_username_or_password));
@@ -68,5 +79,15 @@ public class LoginFragment extends Fragment {
 
     private void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void startLogin() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLoginButton.setEnabled(false);
+    }
+
+    private void stopLogin() {
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mLoginButton.setEnabled(true);
     }
 }
