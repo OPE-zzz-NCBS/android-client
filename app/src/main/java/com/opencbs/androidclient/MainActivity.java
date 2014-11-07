@@ -2,6 +2,7 @@ package com.opencbs.androidclient;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,10 +26,13 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
         setContentView(R.layout.activity_main);
 
         String endpoint = Settings.getEndpoint(this);
+        String accessToken = Settings.getAccessToken(this);
         if (endpoint.isEmpty()) {
             updateState(State.ENDPOINT);
-        } else {
+        } else if (accessToken.isEmpty()) {
             updateState(State.LOGIN);
+        } else {
+            updateState(State.DASHBOARD);
         }
     }
 
@@ -67,6 +71,7 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
 
     @Override
     public void onLogin(String username, String password) {
+        final Context context = this;
         Session session = new Session();
         session.username = username;
         session.password = password;
@@ -76,7 +81,8 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
         sessionService.login(session, new Callback<Session>() {
             @Override
             public void success(Session session, retrofit.client.Response response) {
-                Log.d("OPENCBS", session.token);
+                Settings.setAccessToken(context, session.token);
+                updateState(State.DASHBOARD);
             }
 
             @Override
@@ -110,6 +116,14 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
         transaction.commit();
     }
 
+    private void showDashboardFragment() {
+        setTitle(getString(R.string.dashboard));
+        DashboardFragment fragment = new DashboardFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, fragment);
+        transaction.commit();
+    }
+
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
@@ -128,6 +142,7 @@ public class MainActivity extends Activity implements OnEndpointSaveListener, On
                 break;
 
             case DASHBOARD:
+                showDashboardFragment();
                 break;
         }
         invalidateOptionsMenu();
