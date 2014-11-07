@@ -41,7 +41,7 @@ public class LoginFragment extends Fragment {
         session.username = username;
         session.password = password;
 
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Settings.getEndpoint(getActivity())).build();
+        RestAdapter restAdapter = Factory.getRestAdapter(getActivity());
         SessionService sessionService = restAdapter.create(SessionService.class);
         sessionService.login(session, new Callback<Session>() {
             @Override
