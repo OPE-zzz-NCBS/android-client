@@ -1,6 +1,8 @@
 package com.opencbs.androidclient;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -38,6 +40,11 @@ public class MainActivity extends Activity implements ListView.OnItemClickListen
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ClientsFragment fragment = new ClientsFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame_layout, fragment);
+        transaction.commit();
     }
 
     @Override
