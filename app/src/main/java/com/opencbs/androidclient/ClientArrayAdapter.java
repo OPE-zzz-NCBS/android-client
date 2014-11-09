@@ -24,8 +24,10 @@ public class ClientArrayAdapter extends ProgressAdapter<Client> {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.layout_client_row, parent, false);
         TextView nameTextView = (TextView) rowView.findViewById(R.id.client_name_text_view);
-        String name = mClients.get(position).name;
-        nameTextView.setText(name);
+        TextView typeTextView = (TextView) rowView.findViewById(R.id.client_type_text_view);
+        Client client = mClients.get(position);
+        nameTextView.setText(client.name);
+        typeTextView.setText(client.type);
         return rowView;
     }
 }

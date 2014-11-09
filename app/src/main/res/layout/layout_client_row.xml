@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New Text"
         android:id="@+id/client_name_text_view"
-        android:paddingTop="16dp"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:text="CLIENT_NAME" />
+
+    <TextView
+        android:id="@+id/client_type_text_view"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="CLIENT_TYPE"
+        android:textColor="#999999"
+        android:textSize="10sp"/>
 </LinearLayout>
