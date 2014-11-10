@@ -1,77 +1,103 @@
 package com.opencbs.androidclient;
 
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ClientsFragment extends ListFragment {
+public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ArrayList<Client> mClients;
     private ClientArrayAdapter mAdapter;
     private ClientService mClientService;
 
     private int mOffset;
-    private final static int mLimit = 100;
+    private final static int LIMIT = 25;
     private int mCount = 0;
     private boolean mIncludeCount = true;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mClients = new ArrayList<Client>();
-        mAdapter = new ClientArrayAdapter(getActivity(), mClients);
-        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                loadMore();
-            }
-        });
-        mOffset = 0;
-        setListAdapter(mAdapter);
-
-        RestAdapter restAdapter = Factory.getRestAdapter(getActivity());
-        mClientService = restAdapter.create(ClientService.class);
-
-        loadMore();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_clients, container, false);
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-//        String item = (String) getListAdapter().getItem(position);
-//        Toast.makeText(getActivity(), item + " selected", Toast.LENGTH_LONG).show();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mClients = new ArrayList<Client>();
+        mAdapter = new ClientArrayAdapter(getActivity(), mClients);
+        mAdapter.setOnLoadMoreListener(this);
+        mOffset = 0;
+        ListView listView = (ListView) view.findViewById(R.id.clients_list_view);
+        listView.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.clients_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        RestAdapter restAdapter = Factory.getRestAdapter(getActivity());
+        mClientService = restAdapter.create(ClientService.class);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onRefresh();
+            }
+        }, 100);
     }
 
-    private void loadMore() {
+    @Override
+    public void onRefresh() {
+        mOffset = 0;
+        mIncludeCount = true;
+        mClients.clear();
+        mAdapter.setComplete(false);
+        onLoadMore();
+    }
+
+    @Override
+    public void onLoadMore() {
         mAdapter.setLoading(true);
-        mClientService.getClients(mOffset, mLimit, mIncludeCount, new Callback<ClientsResponse>() {
+        mAdapter.notifyDataSetChanged();
+        if (!mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        mClientService.getClients(mOffset, LIMIT, mIncludeCount, new Callback<ClientsResponse>() {
             @Override
             public void success(ClientsResponse clientsResponse, Response response) {
                 if (mIncludeCount) {
                     mIncludeCount = false;
                     mCount = clientsResponse.count;
                 }
-                for (Client client : clientsResponse.items) {
-                    mClients.add(client);
-                }
-                mOffset += mLimit;
+
+                Collections.addAll(mClients, clientsResponse.items);
+
+                mOffset += LIMIT;
                 if (mOffset >= mCount) {
                     mAdapter.setComplete(true);
                 }
                 mAdapter.setLoading(false);
+                mAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 mAdapter.setLoading(false);
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.notifyDataSetChanged();
             }
         });
     }

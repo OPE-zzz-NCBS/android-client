@@ -32,12 +32,10 @@ public abstract class ProgressAdapter<T> extends BaseAdapter {
 
     public void setComplete(boolean complete) {
         mComplete = complete;
-        notifyDataSetChanged();
     }
 
     public void setLoading(boolean loading) {
         mLoading = loading;
-        notifyDataSetChanged();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
