@@ -19,21 +19,22 @@ public class ClientsFragment extends ListFragment {
     private ClientService mClientService;
 
     private int mOffset;
-    private final static int mLimit = 25;
+    private final static int mLimit = 100;
+    private int mCount = 0;
+    private boolean mIncludeCount = true;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getListView().setOnScrollListener(new EndlessScrollListener() {
+        mClients = new ArrayList<Client>();
+        mAdapter = new ClientArrayAdapter(getActivity(), mClients);
+        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore(int page, int totalItemsCount) {
+            public void onLoadMore() {
                 loadMore();
             }
         });
-
-        mClients = new ArrayList<Client>();
-        mAdapter = new ClientArrayAdapter(getActivity(), mClients);
         mOffset = 0;
         setListAdapter(mAdapter);
 
@@ -50,18 +51,27 @@ public class ClientsFragment extends ListFragment {
     }
 
     private void loadMore() {
-        mClientService.getClients(mOffset, mLimit, new Callback<ClientsResponse>() {
+        mAdapter.setLoading(true);
+        mClientService.getClients(mOffset, mLimit, mIncludeCount, new Callback<ClientsResponse>() {
             @Override
             public void success(ClientsResponse clientsResponse, Response response) {
+                if (mIncludeCount) {
+                    mIncludeCount = false;
+                    mCount = clientsResponse.count;
+                }
                 for (Client client : clientsResponse.items) {
                     mClients.add(client);
                 }
                 mOffset += mLimit;
-                mAdapter.notifyDataSetChanged();
+                if (mOffset >= mCount) {
+                    mAdapter.setComplete(true);
+                }
+                mAdapter.setLoading(false);
             }
 
             @Override
             public void failure(RetrofitError error) {
+                mAdapter.setLoading(false);
             }
         });
     }
