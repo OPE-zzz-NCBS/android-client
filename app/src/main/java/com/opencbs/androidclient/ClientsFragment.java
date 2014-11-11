@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, OnSearchListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -29,6 +30,7 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private final static int LIMIT = 25;
     private int mCount = 0;
     private boolean mIncludeCount = true;
+    private String mQuery = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,12 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
+    public void onSearch(String query) {
+        mQuery = query;
+        onRefresh();
+    }
+
+    @Override
     public void onLoadMore() {
         mAdapter.setLoading(true);
         mAdapter.notifyDataSetChanged();
@@ -74,7 +82,7 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             mSwipeRefreshLayout.setRefreshing(true);
         }
 
-        mClientService.getClients(mOffset, LIMIT, mIncludeCount, new Callback<ClientsResponse>() {
+        Callback<ClientsResponse> callback = new Callback<ClientsResponse>() {
             @Override
             public void success(ClientsResponse clientsResponse, Response response) {
                 if (mIncludeCount) {
@@ -99,6 +107,12 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.notifyDataSetChanged();
             }
-        });
+        };
+
+        if (mQuery.isEmpty()) {
+            mClientService.getAll(mOffset, LIMIT, mIncludeCount, callback);
+        } else {
+            mClientService.search(mOffset, LIMIT, mIncludeCount, mQuery, callback);
+        }
     }
 }

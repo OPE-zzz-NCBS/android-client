@@ -6,8 +6,15 @@ import retrofit.http.Query;
 
 public interface ClientService {
     @GET("/api/clients")
-    void getClients(@Query("offset") int offset,
-                    @Query("limit") int limit,
-                    @Query("includeCount") boolean includeCount,
-                    Callback<ClientsResponse> callback);
+    void getAll(@Query("offset") int offset,
+                @Query("limit") int limit,
+                @Query("includeCount") boolean includeCount,
+                Callback<ClientsResponse> callback);
+
+    @GET("/api/clients")
+    void search(@Query("offset") int offset,
+                @Query("limit") int limit,
+                @Query("includeCount") boolean includeCount,
+                @Query("query") String query,
+                Callback<ClientsResponse> callback);
 }
