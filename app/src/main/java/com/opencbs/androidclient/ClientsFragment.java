@@ -1,12 +1,14 @@
 package com.opencbs.androidclient;
 
 import android.app.Fragment;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import retrofit.client.Response;
 public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, OnSearchListener {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LinearLayout mProgressLayout;
 
     private ArrayList<Client> mClients;
     private ClientArrayAdapter mAdapter;
@@ -48,50 +51,33 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.clients_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mProgressLayout = (LinearLayout) view.findViewById(R.id.progress_layout);
+
         RestAdapter restAdapter = Factory.getRestAdapter(getActivity());
         mClientService = restAdapter.create(ClientService.class);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                onRefresh();
-            }
-        }, 100);
+        load();
+    }
+
+    @Override
+    public void onSearch(String query) {
+        mQuery = query;
+        load();
     }
 
     @Override
     public void onRefresh() {
         mOffset = 0;
         mIncludeCount = true;
-        mClients.clear();
-        mAdapter.setComplete(false);
-        onLoadMore();
-    }
-
-    @Override
-    public void onSearch(String query) {
-        mQuery = query;
-        onRefresh();
-    }
-
-    @Override
-    public void onLoadMore() {
-        mAdapter.setLoading(true);
-        mAdapter.notifyDataSetChanged();
-        if (!mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
 
         Callback<ClientsResponse> callback = new Callback<ClientsResponse>() {
             @Override
             public void success(ClientsResponse clientsResponse, Response response) {
-                if (mIncludeCount) {
-                    mIncludeCount = false;
-                    mCount = clientsResponse.count;
-                }
-
+                mIncludeCount = false;
+                mCount = clientsResponse.count;
+                mClients.clear();
                 Collections.addAll(mClients, clientsResponse.items);
-
                 mOffset += LIMIT;
                 if (mOffset >= mCount) {
                     mAdapter.setComplete(true);
@@ -103,12 +89,74 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             @Override
             public void failure(RetrofitError error) {
+
+            }
+        };
+
+        fireLoad(callback);
+    }
+
+    @Override
+    public void onLoadMore() {
+        mAdapter.setLoading(true);
+        mAdapter.notifyDataSetChanged();
+
+        Callback<ClientsResponse> callback = new Callback<ClientsResponse>() {
+            @Override
+            public void success(ClientsResponse clientsResponse, Response response) {
+                Collections.addAll(mClients, clientsResponse.items);
+                mOffset += LIMIT;
+                if (mOffset >= mCount) {
+                    mAdapter.setComplete(true);
+                }
+                mAdapter.setLoading(false);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
                 mAdapter.setLoading(false);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.notifyDataSetChanged();
             }
         };
 
+        fireLoad(callback);
+    }
+
+    private void load() {
+        mSwipeRefreshLayout.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setEnabled(false);
+        mOffset = 0;
+        mIncludeCount = true;
+
+        Callback<ClientsResponse> callback = new Callback<ClientsResponse>() {
+            @Override
+            public void success(ClientsResponse clientsResponse, Response response) {
+                mIncludeCount = false;
+                mCount = clientsResponse.count;
+                Collections.addAll(mClients, clientsResponse.items);
+                mOffset += LIMIT;
+                if (mOffset >= mCount) {
+                    mAdapter.setComplete(true);
+                }
+                mAdapter.setLoading(false);
+                mAdapter.notifyDataSetChanged();
+                mProgressLayout.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+                mSwipeRefreshLayout.setEnabled(true);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        };
+
+        fireLoad(callback);
+    }
+
+    private void fireLoad(Callback<ClientsResponse> callback) {
         if (mQuery.isEmpty()) {
             mClientService.getAll(mOffset, LIMIT, mIncludeCount, callback);
         } else {
