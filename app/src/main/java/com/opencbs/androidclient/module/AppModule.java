@@ -1,15 +1,17 @@
 package com.opencbs.androidclient.module;
 
+import android.content.Context;
+
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.ui.ClientsFragment;
 import com.opencbs.androidclient.ui.LoginActivity;
 import com.opencbs.androidclient.ui.MainActivity;
-import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.greenrobot.event.EventBus;
 
 @Module(
         injects = {
@@ -29,7 +31,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Bus provideBus() {
-        return new Bus();
+    public Context provideApplicationContext() {
+        return app;
+    }
+
+    @Provides
+    @Singleton
+    public EventBus provideBus() {
+        return new EventBus();
     }
 }
