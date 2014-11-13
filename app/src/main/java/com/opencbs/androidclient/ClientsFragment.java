@@ -12,8 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.squareup.otto.Bus;
+
 import java.util.ArrayList;
 import java.util.Collections;
+
+import javax.inject.Inject;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -34,6 +38,9 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private int mCount = 0;
     private boolean mIncludeCount = true;
     private String mQuery = "";
+
+    @Inject
+    public ClientsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

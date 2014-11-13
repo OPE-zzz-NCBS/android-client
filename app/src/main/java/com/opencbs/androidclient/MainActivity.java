@@ -16,16 +16,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.opencbs.androidclient.ui.BaseActivity;
+
+import javax.inject.Inject;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainActivity extends Activity implements ListView.OnItemClickListener {
+public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private Fragment mFragment;
+    @Inject ClientsFragment clientsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,8 @@ public class MainActivity extends Activity implements ListView.OnItemClickListen
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mFragment = new ClientsFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame_layout, mFragment);
+        transaction.replace(R.id.main_frame_layout, clientsFragment);
         transaction.commit();
     }
 
@@ -59,7 +62,7 @@ public class MainActivity extends Activity implements ListView.OnItemClickListen
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchItem.collapseActionView();
-                OnSearchListener listener = (OnSearchListener) mFragment;
+                OnSearchListener listener = (OnSearchListener) clientsFragment;
                 if (listener != null) {
                     listener.onSearch(query);
                 }
