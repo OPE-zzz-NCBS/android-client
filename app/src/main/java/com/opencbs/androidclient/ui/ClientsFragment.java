@@ -1,4 +1,4 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.ui;
 
 import android.app.Fragment;
 import android.opengl.Visibility;
@@ -12,6 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.opencbs.androidclient.Client;
+import com.opencbs.androidclient.ClientArrayAdapter;
+import com.opencbs.androidclient.ClientService;
+import com.opencbs.androidclient.ClientsResponse;
+import com.opencbs.androidclient.Factory;
+import com.opencbs.androidclient.OnLoadMoreListener;
+import com.opencbs.androidclient.OnSearchListener;
+import com.opencbs.androidclient.R;
 import com.squareup.otto.Bus;
 
 import java.util.ArrayList;

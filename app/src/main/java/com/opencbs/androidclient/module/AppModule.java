@@ -1,9 +1,9 @@
 package com.opencbs.androidclient.module;
 
 import com.opencbs.androidclient.App;
-import com.opencbs.androidclient.ClientsFragment;
-import com.opencbs.androidclient.LoginActivity;
-import com.opencbs.androidclient.MainActivity;
+import com.opencbs.androidclient.ui.ClientsFragment;
+import com.opencbs.androidclient.ui.LoginActivity;
+import com.opencbs.androidclient.ui.MainActivity;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;

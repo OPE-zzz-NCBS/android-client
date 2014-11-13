@@ -1,4 +1,4 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -7,6 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.opencbs.androidclient.EndpointFragment;
+import com.opencbs.androidclient.EndpointListener;
+import com.opencbs.androidclient.LoginFragment;
+import com.opencbs.androidclient.LoginListener;
+import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.Settings;
 
 public class LoginActivity extends Activity implements LoginListener, EndpointListener {
 
