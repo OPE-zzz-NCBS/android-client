@@ -1,4 +1,4 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.ui;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,6 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.opencbs.androidclient.Factory;
+import com.opencbs.androidclient.LoginListener;
+import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.Session;
+import com.opencbs.androidclient.SessionService;
+import com.opencbs.androidclient.Settings;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;

@@ -1,4 +1,4 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.ui;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.opencbs.androidclient.EndpointListener;
+import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.Settings;
 
 
 public class EndpointFragment extends Fragment {
