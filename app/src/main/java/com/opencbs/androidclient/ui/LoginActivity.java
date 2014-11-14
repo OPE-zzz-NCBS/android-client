@@ -1,7 +1,6 @@
 package com.opencbs.androidclient.ui;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,15 +8,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.opencbs.androidclient.EndpointListener;
-import com.opencbs.androidclient.LoginListener;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.event.LoginSuccessEvent;
 
-public class LoginActivity extends Activity implements LoginListener, EndpointListener {
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
+
+public class LoginActivity extends BaseActivity implements EndpointListener {
 
     private enum State {ENDPOINT, LOGIN}
 
-    State mState;
+    State state;
+
+    @Inject
+    LoginFragment loginFragment;
+
+    @Inject
+    EndpointFragment endpointFragment;
+
+    @Inject
+    EventBus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +51,23 @@ public class LoginActivity extends Activity implements LoginListener, EndpointLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mState == State.LOGIN) {
+        if (state == State.LOGIN) {
             getMenuInflater().inflate(R.menu.menu_login, menu);
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bus.unregister(this);
     }
 
     @Override
@@ -55,15 +79,15 @@ public class LoginActivity extends Activity implements LoginListener, EndpointLi
             return true;
         }
 
-        if (id == android.R.id.home && mState == State.ENDPOINT) {
+        if (id == android.R.id.home && state == State.ENDPOINT) {
             setState(State.LOGIN);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void login() {
+    public void onEvent(LoginSuccessEvent event) {
+        Settings.setAccessToken(this, event.session.token);
         openMainActivity();
     }
 
@@ -80,24 +104,22 @@ public class LoginActivity extends Activity implements LoginListener, EndpointLi
 
     private void showEndpointFragment() {
         setTitle(getString(R.string.configure));
-        EndpointFragment fragment = new EndpointFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.login_frame_layout, fragment);
+        transaction.replace(R.id.login_frame_layout, endpointFragment);
         transaction.commit();
     }
 
     private void showLoginFragment() {
         setTitle(getString(R.string.login));
-        LoginFragment fragment = new LoginFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.login_frame_layout, fragment);
+        transaction.replace(R.id.login_frame_layout, loginFragment);
         transaction.commit();
     }
 
     private void setState(State state) {
         ActionBar actionBar = getActionBar();
-        mState = state;
-        switch (mState) {
+        this.state = state;
+        switch (this.state) {
             case ENDPOINT:
                 if (actionBar != null) {
                     actionBar.setDisplayHomeAsUpEnabled(true);

@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.ui.ClientsFragment;
+import com.opencbs.androidclient.ui.EndpointFragment;
 import com.opencbs.androidclient.ui.LoginActivity;
+import com.opencbs.androidclient.ui.LoginFragment;
 import com.opencbs.androidclient.ui.MainActivity;
 
 import javax.inject.Singleton;
@@ -18,7 +20,9 @@ import de.greenrobot.event.EventBus;
                 App.class,
                 LoginActivity.class,
                 MainActivity.class,
-                ClientsFragment.class
+                ClientsFragment.class,
+                LoginFragment.class,
+                EndpointFragment.class
         },
         library = true
 )

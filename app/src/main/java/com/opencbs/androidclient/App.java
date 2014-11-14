@@ -5,6 +5,7 @@ import android.app.Application;
 import com.opencbs.androidclient.module.ApiModule;
 import com.opencbs.androidclient.module.AppModule;
 import com.opencbs.androidclient.service.ClientService;
+import com.opencbs.androidclient.service.SessionService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ public class App extends Application {
     private ObjectGraph objectGraph;
 
     private ClientService clientService;
+    private SessionService sessionService;
 
     @Inject
     EventBus bus;
@@ -30,12 +32,16 @@ public class App extends Application {
 
         clientService = get(ClientService.class);
         bus.register(clientService);
+
+        sessionService = get(SessionService.class);
+        bus.register(sessionService);
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
         bus.unregister(clientService);
+        bus.unregister(sessionService);
     }
 
     public void inject(Object object) {

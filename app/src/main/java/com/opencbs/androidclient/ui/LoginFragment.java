@@ -10,22 +10,26 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.opencbs.androidclient.Factory;
-import com.opencbs.androidclient.LoginListener;
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.Session;
-import com.opencbs.androidclient.SessionService;
-import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.event.LoginEvent;
+import com.opencbs.androidclient.event.LoginFailureEvent;
+import com.opencbs.androidclient.event.LoginSuccessEvent;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
 
 
 public class LoginFragment extends Fragment {
 
     private Button mLoginButton;
     private ProgressBar mProgressBar;
+
+    @Inject
+    EventBus bus;
+
+    @Inject
+    public LoginFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,38 +54,33 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        bus.unregister(this);
+    }
+
+    public void onEvent(LoginSuccessEvent event) {
+        stopLogin();
+    }
+
+    public void onEvent(LoginFailureEvent event) {
+        stopLogin();
+        showMessage(event.error);
+    }
+
     public void login(String username, String password) {
         startLogin();
-
-        Session session = new Session();
-        session.username = username;
-        session.password = password;
-
-        RestAdapter restAdapter = Factory.getRestAdapter(getActivity());
-        SessionService sessionService = restAdapter.create(SessionService.class);
-        sessionService.login(session, new Callback<Session>() {
-            @Override
-            public void success(Session session, retrofit.client.Response response) {
-                stopLogin();
-                Settings.setAccessToken(getActivity(), session.token);
-                LoginListener listener = (LoginListener) getActivity();
-                listener.login();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                stopLogin();
-                if (error.getResponse() != null) {
-                    if (error.getResponse().getStatus() == 401) {
-                        showMessage(getString(R.string.invalid_username_or_password));
-                    } else {
-                        showMessage(getString(R.string.error_) + error.getResponse().getStatus());
-                    }
-                } else {
-                    showMessage(error.getMessage());
-                }
-            }
-        });
+        LoginEvent event = new LoginEvent();
+        event.username = username;
+        event.password = password;
+        bus.post(event);
     }
 
     private void showMessage(String message) {

@@ -12,8 +12,13 @@ import com.opencbs.androidclient.EndpointListener;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
 
+import javax.inject.Inject;
 
 public class EndpointFragment extends Fragment {
+
+    @Inject
+    public EndpointFragment() {}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
