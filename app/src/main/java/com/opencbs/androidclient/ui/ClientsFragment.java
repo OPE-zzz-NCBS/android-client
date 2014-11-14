@@ -12,10 +12,11 @@ import android.widget.ListView;
 import com.opencbs.androidclient.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
 import com.opencbs.androidclient.OnLoadMoreListener;
-import com.opencbs.androidclient.OnSearchListener;
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.event.CancelSearchEvent;
 import com.opencbs.androidclient.event.ClientsLoadedEvent;
 import com.opencbs.androidclient.event.LoadClientsEvent;
+import com.opencbs.androidclient.event.SearchEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +25,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, OnSearchListener {
+public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout progressLayout;
@@ -92,18 +93,24 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
         Collections.addAll(clients, event.clients);
         offset += LIMIT;
-        if (offset >= count) {
-            adapter.setComplete(true);
-        }
+        adapter.setComplete(offset >= count);
         adapter.setLoading(false);
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onSearch(String query) {
+    public void onEvent(SearchEvent event) {
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
-        this.query = query;
+        query = event.query;
+        offset = 0;
+        postLoadClientsEvent();
+    }
+
+    public void onEvent(CancelSearchEvent event) {
+        if (query.isEmpty()) return;
+        swipeRefreshLayout.setVisibility(View.GONE);
+        progressLayout.setVisibility(View.VISIBLE);
+        query = "";
         offset = 0;
         postLoadClientsEvent();
     }

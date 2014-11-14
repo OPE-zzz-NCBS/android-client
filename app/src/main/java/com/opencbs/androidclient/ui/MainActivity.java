@@ -16,13 +16,15 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.opencbs.androidclient.Factory;
-import com.opencbs.androidclient.OnSearchListener;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.SessionService;
 import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.event.CancelSearchEvent;
+import com.opencbs.androidclient.event.SearchEvent;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -32,8 +34,12 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
     @Inject
     ClientsFragment clientsFragment;
+
+    @Inject
+    EventBus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,25 +65,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_clients, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchItem.collapseActionView();
-                OnSearchListener listener = (OnSearchListener) clientsFragment;
-                if (listener != null) {
-                    listener.onSearch(query);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+        setupSearchMenuItem(menu);
         return true;
     }
 
@@ -107,6 +95,38 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    private void setupSearchMenuItem(Menu menu) {
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                SearchEvent event = new SearchEvent();
+                event.query = query;
+                bus.post(event);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                bus.post(new CancelSearchEvent());
+                return true;
+            }
+        });
     }
 
     private void logout() {
