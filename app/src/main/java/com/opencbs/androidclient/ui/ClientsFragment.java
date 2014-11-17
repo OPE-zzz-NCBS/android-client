@@ -1,11 +1,13 @@
 package com.opencbs.androidclient.ui;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -25,7 +27,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener {
+public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout progressLayout;
@@ -37,6 +39,7 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private final static int LIMIT = 25;
     private int count = 0;
     private String query = "";
+    private boolean wasPaused = false;
 
     @Inject
     EventBus bus;
@@ -54,13 +57,16 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onResume();
 
         bus.register(this);
-        postLoadClientsEvent();
+        if (!wasPaused) {
+            postLoadClientsEvent();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         bus.unregister(this);
+        wasPaused = true;
     }
 
     @Override
@@ -71,6 +77,7 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         offset = 0;
         ListView listView = (ListView) view.findViewById(R.id.clients_list_view);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.clients_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -135,5 +142,15 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         event.limit = LIMIT;
         event.query = query;
         bus.post(event);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Client client = adapter.getItem(position);
+        if (client.type.equals("PERSON")) {
+            Intent intent = new Intent(getActivity(), PersonActivity.class);
+            intent.putExtra("id", client.id);
+            startActivity(intent);
+        }
     }
 }
