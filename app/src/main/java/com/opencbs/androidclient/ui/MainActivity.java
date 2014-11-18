@@ -21,17 +21,28 @@ import com.opencbs.androidclient.event.LogoutEvent;
 import com.opencbs.androidclient.event.LogoutSuccessEvent;
 import com.opencbs.androidclient.event.SearchEvent;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
 
+    private static final int MENU_CLIENTS = 10;
+    private static final int MENU_DOWNLOAD = 20;
+    private static final int MENU_LOGOUT = 100;
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+    private ArrayList<String> drawerItems;
+    private ArrayList<Integer> drawerIds;
 
     @Inject
     ClientsFragment clientsFragment;
+
+    @Inject
+    DownloadFragment downloadFragment;
 
     @Inject
     EventBus bus;
@@ -44,17 +55,24 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, 0, 0);
 
-        String[] items = getResources().getStringArray(R.array.navigation_drawer_options);
+        drawerItems = new ArrayList<String>();
+        drawerItems.add(getString(R.string.clients));
+        drawerItems.add(getString(R.string.download));
+        drawerItems.add(getString(R.string.logout));
+
+        drawerIds = new ArrayList<Integer>();
+        drawerIds.add(MENU_CLIENTS);
+        drawerIds.add(MENU_DOWNLOAD);
+        drawerIds.add(MENU_LOGOUT);
+
         ListView listView = (ListView) findViewById(R.id.left_drawer);
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_option_item, items));
+        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_option_item, drawerItems));
         listView.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(drawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame_layout, clientsFragment);
-        transaction.commit();
+        showClientsFragment();
     }
 
     @Override
@@ -93,7 +111,13 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0) {
+        drawerLayout.closeDrawers();
+        int itemId = drawerIds.get(position);
+        if (itemId == MENU_CLIENTS) {
+            showClientsFragment();
+        } else if (itemId == MENU_DOWNLOAD) {
+            showDownloadFragment();
+        } else if (itemId == MENU_LOGOUT) {
             logout();
         }
     }
@@ -145,5 +169,19 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
 
     private void logout() {
         bus.post(new LogoutEvent());
+    }
+
+    private void showClientsFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame_layout, clientsFragment);
+        transaction.commit();
+        setTitle(getString(R.string.clients));
+    }
+
+    private void showDownloadFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame_layout, downloadFragment);
+        transaction.commit();
+        setTitle(getString(R.string.download));
     }
 }
