@@ -1,5 +1,7 @@
 package com.opencbs.androidclient.service;
 
+import android.util.Log;
+
 import com.opencbs.androidclient.ClientsResponse;
 import com.opencbs.androidclient.api.ClientApi;
 import com.opencbs.androidclient.event.ClientsLoadedEvent;
@@ -35,6 +37,7 @@ public class ClientService {
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d("ANDROIDCLIENT", error.getMessage());
             }
         };
 

@@ -2,9 +2,11 @@ package com.opencbs.androidclient;
 
 import android.app.Application;
 
+import com.opencbs.androidclient.model.EconomicActivity;
 import com.opencbs.androidclient.module.ApiModule;
 import com.opencbs.androidclient.module.AppModule;
 import com.opencbs.androidclient.service.ClientService;
+import com.opencbs.androidclient.service.EconomicActivityService;
 import com.opencbs.androidclient.service.LookupDataService;
 import com.opencbs.androidclient.service.PersonService;
 import com.opencbs.androidclient.service.SessionService;
@@ -24,6 +26,7 @@ public class App extends Application {
     private SessionService sessionService;
     private PersonService personService;
     private LookupDataService lookupDataService;
+    private EconomicActivityService economicActivityService;
 
     @Inject
     EventBus bus;
@@ -45,6 +48,9 @@ public class App extends Application {
 
         lookupDataService = get(LookupDataService.class);
         bus.register(lookupDataService);
+
+        economicActivityService = get(EconomicActivityService.class);
+        bus.register(economicActivityService);
     }
 
     @Override
@@ -54,6 +60,7 @@ public class App extends Application {
         bus.unregister(sessionService);
         bus.unregister(personService);
         bus.unregister(lookupDataService);
+        bus.unregister(economicActivityService);
     }
 
     public void inject(Object object) {

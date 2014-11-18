@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.Person;
+import com.opencbs.androidclient.model.Person;
 
 import retrofit.Callback;
 import retrofit.http.GET;

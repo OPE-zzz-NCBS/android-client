@@ -10,6 +10,7 @@ import com.opencbs.androidclient.ui.LoginActivity;
 import com.opencbs.androidclient.ui.LoginFragment;
 import com.opencbs.androidclient.ui.MainActivity;
 import com.opencbs.androidclient.ui.PersonActivity;
+import com.opencbs.androidclient.ui.PersonFormController;
 
 import javax.inject.Singleton;
 
@@ -26,7 +27,8 @@ import de.greenrobot.event.EventBus;
                 LoginFragment.class,
                 DownloadFragment.class,
                 EndpointFragment.class,
-                PersonActivity.class
+                PersonActivity.class,
+                PersonFormController.class
         },
         library = true
 )

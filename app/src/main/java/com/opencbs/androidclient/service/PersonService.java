@@ -2,7 +2,7 @@ package com.opencbs.androidclient.service;
 
 import android.util.Log;
 
-import com.opencbs.androidclient.Person;
+import com.opencbs.androidclient.model.Person;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.event.LoadPersonEvent;
 import com.opencbs.androidclient.event.PersonLoadedEvent;
