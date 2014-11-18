@@ -16,6 +16,7 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.opencbs.androidclient.ui.PersonActivity"></LinearLayout>
+            tools:context="com.opencbs.androidclient.ui.PersonActivity">
+            </LinearLayout>
     </ScrollView>
 </RelativeLayout>

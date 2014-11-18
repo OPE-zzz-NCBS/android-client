@@ -3,7 +3,10 @@ package com.opencbs.androidclient.ui;
 import android.app.Activity;
 import android.graphics.Color;
 import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -48,10 +51,10 @@ public class PersonFormController {
 
     public void onEvent(EconomicActivityLoadedEvent event) {
         LinearLayout ll = (LinearLayout) activity.findViewById(R.id.person_layout);
-        TextView textView = (TextView) ll.findViewById(event.actionId);
-        if (textView != null && event.economicActivity != null) {
-            textView.setText(event.economicActivity.name);
-            textView.setTag(event.economicActivity.id);
+        Button button = (Button) ll.findViewById(event.actionId);
+        if (button != null && event.economicActivity != null) {
+            button.setText(event.economicActivity.name);
+            button.setTag(event.economicActivity.id);
         }
     }
 
@@ -133,10 +136,11 @@ public class PersonFormController {
         return spinner;
     }
 
-    private TextView createEconomicActivityPicker(int id) {
-        TextView picker = new TextView(activity);
-        picker.setText("...");
-        picker.setId(id);
-        return picker;
+    private Button createEconomicActivityPicker(int id) {
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        Button button = (Button) inflater.inflate(R.layout.spinner_button, null, false);
+        button.setText("");
+        button.setId(id);
+        return button;
     }
 }
