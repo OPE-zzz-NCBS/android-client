@@ -18,7 +18,7 @@ public class EconomicActivityService {
 
     public void onEvent(LoadEconomicActivityEvent event) {
         EconomicActivityLoadedEvent responseEvent = new EconomicActivityLoadedEvent();
-        responseEvent.economicActivity = dbHelper.getEconomicActivity(event.id);
+        responseEvent.economicActivity = dbHelper.getEconomicActivity(event.economicActivityId);
         responseEvent.actionId = event.actionId;
         bus.post(responseEvent);
     }

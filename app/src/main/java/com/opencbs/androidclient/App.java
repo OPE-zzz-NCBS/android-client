@@ -2,7 +2,6 @@ package com.opencbs.androidclient;
 
 import android.app.Application;
 
-import com.opencbs.androidclient.model.EconomicActivity;
 import com.opencbs.androidclient.module.ApiModule;
 import com.opencbs.androidclient.module.AppModule;
 import com.opencbs.androidclient.service.ClientService;

@@ -27,6 +27,10 @@
             android:name="com.opencbs.androidclient.ui.PersonActivity"
             android:label="@string/person" >
         </activity>
+        <activity
+            android:name="com.opencbs.androidclient.ui.EconomicActivityPickerActivity"
+            android:label="@string/title_activity_economic_activity_picker" >
+        </activity>
     </application>
 
 </manifest>
