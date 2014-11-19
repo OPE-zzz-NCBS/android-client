@@ -5,6 +5,7 @@ import android.content.Context;
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.ui.ClientsFragment;
 import com.opencbs.androidclient.ui.DownloadFragment;
+import com.opencbs.androidclient.ui.EconomicActivityPickerActivity;
 import com.opencbs.androidclient.ui.EndpointFragment;
 import com.opencbs.androidclient.ui.LoginActivity;
 import com.opencbs.androidclient.ui.LoginFragment;
@@ -27,6 +28,7 @@ import de.greenrobot.event.EventBus;
                 DownloadFragment.class,
                 EndpointFragment.class,
                 PersonActivity.class,
+                EconomicActivityPickerActivity.class
         },
         library = true
 )

@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.opencbs.androidclient.model.EconomicActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -68,5 +71,28 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return result;
+    }
+
+    public EconomicActivity[] getEconomicActivities() {
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<EconomicActivity> result = new ArrayList<EconomicActivity>();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("select * from economic_activities", null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    EconomicActivity economicActivity = new EconomicActivity();
+                    economicActivity.id = cursor.getInt(cursor.getColumnIndex("_id"));
+                    economicActivity.name = cursor.getString(cursor.getColumnIndex("name"));
+                    economicActivity.parentId = cursor.getInt(cursor.getColumnIndex("parent_id"));
+                    result.add(economicActivity);
+                    cursor.moveToNext();
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+        return result.toArray(new EconomicActivity[result.size()]);
     }
 }

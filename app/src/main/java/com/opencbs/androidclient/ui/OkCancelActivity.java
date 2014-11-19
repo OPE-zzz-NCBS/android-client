@@ -17,7 +17,6 @@
 package com.opencbs.androidclient.ui;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,7 @@ import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
 
-public abstract class OkCancelActivity extends Activity {
+public abstract class OkCancelActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
