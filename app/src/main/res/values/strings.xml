@@ -19,6 +19,7 @@
     <string name="logout">Logout</string>
     <string name="download_description">For the application to work correctly you have to cache some data by downloading it from the server.</string>
     <string name="title_activity_economic_activity_picker">EconomicActivityPickerActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

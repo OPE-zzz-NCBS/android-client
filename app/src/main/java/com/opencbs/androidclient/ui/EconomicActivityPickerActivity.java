@@ -1,13 +1,10 @@
 package com.opencbs.androidclient.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.opencbs.androidclient.R;
 
-public class EconomicActivityPickerActivity extends Activity {
+public class EconomicActivityPickerActivity extends OkCancelActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +13,10 @@ public class EconomicActivityPickerActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+    protected void onOk() {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    protected void onCancel() {
     }
 }
