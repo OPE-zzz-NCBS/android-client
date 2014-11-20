@@ -1,5 +1,6 @@
 package com.opencbs.androidclient.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.event.BusEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.event.LoadPersonEvent;
@@ -28,7 +30,9 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.inject.Inject;
 
@@ -48,11 +52,12 @@ public class PersonActivity extends BaseActivity {
 
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
 
+    private Queue<BusEvent> eventQueue = new LinkedList<BusEvent>();
+
     @Inject
     EventBus bus;
 
     private int id = 0;
-    private boolean personLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,30 +66,17 @@ public class PersonActivity extends BaseActivity {
 
         Intent intent = getIntent();
         id = intent.getIntExtra("id", 0);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_person, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        LoadPersonEvent event = new LoadPersonEvent();
+        event.id = id;
+        eventQueue.add(event);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         bus.register(this);
-        loadPerson();
+        processEventQueue();
     }
 
     @Override
@@ -93,16 +85,26 @@ public class PersonActivity extends BaseActivity {
         bus.unregister(this);
     }
 
-    private void loadPerson() {
-        if (personLoaded) return;
-        LoadPersonEvent event = new LoadPersonEvent();
-        event.id = id;
-        bus.post(event);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_ECONOMIC_ACTIVITY_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                LoadEconomicActivityEvent event = new LoadEconomicActivityEvent();
+                event.actionId = data.getIntExtra("economicActivityPickerId", 0);
+                event.economicActivityId = data.getIntExtra("economicActivityId", 0);
+                eventQueue.add(event);
+            }
+        }
+    }
+
+    private void processEventQueue() {
+        while (!eventQueue.isEmpty()) {
+            bus.post(eventQueue.remove());
+        }
     }
 
     public void onEvent(PersonLoadedEvent event) {
         setPerson(event.person);
-        personLoaded = true;
     }
 
     public void onEvent(EconomicActivityLoadedEvent event) {
@@ -193,9 +195,10 @@ public class PersonActivity extends BaseActivity {
 
     private void addEconomicActivityPicker(ViewGroup group, final int id, final int economicActivityId) {
         LayoutInflater inflater = LayoutInflater.from(this);
-        Button button = (Button) inflater.inflate(R.layout.spinner_button, null, false);
+        final Button button = (Button) inflater.inflate(R.layout.spinner_button, group, false);
         button.setText("");
         button.setId(id);
+        button.setTag(economicActivityId);
         group.addView(button);
 
         final Context context = this;
@@ -204,7 +207,7 @@ public class PersonActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EconomicActivityPickerActivity.class);
                 intent.putExtra("economicActivityPickerId", id);
-                intent.putExtra("economicActivityId", economicActivityId);
+                intent.putExtra("economicActivityId", (Integer) button.getTag());
                 startActivityForResult(intent, PICK_ECONOMIC_ACTIVITY_REQUEST);
             }
         });

@@ -1,4 +1,4 @@
 package com.opencbs.androidclient.event;
 
-public class DownloadLookupDataEvent {
+public class DownloadLookupDataEvent extends BusEvent {
 }

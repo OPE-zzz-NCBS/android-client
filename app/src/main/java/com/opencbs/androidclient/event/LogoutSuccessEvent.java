@@ -1,4 +1,4 @@
 package com.opencbs.androidclient.event;
 
-public class LogoutSuccessEvent {
+public class LogoutSuccessEvent extends BusEvent {
 }
