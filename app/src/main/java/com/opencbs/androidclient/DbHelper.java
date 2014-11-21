@@ -32,6 +32,16 @@ public class DbHelper extends SQLiteOpenHelper {
                         "parent_id integer not null" +
                         ")"
         );
+
+        db.execSQL(
+                "create table branches (" +
+                        "_id integer primary key, " +
+                        "name text not null, " +
+                        "code text not null, " +
+                        "description text not null, " +
+                        "address text not null" +
+                        ")"
+        );
     }
 
     @Override
@@ -59,7 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
         EconomicActivity result = null;
         Cursor cursor = null;
         try {
-            cursor = db.rawQuery("select * from economic_activities where _id = ?", new String[] { id + "" });
+            cursor = db.rawQuery("select * from economic_activities where _id = ?", new String[]{id + ""});
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 result = new EconomicActivity();

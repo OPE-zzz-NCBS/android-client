@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,8 +17,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.event.BranchLoadedEvent;
 import com.opencbs.androidclient.event.BusEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
+import com.opencbs.androidclient.event.LoadBranchEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.event.LoadPersonEvent;
 import com.opencbs.androidclient.event.PersonLoadedEvent;
@@ -40,15 +40,16 @@ import de.greenrobot.event.EventBus;
 
 public class PersonActivity extends BaseActivity {
 
-    private static final int FIRST_NAME_ID = 1;
-    private static final int LAST_NAME_ID = 2;
-    private static final int FATHER_NAME_ID = 3;
-    private static final int BIRTH_DATE_ID = 4;
-    private static final int BIRTH_PLACE_ID = 5;
-    private static final int SEX_ID = 6;
-    private static final int IDENTIFICATION_DATA_ID = 7;
-    private static final int NATIONALITY_ID = 8;
-    private static final int ECONOMIC_ACTIVITY_ID = 9;
+    private static final int FIRST_NAME_VIEW_ID = 1;
+    private static final int LAST_NAME_VIEW_ID = 2;
+    private static final int FATHER_NAME_VIEW_ID = 3;
+    private static final int BIRTH_DATE_VIEW_ID = 4;
+    private static final int BIRTH_PLACE_VIEW_ID = 5;
+    private static final int SEX_VIEW_ID = 6;
+    private static final int IDENTIFICATION_DATA_VIEW_ID = 7;
+    private static final int NATIONALITY_VIEW_ID = 8;
+    private static final int ECONOMIC_ACTIVITY_VIEW_ID = 9;
+    private static final int BRANCH_VIEW_ID = 10;
 
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
 
@@ -116,6 +117,15 @@ public class PersonActivity extends BaseActivity {
         }
     }
 
+    public void onEvent(BranchLoadedEvent event) {
+        LinearLayout ll = (LinearLayout) findViewById(R.id.person_layout);
+        Button button = (Button) ll.findViewById(event.actionId);
+        if (button != null && event.branch != null) {
+            button.setText(event.branch.name);
+            button.setTag(event.branch.id);
+        }
+    }
+
     private void setPerson(Person person) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.person_layout);
         if (layout.getChildCount() > 0) {
@@ -123,34 +133,37 @@ public class PersonActivity extends BaseActivity {
         }
 
         addLabel(layout, "First name");
-        addTextEditor(layout, FIRST_NAME_ID, person.firstName);
+        addTextEditor(layout, FIRST_NAME_VIEW_ID, person.firstName);
 
         addLabel(layout, "Father name");
-        addTextEditor(layout, FATHER_NAME_ID, person.fatherName);
+        addTextEditor(layout, FATHER_NAME_VIEW_ID, person.fatherName);
 
         addLabel(layout, "Last name");
-        addTextEditor(layout, LAST_NAME_ID, person.lastName);
+        addTextEditor(layout, LAST_NAME_VIEW_ID, person.lastName);
 
         addLabel(layout, "Birth date");
-        addDateEditor(layout, BIRTH_DATE_ID, person.birthDate);
+        addDateEditor(layout, BIRTH_DATE_VIEW_ID, person.birthDate);
 
         addLabel(layout, "Birth place");
-        addTextEditor(layout, BIRTH_PLACE_ID, person.birthPlace);
+        addTextEditor(layout, BIRTH_PLACE_VIEW_ID, person.birthPlace);
 
         addLabel(layout, "Sex");
         ArrayList<String> list = new ArrayList<String>();
         list.add("Male");
         list.add("Female");
-        addSpinner(layout, SEX_ID, list, person.sex);
+        addSpinner(layout, SEX_VIEW_ID, list, person.sex);
 
         addLabel(layout, "Identification data");
-        addTextEditor(layout, IDENTIFICATION_DATA_ID, person.identificationData);
+        addTextEditor(layout, IDENTIFICATION_DATA_VIEW_ID, person.identificationData);
 
         addLabel(layout, "Nationality");
-        addTextEditor(layout, NATIONALITY_ID, person.nationality);
+        addTextEditor(layout, NATIONALITY_VIEW_ID, person.nationality);
 
         addLabel(layout, "Economic activity");
-        addEconomicActivityPicker(layout, ECONOMIC_ACTIVITY_ID, person.activityId);
+        addEconomicActivityPicker(layout, ECONOMIC_ACTIVITY_VIEW_ID, person.activityId);
+
+        addLabel(layout, "Branch");
+        addBranchPicker(layout, BRANCH_VIEW_ID, person.branchId);
     }
 
     private void addLabel(ViewGroup group, String text) {
@@ -215,6 +228,20 @@ public class PersonActivity extends BaseActivity {
         LoadEconomicActivityEvent event = new LoadEconomicActivityEvent();
         event.actionId = id;
         event.economicActivityId = economicActivityId;
+        bus.post(event);
+    }
+
+    private void addBranchPicker(ViewGroup group, final int id, final int branchId) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final Button button = (Button) inflater.inflate(R.layout.spinner_button, group, false);
+        button.setText("");
+        button.setId(id);
+        button.setTag(branchId);
+        group.addView(button);
+
+        LoadBranchEvent event = new LoadBranchEvent();
+        event.actionId = id;
+        event.branchId = branchId;
         bus.post(event);
     }
 }

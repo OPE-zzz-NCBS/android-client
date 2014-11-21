@@ -8,6 +8,7 @@ import com.opencbs.androidclient.ApiRequestInterceptor;
 import com.opencbs.androidclient.api.LookupDataApi;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.SessionApi;
+import com.opencbs.androidclient.service.BranchService;
 import com.opencbs.androidclient.service.ClientService;
 import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.api.ClientApi;
@@ -27,7 +28,8 @@ import retrofit.converter.GsonConverter;
                 SessionService.class,
                 PersonService.class,
                 LookupDataService.class,
-                EconomicActivityService.class
+                EconomicActivityService.class,
+                BranchService.class
         },
         library = true,
         complete = false

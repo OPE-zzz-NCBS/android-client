@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.opencbs.androidclient.module.ApiModule;
 import com.opencbs.androidclient.module.AppModule;
+import com.opencbs.androidclient.service.BranchService;
 import com.opencbs.androidclient.service.ClientService;
 import com.opencbs.androidclient.service.EconomicActivityService;
 import com.opencbs.androidclient.service.LookupDataService;
@@ -26,6 +27,7 @@ public class App extends Application {
     private PersonService personService;
     private LookupDataService lookupDataService;
     private EconomicActivityService economicActivityService;
+    private BranchService branchService;
 
     @Inject
     EventBus bus;
@@ -50,6 +52,9 @@ public class App extends Application {
 
         economicActivityService = get(EconomicActivityService.class);
         bus.register(economicActivityService);
+
+        branchService = get(BranchService.class);
+        bus.register(branchService);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class App extends Application {
         bus.unregister(personService);
         bus.unregister(lookupDataService);
         bus.unregister(economicActivityService);
+        bus.unregister(branchService);
     }
 
     public void inject(Object object) {
