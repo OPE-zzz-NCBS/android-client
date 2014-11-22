@@ -6,4 +6,9 @@ public class Branch {
     public String code;
     public String description;
     public String address;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

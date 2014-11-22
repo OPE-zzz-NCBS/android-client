@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.BranchLoadedEvent;
-import com.opencbs.androidclient.event.BusEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadBranchEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
@@ -24,22 +23,12 @@ import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
-import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
-
-public abstract class EditorActivity extends BaseActivity {
+public abstract class EditorActivity extends ActivityWithBus {
 
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
-
-    @Inject
-    EventBus bus;
-
-    protected Queue<BusEvent> eventQueue = new LinkedList<BusEvent>();
+    private static final int PICK_BRANCH_REQUEST = 2;
 
     public void onEvent(EconomicActivityLoadedEvent event) {
         ViewGroup viewGroup = getContainer();
@@ -50,26 +39,7 @@ public abstract class EditorActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-        processEventQueue();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
-    }
-
     protected abstract ViewGroup getContainer();
-
-    protected void processEventQueue() {
-        while (!eventQueue.isEmpty()) {
-            bus.post(eventQueue.remove());
-        }
-    }
 
     protected void addLabel(String text) {
         TextView label = new TextView(this);
@@ -144,6 +114,17 @@ public abstract class EditorActivity extends BaseActivity {
         button.setTag(branchId);
         getContainer().addView(button);
 
+        final Context context = this;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, BranchPickerActivity.class);
+                intent.putExtra("branchPickerId", id);
+                intent.putExtra("branchId", (Integer) button.getTag());
+                startActivityForResult(intent, PICK_BRANCH_REQUEST);
+            }
+        });
+
         LoadBranchEvent event = new LoadBranchEvent();
         event.actionId = id;
         event.branchId = branchId;
@@ -166,7 +147,14 @@ public abstract class EditorActivity extends BaseActivity {
                 LoadEconomicActivityEvent event = new LoadEconomicActivityEvent();
                 event.actionId = data.getIntExtra("economicActivityPickerId", 0);
                 event.economicActivityId = data.getIntExtra("economicActivityId", 0);
-                eventQueue.add(event);
+                enqueueEvent(event);
+            }
+        } else if (requestCode == PICK_BRANCH_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                LoadBranchEvent event = new LoadBranchEvent();
+                event.actionId = data.getIntExtra("branchPickerId", 0);
+                event.branchId = data.getIntExtra("branchId", 0);
+                enqueueEvent(event);
             }
         }
     }

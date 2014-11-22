@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.repo.BranchRepo;
+import com.opencbs.androidclient.ui.BranchPickerActivity;
 import com.opencbs.androidclient.ui.ClientsFragment;
 import com.opencbs.androidclient.ui.DownloadFragment;
 import com.opencbs.androidclient.ui.EconomicActivityPickerActivity;
@@ -30,6 +31,7 @@ import de.greenrobot.event.EventBus;
                 EndpointFragment.class,
                 PersonActivity.class,
                 EconomicActivityPickerActivity.class,
+                BranchPickerActivity.class,
 
                 BranchRepo.class
         },

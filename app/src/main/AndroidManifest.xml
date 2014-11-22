@@ -28,8 +28,10 @@
             android:label="@string/person" >
         </activity>
         <activity
-            android:name="com.opencbs.androidclient.ui.EconomicActivityPickerActivity"
-            android:label="@string/title_activity_economic_activity_picker" >
+            android:name="com.opencbs.androidclient.ui.EconomicActivityPickerActivity">
+        </activity>
+        <activity
+            android:name="com.opencbs.androidclient.ui.BranchPickerActivity">
         </activity>
     </application>
 

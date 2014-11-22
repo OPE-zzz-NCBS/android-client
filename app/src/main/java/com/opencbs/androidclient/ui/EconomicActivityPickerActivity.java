@@ -14,19 +14,12 @@ import com.opencbs.androidclient.model.EconomicActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.inject.Inject;
-
-import de.greenrobot.event.EventBus;
-
 public class EconomicActivityPickerActivity extends OkCancelActivity {
 
     private ArrayList<EconomicActivity> economicActivities;
     private ArrayAdapter<EconomicActivity> adapter;
     private ListView listView;
     private int economicActivityPickerId = 0;
-
-    @Inject
-    EventBus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +33,8 @@ public class EconomicActivityPickerActivity extends OkCancelActivity {
 
         Intent intent = getIntent();
         economicActivityPickerId = intent.getIntExtra("economicActivityPickerId", 0);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-        loadEconomicActivities();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
+        enqueueEvent(new LoadEconomicActivitiesEvent());
     }
 
     @Override
@@ -98,10 +80,5 @@ public class EconomicActivityPickerActivity extends OkCancelActivity {
                 listView.setItemChecked(position, true);
             }
         }
-    }
-
-    private void loadEconomicActivities() {
-        LoadEconomicActivitiesEvent event = new LoadEconomicActivitiesEvent();
-        bus.post(event);
     }
 }

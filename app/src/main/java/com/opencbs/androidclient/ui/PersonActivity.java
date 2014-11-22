@@ -35,7 +35,7 @@ public class PersonActivity extends EditorActivity {
 
         LoadPersonEvent event = new LoadPersonEvent();
         event.id = intent.getIntExtra("id", 0);
-        eventQueue.add(event);
+        enqueueEvent(event);
     }
 
     @Override

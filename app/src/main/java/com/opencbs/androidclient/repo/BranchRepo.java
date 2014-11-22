@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.model.Branch;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -58,7 +58,29 @@ public class BranchRepo {
         return result;
     }
 
-    public List<Branch> getAll() {
-        return null;
+    public Branch[] getAll() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ArrayList<Branch> result = new ArrayList<Branch>();
+        Cursor cursor = null;
+        try
+        {
+            cursor = db.rawQuery("select * from branches", null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Branch branch = new Branch();
+                    branch.id = cursor.getInt(cursor.getColumnIndex("_id"));
+                    branch.name = cursor.getString(cursor.getColumnIndex("name"));
+                    branch.code = cursor.getString(cursor.getColumnIndex("code"));
+                    branch.description = cursor.getString(cursor.getColumnIndex("description"));
+                    branch.address = cursor.getString(cursor.getColumnIndex("address"));
+                    result.add(branch);
+                    cursor.moveToNext();
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+        return result.toArray(new Branch[result.size()]);
     }
 }
