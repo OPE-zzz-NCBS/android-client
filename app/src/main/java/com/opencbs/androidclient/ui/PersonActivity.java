@@ -90,6 +90,6 @@ public class PersonActivity extends EditorActivity {
         addBranchPicker(BRANCH_VIEW_ID, person.branchId);
 
         addLabel("City");
-        addCityPicker(CITY_VIEW_ID, "");
+        addCityPicker(CITY_VIEW_ID, person.cityId);
     }
 }

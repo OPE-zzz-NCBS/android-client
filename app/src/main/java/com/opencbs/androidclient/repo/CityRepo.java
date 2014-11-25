@@ -34,6 +34,24 @@ public class CityRepo {
             db.insert("cities", null, contentValues);
         }
     }
+    public City get(int id) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        City result = null;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("select * from cities where _id = ?", new String[]{id + ""});
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                result = new City();
+                result.id = id;
+                result.name = cursor.getString(cursor.getColumnIndex("name"));
+                result.districtId = cursor.getInt(cursor.getColumnIndex("district_id"));
+            }
+        } finally {
+            cursor.close();
+        }
+        return result;
+    }
 
     public City[] getAll() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();

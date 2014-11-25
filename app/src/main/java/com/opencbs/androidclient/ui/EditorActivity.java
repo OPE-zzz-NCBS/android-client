@@ -18,9 +18,11 @@ import android.widget.TextView;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.BranchLoadedEvent;
 import com.opencbs.androidclient.event.CitiesLoadedEvent;
+import com.opencbs.androidclient.event.CityLoadedEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadBranchEvent;
 import com.opencbs.androidclient.event.LoadCitiesEvent;
+import com.opencbs.androidclient.event.LoadCityEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.model.City;
 
@@ -135,15 +137,21 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(event);
     }
 
-    protected void addCityPicker(int id, String value) {
+    protected void addCityPicker(int id, int cityId) {
         AutoCompleteTextView textView = new AutoCompleteTextView(this);
         textView.setId(id);
-        textView.setText(value);
+        textView.setText("");
+        textView.setTag(cityId);
         getContainer().addView(textView);
 
         LoadCitiesEvent event = new LoadCitiesEvent();
         event.selector = id;
         bus.post(event);
+
+        LoadCityEvent loadCityEvent = new LoadCityEvent();
+        loadCityEvent.selector = id;
+        loadCityEvent.cityId = cityId;
+        bus.post(loadCityEvent);
     }
 
     public void onEvent(BranchLoadedEvent event) {
@@ -161,6 +169,12 @@ public abstract class EditorActivity extends ActivityWithBus {
 
         ArrayAdapter<City> adapter = new ArrayAdapter<City>(this, android.R.layout.simple_dropdown_item_1line, event.cities);
         textView.setAdapter(adapter);
+    }
+
+    public void onEvent(CityLoadedEvent event) {
+        AutoCompleteTextView textView = (AutoCompleteTextView) getContainer().findViewById(event.selector);
+        if (textView == null) return;
+        textView.setText(event.city.name);
     }
 
     @Override

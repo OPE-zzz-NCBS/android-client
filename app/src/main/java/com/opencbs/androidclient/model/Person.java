@@ -14,4 +14,5 @@ public class Person {
     public String nationality;
     public int activityId;
     public int branchId;
+    public int cityId;
 }
