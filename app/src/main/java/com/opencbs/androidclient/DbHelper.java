@@ -42,6 +42,14 @@ public class DbHelper extends SQLiteOpenHelper {
                         "address text not null" +
                         ")"
         );
+
+        db.execSQL(
+                "create table cities (" +
+                        "_id integer primary key, " +
+                        "name text not null, " +
+                        "district_id int not null" +
+                        ")"
+        );
     }
 
     @Override

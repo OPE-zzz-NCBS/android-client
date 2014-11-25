@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,9 +17,12 @@ import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.BranchLoadedEvent;
+import com.opencbs.androidclient.event.CitiesLoadedEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadBranchEvent;
+import com.opencbs.androidclient.event.LoadCitiesEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
+import com.opencbs.androidclient.model.City;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -131,6 +135,17 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(event);
     }
 
+    protected void addCityPicker(int id, String value) {
+        AutoCompleteTextView textView = new AutoCompleteTextView(this);
+        textView.setId(id);
+        textView.setText(value);
+        getContainer().addView(textView);
+
+        LoadCitiesEvent event = new LoadCitiesEvent();
+        event.selector = id;
+        bus.post(event);
+    }
+
     public void onEvent(BranchLoadedEvent event) {
         ViewGroup viewGroup = getContainer();
         Button button = (Button) viewGroup.findViewById(event.actionId);
@@ -138,6 +153,14 @@ public abstract class EditorActivity extends ActivityWithBus {
             button.setText(event.branch.name);
             button.setTag(event.branch.id);
         }
+    }
+
+    public void onEvent(CitiesLoadedEvent event) {
+        AutoCompleteTextView textView = (AutoCompleteTextView) getContainer().findViewById(event.selector);
+        if (textView == null) return;
+
+        ArrayAdapter<City> adapter = new ArrayAdapter<City>(this, android.R.layout.simple_dropdown_item_1line, event.cities);
+        textView.setAdapter(adapter);
     }
 
     @Override
