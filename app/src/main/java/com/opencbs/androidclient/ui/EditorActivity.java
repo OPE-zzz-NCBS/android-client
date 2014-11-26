@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -172,11 +173,24 @@ public abstract class EditorActivity extends ActivityWithBus {
     }
 
     public void onEvent(CitiesLoadedEvent event) {
-        AutoCompleteTextView textView = (AutoCompleteTextView) getContainer().findViewById(event.selector);
+        final AutoCompleteTextView textView = (AutoCompleteTextView) getContainer().findViewById(event.selector);
         if (textView == null) return;
 
-        ArrayAdapter<City> adapter = new ArrayAdapter<City>(this, android.R.layout.simple_dropdown_item_1line, event.cities);
+        final ArrayAdapter<City> adapter = new ArrayAdapter<City>(this, android.R.layout.simple_dropdown_item_1line, event.cities);
         textView.setAdapter(adapter);
+        textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                City city = adapter.getItem(position);
+                if (city == null) return;
+                view.setTag(city.id);
+
+                LoadDistrictEvent loadDistrictEvent = new LoadDistrictEvent();
+                loadDistrictEvent.selector = textView.getId() - 1;
+                loadDistrictEvent.districtId = city.districtId;
+                bus.post(loadDistrictEvent);
+            }
+        });
     }
 
     public void onEvent(CityLoadedEvent event) {
