@@ -19,10 +19,12 @@ import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.BranchLoadedEvent;
 import com.opencbs.androidclient.event.CitiesLoadedEvent;
 import com.opencbs.androidclient.event.CityLoadedEvent;
+import com.opencbs.androidclient.event.DistrictLoadedEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadBranchEvent;
 import com.opencbs.androidclient.event.LoadCitiesEvent;
 import com.opencbs.androidclient.event.LoadCityEvent;
+import com.opencbs.androidclient.event.LoadDistrictEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.model.City;
 
@@ -56,10 +58,14 @@ public abstract class EditorActivity extends ActivityWithBus {
     }
 
     protected void addTextEditor(int id, String value) {
+        addTextEditor(id, value, true);
+    }
+    protected void addTextEditor(int id, String value, boolean enabled) {
         EditText editText = new EditText(this);
         editText.setText(value);
         editText.setSingleLine(true);
         editText.setId(id);
+        editText.setEnabled(enabled);
         getContainer().addView(editText);
     }
 
@@ -174,7 +180,22 @@ public abstract class EditorActivity extends ActivityWithBus {
     public void onEvent(CityLoadedEvent event) {
         AutoCompleteTextView textView = (AutoCompleteTextView) getContainer().findViewById(event.selector);
         if (textView == null) return;
+        if (event.city == null) {
+            textView.setTag(0);
+            return;
+        }
         textView.setText(event.city.name);
+
+        LoadDistrictEvent loadDistrictEvent = new LoadDistrictEvent();
+        loadDistrictEvent.selector = event.selector - 1;
+        loadDistrictEvent.districtId = event.city.districtId;
+        bus.post(loadDistrictEvent);
+    }
+
+    public void onEvent(DistrictLoadedEvent event) {
+        EditText editText = (EditText) getContainer().findViewById(event.selector);
+        if (editText == null || event.district == null) return;
+        editText.setText(event.district.name);
     }
 
     @Override

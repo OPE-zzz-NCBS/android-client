@@ -50,6 +50,14 @@ public class DbHelper extends SQLiteOpenHelper {
                         "district_id int not null" +
                         ")"
         );
+
+        db.execSQL(
+                "create table districts (" +
+                        "_id integer primary key, " +
+                        "name text not null, " +
+                        "region_id int not null" +
+                        ")"
+        );
     }
 
     @Override
