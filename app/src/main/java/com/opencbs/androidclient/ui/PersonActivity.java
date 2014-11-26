@@ -23,8 +23,9 @@ public class PersonActivity extends EditorActivity {
     private static final int NATIONALITY_VIEW_ID = 8;
     private static final int ECONOMIC_ACTIVITY_VIEW_ID = 9;
     private static final int BRANCH_VIEW_ID = 10;
-    private static final int DISTRICT_VIEW_ID = 13;
-    private static final int CITY_VIEW_ID = 14;
+    private static final int REGION_VIEW_ID = 11;
+    private static final int DISTRICT_VIEW_ID = 12;
+    private static final int CITY_VIEW_ID = 13;
 
     private ViewGroup container;
 
@@ -89,6 +90,9 @@ public class PersonActivity extends EditorActivity {
 
         addLabel("Branch");
         addBranchPicker(BRANCH_VIEW_ID, person.branchId);
+
+        addLabel("Region");
+        addTextEditor(REGION_VIEW_ID, "", false);
 
         addLabel("District");
         addTextEditor(DISTRICT_VIEW_ID, "", false);

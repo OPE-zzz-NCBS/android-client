@@ -26,6 +26,8 @@ import com.opencbs.androidclient.event.LoadCitiesEvent;
 import com.opencbs.androidclient.event.LoadCityEvent;
 import com.opencbs.androidclient.event.LoadDistrictEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
+import com.opencbs.androidclient.event.LoadRegionEvent;
+import com.opencbs.androidclient.event.RegionLoadedEvent;
 import com.opencbs.androidclient.model.City;
 
 import java.text.Format;
@@ -196,6 +198,17 @@ public abstract class EditorActivity extends ActivityWithBus {
         EditText editText = (EditText) getContainer().findViewById(event.selector);
         if (editText == null || event.district == null) return;
         editText.setText(event.district.name);
+
+        LoadRegionEvent loadRegionEvent = new LoadRegionEvent();
+        loadRegionEvent.regionId = event.district.regionId;
+        loadRegionEvent.selector = event.selector - 1;
+        bus.post(loadRegionEvent);
+    }
+
+    public void onEvent(RegionLoadedEvent event) {
+        EditText editText = (EditText) getContainer().findViewById(event.selector);
+        if (editText == null || event.region == null) return;
+        editText.setText(event.region.name);
     }
 
     @Override

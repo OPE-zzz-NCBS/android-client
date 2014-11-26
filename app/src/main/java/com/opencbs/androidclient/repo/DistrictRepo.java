@@ -34,6 +34,7 @@ public class DistrictRepo {
             db.insert("districts", null, contentValues);
         }
     }
+
     public District get(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         District result = null;

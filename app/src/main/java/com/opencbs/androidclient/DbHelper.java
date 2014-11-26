@@ -58,6 +58,13 @@ public class DbHelper extends SQLiteOpenHelper {
                         "region_id int not null" +
                         ")"
         );
+
+        db.execSQL(
+                "create table regions (" +
+                        "_id integer primary key, " +
+                        "name text not null" +
+                        ")"
+        );
     }
 
     @Override

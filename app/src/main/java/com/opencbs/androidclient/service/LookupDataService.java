@@ -10,6 +10,7 @@ import com.opencbs.androidclient.event.LookupDataDownloadedEvent;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;
 import com.opencbs.androidclient.repo.DistrictRepo;
+import com.opencbs.androidclient.repo.RegionRepo;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -39,6 +40,9 @@ public class LookupDataService {
     @Inject
     DistrictRepo districtRepo;
 
+    @Inject
+    RegionRepo regionRepo;
+
     public void onEvent(DownloadLookupDataEvent event) {
         Callback<LookupDataResponse> callback = new Callback<LookupDataResponse>() {
             @Override
@@ -55,6 +59,9 @@ public class LookupDataService {
 
                 districtRepo.deleteAll();
                 districtRepo.add(lookupDataResponse.districts);
+
+                regionRepo.deleteAll();
+                regionRepo.add(lookupDataResponse.regions);
 
                 bus.post(new LookupDataDownloadedEvent());
             }

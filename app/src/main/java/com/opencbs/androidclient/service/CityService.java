@@ -6,8 +6,11 @@ import com.opencbs.androidclient.event.DistrictLoadedEvent;
 import com.opencbs.androidclient.event.LoadCitiesEvent;
 import com.opencbs.androidclient.event.LoadCityEvent;
 import com.opencbs.androidclient.event.LoadDistrictEvent;
+import com.opencbs.androidclient.event.LoadRegionEvent;
+import com.opencbs.androidclient.event.RegionLoadedEvent;
 import com.opencbs.androidclient.repo.CityRepo;
 import com.opencbs.androidclient.repo.DistrictRepo;
+import com.opencbs.androidclient.repo.RegionRepo;
 
 import javax.inject.Inject;
 
@@ -23,6 +26,9 @@ public class CityService {
 
     @Inject
     DistrictRepo districtRepo;
+
+    @Inject
+    RegionRepo regionRepo;
 
     public void onEvent(LoadCitiesEvent event) {
         CitiesLoadedEvent responseEvent = new CitiesLoadedEvent();
@@ -42,6 +48,13 @@ public class CityService {
         DistrictLoadedEvent responseEvent = new DistrictLoadedEvent();
         responseEvent.selector = event.selector;
         responseEvent.district = districtRepo.get(event.districtId);
+        bus.post(responseEvent);
+    }
+
+    public void onEvent(LoadRegionEvent event) {
+        RegionLoadedEvent responseEvent = new RegionLoadedEvent();
+        responseEvent.selector = event.selector;
+        responseEvent.region = regionRepo.get(event.regionId);
         bus.post(responseEvent);
     }
 }
