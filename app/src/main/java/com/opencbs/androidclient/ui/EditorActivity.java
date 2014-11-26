@@ -60,16 +60,13 @@ public abstract class EditorActivity extends ActivityWithBus {
         getContainer().addView(label);
     }
 
-    protected void addTextEditor(int id, String value) {
-        addTextEditor(id, value, true);
-    }
-    protected void addTextEditor(int id, String value, boolean enabled) {
+    protected EditText addTextEditor(int id, String value) {
         EditText editText = new EditText(this);
         editText.setText(value);
         editText.setSingleLine(true);
         editText.setId(id);
-        editText.setEnabled(enabled);
         getContainer().addView(editText);
+        return editText;
     }
 
     protected void addDateEditor(int id, Date value) {
