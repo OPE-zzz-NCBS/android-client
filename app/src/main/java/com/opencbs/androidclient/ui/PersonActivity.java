@@ -97,32 +97,30 @@ public class PersonActivity extends EditorActivity {
         addLabel("Branch");
         addBranchPicker(BRANCH_VIEW_ID, person.branchId);
 
+        addLabel("Home phone");
+        addTextEditor(HOME_PHONE_VIEW_ID, person.homePhone);
+
+        addLabel("Personal phone");
+        addTextEditor(PERSONAL_PHONE_VIEW_ID, person.personalPhone);
+
+        addLabel("Email");
+        addTextEditor(EMAIL_VIEW_ID, person.email);
+
+        addSection("ADDRESS 1");
+
         addLabel("Region");
-        EditText editText = addTextEditor(REGION_VIEW_ID, "");
-        editText.setEnabled(false);
+        addTextEditor(REGION_VIEW_ID, "").setEnabled(false);
 
         addLabel("District");
-        editText = addTextEditor(DISTRICT_VIEW_ID, "");
-        editText.setEnabled(false);
+        addTextEditor(DISTRICT_VIEW_ID, "").setEnabled(false);
 
         addLabel("City");
         addCityPicker(CITY_VIEW_ID, person.cityId);
 
         addLabel("Address");
-        editText = addTextEditor(ADDRESS_VIEW_ID, person.address);
-        editText.setSingleLine(false);
-        editText.setMinLines(3);
+        addTextEditor(ADDRESS_VIEW_ID, person.address).setSingleLine(false);
 
         addLabel("Postal code");
         addTextEditor(POSTAL_CODE_ID, person.postalCode);
-
-        addLabel("Home phone");
-        addTextEditor(HOME_PHONE_VIEW_ID, person.homePhone);
-
-        addLabel("Person phone");
-        addTextEditor(PERSONAL_PHONE_VIEW_ID, person.personalPhone);
-
-        addLabel("Email");
-        addTextEditor(EMAIL_VIEW_ID, person.email);
     }
 }

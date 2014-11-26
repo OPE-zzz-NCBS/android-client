@@ -1,18 +1,22 @@
 package com.opencbs.androidclient.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +45,8 @@ public abstract class EditorActivity extends ActivityWithBus {
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
     private static final int PICK_BRANCH_REQUEST = 2;
 
+    private int margin = 24;
+
     public void onEvent(EconomicActivityLoadedEvent event) {
         ViewGroup viewGroup = getContainer();
         Button button = (Button) viewGroup.findViewById(event.actionId);
@@ -55,8 +61,18 @@ public abstract class EditorActivity extends ActivityWithBus {
     protected void addLabel(String text) {
         TextView label = new TextView(this);
         label.setText(text);
-        label.setPadding(0, 48, 0, 0);
         label.setTextColor(Color.parseColor("#666666"));
+        label.setLayoutParams(getLabelLayoutParams());
+        getContainer().addView(label);
+    }
+
+    protected void addSection(String text) {
+        TextView label = new TextView(this);
+        label.setText(text);
+        label.setBackgroundColor(Color.parseColor("#cccccc"));
+        label.setPadding(24, 24, 24, 24);
+        label.setGravity(Gravity.CENTER);
+        label.setLayoutParams(getSectionLayoutParams());
         getContainer().addView(label);
     }
 
@@ -65,6 +81,7 @@ public abstract class EditorActivity extends ActivityWithBus {
         editText.setText(value);
         editText.setSingleLine(true);
         editText.setId(id);
+        editText.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(editText);
         return editText;
     }
@@ -77,6 +94,7 @@ public abstract class EditorActivity extends ActivityWithBus {
         editText.setHint(hint);
         editText.setText(((SimpleDateFormat) dateFormat).format(value));
         editText.setId(id);
+        editText.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(editText);
     }
 
@@ -90,6 +108,7 @@ public abstract class EditorActivity extends ActivityWithBus {
             spinner.setSelection(position);
         }
         spinner.setId(id);
+        spinner.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(spinner);
     }
 
@@ -99,6 +118,7 @@ public abstract class EditorActivity extends ActivityWithBus {
         button.setText("");
         button.setId(id);
         button.setTag(economicActivityId);
+        button.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(button);
 
         final Context context = this;
@@ -124,6 +144,7 @@ public abstract class EditorActivity extends ActivityWithBus {
         button.setText("");
         button.setId(id);
         button.setTag(branchId);
+        button.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(button);
 
         final Context context = this;
@@ -148,6 +169,7 @@ public abstract class EditorActivity extends ActivityWithBus {
         textView.setId(id);
         textView.setText("");
         textView.setTag(cityId);
+        textView.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(textView);
 
         LoadCitiesEvent event = new LoadCitiesEvent();
@@ -239,5 +261,23 @@ public abstract class EditorActivity extends ActivityWithBus {
                 enqueueEvent(event);
             }
         }
+    }
+
+    private LinearLayout.LayoutParams getLabelLayoutParams() {
+        LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        result.setMargins(48, 48, 48, 0);
+        return result;
+    }
+
+    private LinearLayout.LayoutParams getEditorLayoutParams() {
+        LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        result.setMargins(48, 0, 48, 0);
+        return result;
+    }
+
+    private LinearLayout.LayoutParams getSectionLayoutParams() {
+        LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        result.setMargins(0, 48, 0, 0);
+        return result;
     }
 }
