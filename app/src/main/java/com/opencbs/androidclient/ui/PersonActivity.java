@@ -3,7 +3,6 @@ package com.opencbs.androidclient.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.LoadPersonEvent;
@@ -24,14 +23,21 @@ public class PersonActivity extends EditorActivity {
     private static final int NATIONALITY_VIEW_ID = 8;
     private static final int ECONOMIC_ACTIVITY_VIEW_ID = 9;
     private static final int BRANCH_VIEW_ID = 10;
-    private static final int REGION_VIEW_ID = 11;
-    private static final int DISTRICT_VIEW_ID = 12;
-    private static final int CITY_VIEW_ID = 13;
-    private static final int ADDRESS_VIEW_ID = 14;
-    private static final int POSTAL_CODE_ID = 15;
-    private static final int HOME_PHONE_VIEW_ID = 16;
-    private static final int PERSONAL_PHONE_VIEW_ID = 17;
-    private static final int EMAIL_VIEW_ID = 18;
+    private static final int HOME_PHONE_VIEW_ID = 11;
+    private static final int PERSONAL_PHONE_VIEW_ID = 12;
+    private static final int EMAIL_VIEW_ID = 13;
+
+    private static final int REGION_1_VIEW_ID = 14;
+    private static final int DISTRICT_1_VIEW_ID = 15;
+    private static final int CITY_1_VIEW_ID = 16;
+    private static final int ADDRESS_1_VIEW_ID = 17;
+    private static final int POSTAL_1_CODE_ID = 18;
+
+    private static final int REGION_2_VIEW_ID = 19;
+    private static final int DISTRICT_2_VIEW_ID = 20;
+    private static final int CITY_2_VIEW_ID = 21;
+    private static final int ADDRESS_2_VIEW_ID = 22;
+    private static final int POSTAL_2_CODE_ID = 23;
 
     private ViewGroup container;
 
@@ -109,18 +115,35 @@ public class PersonActivity extends EditorActivity {
         addSection("ADDRESS 1");
 
         addLabel("Region");
-        addTextEditor(REGION_VIEW_ID, "").setEnabled(false);
+        addTextEditor(REGION_1_VIEW_ID, "").setEnabled(false);
 
         addLabel("District");
-        addTextEditor(DISTRICT_VIEW_ID, "").setEnabled(false);
+        addTextEditor(DISTRICT_1_VIEW_ID, "").setEnabled(false);
 
         addLabel("City");
-        addCityPicker(CITY_VIEW_ID, person.cityId);
+        addCityPicker(CITY_1_VIEW_ID, person.address1.cityId);
 
         addLabel("Address");
-        addTextEditor(ADDRESS_VIEW_ID, person.address).setSingleLine(false);
+        addTextEditor(ADDRESS_1_VIEW_ID, person.address1.address).setSingleLine(false);
 
         addLabel("Postal code");
-        addTextEditor(POSTAL_CODE_ID, person.postalCode);
+        addTextEditor(POSTAL_1_CODE_ID, person.address1.postalCode);
+
+        addSection("ADDRESS 2");
+
+        addLabel("Region");
+        addTextEditor(REGION_2_VIEW_ID, "").setEnabled(false);
+
+        addLabel("District");
+        addTextEditor(DISTRICT_2_VIEW_ID, "").setEnabled(false);
+
+        addLabel("City");
+        addCityPicker(CITY_2_VIEW_ID, person.address2.cityId);
+
+        addLabel("Address");
+        addTextEditor(ADDRESS_2_VIEW_ID, person.address2.address).setSingleLine(false);
+
+        addLabel("Postal code");
+        addTextEditor(POSTAL_2_CODE_ID, person.address2.postalCode);
     }
 }
