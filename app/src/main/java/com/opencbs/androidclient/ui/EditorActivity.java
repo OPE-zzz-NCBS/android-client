@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,12 +64,27 @@ public abstract class EditorActivity extends ActivityWithBus {
 
     protected abstract ViewGroup getContainer();
 
-    protected void addLabel(String text) {
+    protected void addLabel(String text, boolean required) {
         TextView label = new TextView(this);
-        label.setText(text);
-        label.setTextColor(Color.parseColor("#666666"));
+        if (!required) {
+            label.setText(text);
+            label.setTextColor(Color.parseColor("#666666"));
+        } else {
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+            builder.append(text).append(" ");
+            int start = 0;
+            int end = builder.length();
+            builder.append("*");
+            builder.setSpan(new ForegroundColorSpan(Color.parseColor("#666666")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(Color.RED), end, end + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            label.setText(builder);
+        }
         label.setLayoutParams(getLabelLayoutParams());
         getContainer().addView(label);
+    }
+
+    protected void addLabel(String text) {
+        addLabel(text, false);
     }
 
     protected void addSection(String text) {
@@ -198,17 +216,18 @@ public abstract class EditorActivity extends ActivityWithBus {
 
     protected void addCustomValue(CustomValue value) {
         String fieldType = value.field.type;
+        boolean required = value.field.mandatory;
         if (fieldType.equals("List")) {
-            addLabel(value.field.caption);
+            addLabel(value.field.caption, required);
             addListCustomValue(value);
         } else if (fieldType.equals("Text")) {
-            addLabel(value.field.caption);
+            addLabel(value.field.caption, required);
             addTextCustomValue(value);
         } else if (fieldType.equals("Number")) {
-            addLabel(value.field.caption);
+            addLabel(value.field.caption, required);
             addNumberCustomValue(value);
         } else if (fieldType.equals("Date")) {
-            addLabel(value.field.caption);
+            addLabel(value.field.caption, required);
             addDateCustomValue(value);
         } else if (fieldType.equals("Boolean")) {
             addBooleanCustomValue(value);

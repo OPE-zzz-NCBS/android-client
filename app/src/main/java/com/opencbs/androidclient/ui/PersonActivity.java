@@ -71,37 +71,37 @@ public class PersonActivity extends EditorActivity {
             layout.removeAllViews();
         }
 
-        addLabel("First name");
+        addLabel("First name", true);
         addTextEditor(FIRST_NAME_VIEW_ID, person.firstName);
 
         addLabel("Father name");
         addTextEditor(FATHER_NAME_VIEW_ID, person.fatherName);
 
-        addLabel("Last name");
+        addLabel("Last name", true);
         addTextEditor(LAST_NAME_VIEW_ID, person.lastName);
 
-        addLabel("Birth date");
+        addLabel("Birth date", true);
         addDateEditor(BIRTH_DATE_VIEW_ID, person.birthDate);
 
         addLabel("Birth place");
         addTextEditor(BIRTH_PLACE_VIEW_ID, person.birthPlace);
 
-        addLabel("Sex");
+        addLabel("Sex", true);
         ArrayList<String> list = new ArrayList<String>();
         list.add("Male");
         list.add("Female");
         addSpinner(SEX_VIEW_ID, list, person.sex);
 
-        addLabel("Identification data");
+        addLabel("Identification data", true);
         addTextEditor(IDENTIFICATION_DATA_VIEW_ID, person.identificationData);
 
         addLabel("Nationality");
         addTextEditor(NATIONALITY_VIEW_ID, person.nationality);
 
-        addLabel("Economic activity");
+        addLabel("Economic activity", true);
         addEconomicActivityPicker(ECONOMIC_ACTIVITY_VIEW_ID, person.activityId);
 
-        addLabel("Branch");
+        addLabel("Branch", true);
         addBranchPicker(BRANCH_VIEW_ID, person.branchId);
 
         addLabel("Home phone");
@@ -115,13 +115,13 @@ public class PersonActivity extends EditorActivity {
 
         addSection("ADDRESS 1");
 
-        addLabel("Region");
+        addLabel("Region", true);
         addTextEditor(REGION_1_VIEW_ID, "").setEnabled(false);
 
-        addLabel("District");
+        addLabel("District", true);
         addTextEditor(DISTRICT_1_VIEW_ID, "").setEnabled(false);
 
-        addLabel("City");
+        addLabel("City", true);
         addCityPicker(CITY_1_VIEW_ID, person.address1.cityId);
 
         addLabel("Address");
