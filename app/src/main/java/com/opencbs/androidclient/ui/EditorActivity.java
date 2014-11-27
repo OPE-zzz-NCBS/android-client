@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -35,6 +36,7 @@ import com.opencbs.androidclient.model.City;
 import com.opencbs.androidclient.model.CustomValue;
 
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,8 +49,6 @@ public abstract class EditorActivity extends ActivityWithBus {
     private static final int PICK_BRANCH_REQUEST = 2;
 
     private static final int CUSTOM_VIEW_BASE_ID = 1000;
-
-    private int margin = 24;
 
     public void onEvent(EconomicActivityLoadedEvent event) {
         ViewGroup viewGroup = getContainer();
@@ -95,7 +95,9 @@ public abstract class EditorActivity extends ActivityWithBus {
         Format dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         String hint = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
         editText.setHint(hint);
-        editText.setText(((SimpleDateFormat) dateFormat).format(value));
+        if (value != null) {
+            editText.setText(((SimpleDateFormat) dateFormat).format(value));
+        }
         editText.setId(id);
         editText.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(editText);
@@ -185,19 +187,37 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(loadCityEvent);
     }
 
+    protected void addCheckBox(int id, String label, boolean value) {
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setText(label);
+        checkBox.setChecked(value);
+        checkBox.setLayoutParams(getLabelLayoutParams());
+        checkBox.setId(id);
+        getContainer().addView(checkBox);
+    }
+
     protected void addCustomValue(CustomValue value) {
-        addLabel(value.field.caption);
-        if (value.field.type.equals("List")) {
+        String fieldType = value.field.type;
+        if (fieldType.equals("List")) {
+            addLabel(value.field.caption);
             addListCustomValue(value);
-        } else if (value.field.type.equals("Text")) {
+        } else if (fieldType.equals("Text")) {
+            addLabel(value.field.caption);
             addTextCustomValue(value);
-        } else if (value.field.type.equals("Number")) {
+        } else if (fieldType.equals("Number")) {
+            addLabel(value.field.caption);
             addNumberCustomValue(value);
+        } else if (fieldType.equals("Date")) {
+            addLabel(value.field.caption);
+            addDateCustomValue(value);
+        } else if (fieldType.equals("Boolean")) {
+            addBooleanCustomValue(value);
         }
     }
 
     protected void addListCustomValue(CustomValue value) {
-        List<String> items = Arrays.asList(value.field.extra.split(Pattern.quote("|")));
+        String extra = "|" + value.field.extra;
+        List<String> items = Arrays.asList(extra.split(Pattern.quote("|")));
         addSpinner(CUSTOM_VIEW_BASE_ID + value.field.id, items, value.value);
     }
 
@@ -208,6 +228,23 @@ public abstract class EditorActivity extends ActivityWithBus {
     protected void addNumberCustomValue(CustomValue value) {
         EditText editText = addTextEditor(CUSTOM_VIEW_BASE_ID + value.field.id, value.value);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+    }
+
+    protected void addBooleanCustomValue(CustomValue value) {
+        boolean checked = Boolean.parseBoolean(value.value);
+        addCheckBox(CUSTOM_VIEW_BASE_ID + value.field.id, value.field.caption, checked);
+    }
+
+    protected void addDateCustomValue(CustomValue value) {
+        Date date = null;
+        if (!value.value.isEmpty()) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                date = format.parse(value.value);
+            } catch (ParseException ignored) {
+            }
+        }
+        addDateEditor(CUSTOM_VIEW_BASE_ID + value.field.id, date);
     }
 
     public void onEvent(BranchLoadedEvent event) {
@@ -293,7 +330,7 @@ public abstract class EditorActivity extends ActivityWithBus {
 
     private LinearLayout.LayoutParams getLabelLayoutParams() {
         LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        result.setMargins(48, 48, 48, 0);
+        result.setMargins(48, 96, 48, 0);
         return result;
     }
 
