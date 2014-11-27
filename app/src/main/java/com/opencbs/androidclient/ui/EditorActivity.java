@@ -1,6 +1,5 @@
 package com.opencbs.androidclient.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -34,16 +32,21 @@ import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.event.LoadRegionEvent;
 import com.opencbs.androidclient.event.RegionLoadedEvent;
 import com.opencbs.androidclient.model.City;
+import com.opencbs.androidclient.model.CustomValue;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public abstract class EditorActivity extends ActivityWithBus {
 
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
     private static final int PICK_BRANCH_REQUEST = 2;
+
+    private static final int CUSTOM_VIEW_BASE_ID = 1000;
 
     private int margin = 24;
 
@@ -180,6 +183,31 @@ public abstract class EditorActivity extends ActivityWithBus {
         loadCityEvent.selector = id;
         loadCityEvent.cityId = cityId;
         bus.post(loadCityEvent);
+    }
+
+    protected void addCustomValue(CustomValue value) {
+        addLabel(value.field.caption);
+        if (value.field.type.equals("List")) {
+            addListCustomValue(value);
+        } else if (value.field.type.equals("Text")) {
+            addTextCustomValue(value);
+        } else if (value.field.type.equals("Number")) {
+            addNumberCustomValue(value);
+        }
+    }
+
+    protected void addListCustomValue(CustomValue value) {
+        List<String> items = Arrays.asList(value.field.extra.split(Pattern.quote("|")));
+        addSpinner(CUSTOM_VIEW_BASE_ID + value.field.id, items, value.value);
+    }
+
+    protected void addTextCustomValue(CustomValue value) {
+        addTextEditor(CUSTOM_VIEW_BASE_ID + value.field.id, value.value);
+    }
+
+    protected void addNumberCustomValue(CustomValue value) {
+        EditText editText = addTextEditor(CUSTOM_VIEW_BASE_ID + value.field.id, value.value);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     public void onEvent(BranchLoadedEvent event) {

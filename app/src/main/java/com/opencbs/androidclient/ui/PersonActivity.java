@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.LoadPersonEvent;
 import com.opencbs.androidclient.event.PersonLoadedEvent;
+import com.opencbs.androidclient.model.CustomValue;
 import com.opencbs.androidclient.model.Person;
 
 import java.util.ArrayList;
@@ -145,5 +146,14 @@ public class PersonActivity extends EditorActivity {
 
         addLabel("Postal code");
         addTextEditor(POSTAL_2_CODE_ID, person.address2.postalCode);
+
+        String currentCustomSection = "";
+        for (CustomValue value : person.customInformation) {
+            if (!currentCustomSection.equals(value.field.tab)) {
+                addSection(value.field.tab.toUpperCase());
+                currentCustomSection = value.field.tab;
+            }
+            addCustomValue(value);
+        }
     }
 }

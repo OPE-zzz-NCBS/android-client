@@ -1,6 +1,7 @@
 package com.opencbs.androidclient.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Person {
     public int id;
@@ -19,4 +20,5 @@ public class Person {
     public String email;
     public Address address1;
     public Address address2;
+    public List<CustomValue> customInformation;
 }
