@@ -1,8 +1,8 @@
 package com.opencbs.androidclient.event;
 
+import com.opencbs.androidclient.model.ClientRange;
+
 public class LoadClientsEvent extends BusEvent {
-    public int offset;
-    public int limit;
-    public boolean includeCount;
     public String query;
+    public ClientRange clientRange;
 }

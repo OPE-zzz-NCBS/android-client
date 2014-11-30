@@ -1,10 +1,12 @@
 package com.opencbs.androidclient.event;
 
 import com.opencbs.androidclient.Client;
+import com.opencbs.androidclient.model.ClientRange;
+
+import java.util.List;
 
 public class ClientsLoadedEvent extends BusEvent {
-    public int offset;
-    public int limit;
-    public int count;
-    public Client[] clients;
+    public List<Client> clients;
+    public ClientRange thisRange;
+    public ClientRange nextRange;
 }

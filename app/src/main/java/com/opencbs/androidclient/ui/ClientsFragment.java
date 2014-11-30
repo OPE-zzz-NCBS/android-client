@@ -1,7 +1,5 @@
 package com.opencbs.androidclient.ui;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,15 +18,13 @@ import com.opencbs.androidclient.event.CancelSearchEvent;
 import com.opencbs.androidclient.event.ClientsLoadedEvent;
 import com.opencbs.androidclient.event.LoadClientsEvent;
 import com.opencbs.androidclient.event.SearchEvent;
+import com.opencbs.androidclient.model.ClientRange;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
+public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout progressLayout;
@@ -36,52 +32,20 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private ArrayList<Client> clients;
     private ClientArrayAdapter adapter;
 
-    private int offset;
-    private final static int LIMIT = 25;
-    private int count = 0;
+    private final static int BATCH_SIZE = 1000;
     private String query = "";
-    private boolean wasPaused = false;
-
-    @Inject
-    EventBus bus;
+    private ClientRange nextRange;
 
     @Inject
     public ClientsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_clients, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_clients, container, false);
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        wasPaused = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        bus.register(this);
-        if (!wasPaused) {
-            postLoadClientsEvent();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        bus.unregister(this);
-        wasPaused = true;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
         clients = new ArrayList<Client>();
         adapter = new ClientArrayAdapter(getActivity(), clients);
         adapter.setOnLoadMoreListener(this);
-        offset = 0;
         ListView listView = (ListView) view.findViewById(R.id.clients_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
@@ -92,6 +56,17 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         progressLayout = (LinearLayout) view.findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
+
+        nextRange = new ClientRange();
+        nextRange.from = 0;
+        nextRange.to = BATCH_SIZE - 1;
+
+        LoadClientsEvent event = new LoadClientsEvent();
+        event.query = query;
+        event.clientRange = nextRange;
+        enqueueEvent(event);
+
+        return view;
     }
 
     public void onEvent(ClientsLoadedEvent event) {
@@ -101,13 +76,14 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        if (offset == 0) {
+        if (event.thisRange.from == 0) {
             clients.clear();
-            count = event.count;
         }
-        Collections.addAll(clients, event.clients);
-        offset += LIMIT;
-        adapter.setComplete(offset >= count);
+
+        nextRange = event.nextRange;
+
+        clients.addAll(event.clients);
+        adapter.setComplete(event.nextRange == null);
         adapter.setLoading(false);
         adapter.notifyDataSetChanged();
     }
@@ -116,7 +92,7 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = event.query;
-        offset = 0;
+//        offset = 0;
         postLoadClientsEvent();
     }
 
@@ -125,13 +101,15 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = "";
-        offset = 0;
+//        offset = 0;
         postLoadClientsEvent();
     }
 
     @Override
     public void onRefresh() {
-        offset = 0;
+        nextRange = new ClientRange();
+        nextRange.from = 0;
+        nextRange.to = BATCH_SIZE - 1;
         postLoadClientsEvent();
     }
 
@@ -144,10 +122,8 @@ public class ClientsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void postLoadClientsEvent() {
         LoadClientsEvent event = new LoadClientsEvent();
-        event.includeCount = offset == 0;
-        event.offset = offset;
-        event.limit = LIMIT;
         event.query = query;
+        event.clientRange = nextRange;
         bus.post(event);
     }
 
