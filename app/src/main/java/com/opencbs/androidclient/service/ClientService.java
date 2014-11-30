@@ -50,11 +50,11 @@ public class ClientService {
                         int count = Integer.parseInt(matcher.group(3));
 
                         if (to < count - 1) {
-                            ClientRange nextRange = new ClientRange();
-                            nextRange.from = to + 1;
-                            nextRange.to = nextRange.from + (to - from);
-                            if (nextRange.to >= count - 1) nextRange.to = count - 1;
-                            responseEvent.nextRange = nextRange;
+                            int size = to - from;
+                            from = to + 1;
+                            to = from + size;
+                            if (to >= count - 1) to = count - 1;
+                            responseEvent.nextRange = new ClientRange(from, to);
                         }
                         break;
                     }
@@ -68,6 +68,10 @@ public class ClientService {
             }
         };
 
-        clientApi.get().getAll(event.query, event.clientRange, callback);
+        if (event.query.isEmpty()) {
+            clientApi.get().getAll(event.clientRange, callback);
+        } else {
+            clientApi.get().search(event.query, event.clientRange, callback);
+        }
     }
 }

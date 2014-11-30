@@ -32,7 +32,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
     private ArrayList<Client> clients;
     private ClientArrayAdapter adapter;
 
-    private final static int BATCH_SIZE = 1000;
+    private final static int BATCH_SIZE = 25;
     private String query = "";
     private ClientRange nextRange;
 
@@ -57,9 +57,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         progressLayout = (LinearLayout) view.findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
 
-        nextRange = new ClientRange();
-        nextRange.from = 0;
-        nextRange.to = BATCH_SIZE - 1;
+        nextRange = new ClientRange(0, BATCH_SIZE - 1);
 
         LoadClientsEvent event = new LoadClientsEvent();
         event.query = query;
@@ -92,7 +90,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = event.query;
-//        offset = 0;
+        nextRange = new ClientRange(0, BATCH_SIZE - 1);
         postLoadClientsEvent();
     }
 
@@ -101,15 +99,13 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = "";
-//        offset = 0;
+        nextRange = new ClientRange(0, BATCH_SIZE - 1);
         postLoadClientsEvent();
     }
 
     @Override
     public void onRefresh() {
-        nextRange = new ClientRange();
-        nextRange.from = 0;
-        nextRange.to = BATCH_SIZE - 1;
+        nextRange = new ClientRange(0, BATCH_SIZE - 1);
         postLoadClientsEvent();
     }
 

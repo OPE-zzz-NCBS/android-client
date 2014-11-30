@@ -12,5 +12,8 @@ import retrofit.http.Query;
 
 public interface ClientApi {
     @GET("/api/clients")
-    void getAll(@Query("query") String query, @Header("Range") ClientRange clientRange, Callback<List<Client>> callback);
+    void getAll(@Header("Range") ClientRange clientRange, Callback<List<Client>> callback);
+
+    @GET("/api/clients")
+    void search(@Query("query") String query, @Header("Range") ClientRange clientRange, Callback<List<Client>> callback);
 }
