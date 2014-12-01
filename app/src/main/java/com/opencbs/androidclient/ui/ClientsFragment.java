@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.opencbs.androidclient.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
@@ -17,12 +18,14 @@ import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.CancelSearchEvent;
 import com.opencbs.androidclient.event.ClientsLoadedEvent;
 import com.opencbs.androidclient.event.LoadClientsEvent;
+import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
 import com.opencbs.androidclient.model.ClientRange;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
 
@@ -101,6 +104,12 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         query = "";
         nextRange = new ClientRange(0, BATCH_SIZE - 1);
         postLoadClientsEvent();
+    }
+
+    public void onEvent(NewPersonEvent event) {
+        Intent intent = new Intent(getActivity(), PersonActivity.class);
+        intent.putExtra("id", 0);
+        startActivity(intent);
     }
 
     @Override

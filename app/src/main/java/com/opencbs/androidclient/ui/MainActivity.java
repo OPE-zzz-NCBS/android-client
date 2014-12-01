@@ -19,15 +19,14 @@ import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.event.CancelSearchEvent;
 import com.opencbs.androidclient.event.LogoutEvent;
 import com.opencbs.androidclient.event.LogoutSuccessEvent;
+import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
+public class MainActivity extends ActivityWithBus implements ListView.OnItemClickListener {
 
     private static final int MENU_CLIENTS = 10;
     private static final int MENU_DOWNLOAD = 20;
@@ -43,9 +42,6 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
 
     @Inject
     DownloadFragment downloadFragment;
-
-    @Inject
-    EventBus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,18 +72,6 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_clients, menu);
         setupSearchMenuItem(menu);
@@ -99,6 +83,13 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+
+        switch (item.getItemId()) {
+            case R.id.action_new_person:
+                bus.post(new NewPersonEvent());
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

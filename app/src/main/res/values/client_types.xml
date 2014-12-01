@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="client_type_array">
+        <item>@string/person</item>
+        <item>@string/group</item>
+        <item>@string/village_bank</item>
+        <item>@string/company</item>
+    </string-array>
+</resources>

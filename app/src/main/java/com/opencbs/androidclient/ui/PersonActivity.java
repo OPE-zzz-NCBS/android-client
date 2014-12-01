@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.LoadPersonEvent;
 import com.opencbs.androidclient.event.PersonLoadedEvent;
+import com.opencbs.androidclient.model.Address;
 import com.opencbs.androidclient.model.CustomValue;
 import com.opencbs.androidclient.model.Person;
 
@@ -48,10 +49,21 @@ public class PersonActivity extends EditorActivity {
         setContentView(R.layout.activity_person);
 
         Intent intent = getIntent();
+        int id = intent.getIntExtra("id", 0);
 
-        LoadPersonEvent event = new LoadPersonEvent();
-        event.id = intent.getIntExtra("id", 0);
-        enqueueEvent(event);
+        if (id > 0) {
+            LoadPersonEvent event = new LoadPersonEvent();
+            event.id = intent.getIntExtra("id", 0);
+            enqueueEvent(event);
+        } else {
+            PersonLoadedEvent event = new PersonLoadedEvent();
+            Person person = new Person();
+            person.address1 = new Address();
+            person.address2 = new Address();
+            person.customInformation = new ArrayList<CustomValue>();
+            event.person = person;
+            enqueueEvent(event);
+        }
     }
 
     @Override

@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_search"
-        android:title="Search"
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="collapseActionView|ifRoom"
-        android:actionViewClass="android.widget.SearchView" />
+        android:title="@string/action_search" />
+
+    <item
+        android:id="@+id/action_new"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_new">
+        <menu>
+            <item
+                android:id="@+id/action_new_person"
+                android:title="New person" />
+
+            <item
+                android:id="@+id/action_new_group"
+                android:title="New group" />
+
+            <item
+                android:id="@+id/action_new_village_bank"
+                android:title="New village bank" />
+
+            <item
+                android:id="@+id/action_new_company"
+                android:title="New company" />
+        </menu>
+    </item>
 </menu>
