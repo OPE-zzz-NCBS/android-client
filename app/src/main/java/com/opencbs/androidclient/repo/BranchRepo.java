@@ -8,6 +8,7 @@ import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.model.Branch;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,7 @@ public class BranchRepo {
         db.execSQL("delete from branches");
     }
 
-    public void add(Branch[] branches) {
+    public void add(List<Branch> branches) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (Branch branch : branches) {
             ContentValues contentValues = new ContentValues();
@@ -53,12 +54,14 @@ public class BranchRepo {
                 result.address = cursor.getString(cursor.getColumnIndex("address"));
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return result;
     }
 
-    public Branch[] getAll() {
+    public List<Branch> getAll() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ArrayList<Branch> result = new ArrayList<Branch>();
         Cursor cursor = null;
@@ -79,8 +82,10 @@ public class BranchRepo {
                 }
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return result.toArray(new Branch[result.size()]);
+        return result;
     }
 }

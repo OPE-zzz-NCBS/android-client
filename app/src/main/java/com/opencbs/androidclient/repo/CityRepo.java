@@ -8,6 +8,7 @@ import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.model.City;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,7 @@ public class CityRepo {
         db.execSQL("delete from cities");
     }
 
-    public void add(City[] cities) {
+    public void add(List<City> cities) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (City city : cities) {
             ContentValues contentValues = new ContentValues();
@@ -48,12 +49,14 @@ public class CityRepo {
                 result.districtId = cursor.getInt(cursor.getColumnIndex("district_id"));
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return result;
     }
 
-    public City[] getAll() {
+    public List<City> getAll() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ArrayList<City> result = new ArrayList<City>();
         Cursor cursor = null;
@@ -72,8 +75,10 @@ public class CityRepo {
                 }
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return result.toArray(new City[result.size()]);
+        return result;
     }
 }

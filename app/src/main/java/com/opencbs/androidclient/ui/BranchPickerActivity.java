@@ -12,7 +12,6 @@ import com.opencbs.androidclient.event.LoadBranchesEvent;
 import com.opencbs.androidclient.model.Branch;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class BranchPickerActivity extends OkCancelActivity {
 
@@ -39,7 +38,7 @@ public class BranchPickerActivity extends OkCancelActivity {
 
     public void onEvent(BranchesLoadedEvent event) {
         branches.clear();
-        Collections.addAll(branches, event.branches);
+        branches.addAll(event.branches);
         adapter.notifyDataSetChanged();
 
         Intent intent = getIntent();

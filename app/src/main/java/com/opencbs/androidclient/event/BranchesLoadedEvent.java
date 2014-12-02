@@ -2,6 +2,8 @@ package com.opencbs.androidclient.event;
 
 import com.opencbs.androidclient.model.Branch;
 
+import java.util.List;
+
 public class BranchesLoadedEvent {
-    public Branch[] branches;
+    public List<Branch> branches;
 }

@@ -6,10 +6,12 @@ import com.opencbs.androidclient.model.District;
 import com.opencbs.androidclient.model.EconomicActivity;
 import com.opencbs.androidclient.model.Region;
 
+import java.util.List;
+
 public class LookupDataResponse {
     public EconomicActivity[] economicActivities;
-    public Branch[] branches;
-    public City[] cities;
-    public District[] districts;
-    public Region[] regions;
+    public List<Branch> branches;
+    public List<City> cities;
+    public List<District> districts;
+    public List<Region> regions;
 }

@@ -8,6 +8,7 @@ import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.model.Region;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,7 @@ public class RegionRepo {
         db.execSQL("delete from regions");
     }
 
-    public void add(Region[] regions) {
+    public void add(List<Region> regions) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (Region region : regions) {
             ContentValues contentValues = new ContentValues();
@@ -47,12 +48,14 @@ public class RegionRepo {
                 result.name = cursor.getString(cursor.getColumnIndex("name"));
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return result;
     }
 
-    public Region[] getAll() {
+    public List<Region> getAll() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ArrayList<Region> result = new ArrayList<Region>();
         Cursor cursor = null;
@@ -70,8 +73,10 @@ public class RegionRepo {
                 }
             }
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return result.toArray(new Region[result.size()]);
+        return result;
     }
 }
