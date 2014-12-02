@@ -1,10 +1,10 @@
 package com.opencbs.androidclient.service;
 
-import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.event.EconomicActivitiesLoadedEvent;
 import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivitiesEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
+import com.opencbs.androidclient.repo.EconomicActivityRepo;
 
 import javax.inject.Inject;
 
@@ -16,18 +16,18 @@ public class EconomicActivityService {
     EventBus bus;
 
     @Inject
-    DbHelper dbHelper;
+    EconomicActivityRepo economicActivityRepo;
 
     public void onEvent(LoadEconomicActivityEvent event) {
         EconomicActivityLoadedEvent responseEvent = new EconomicActivityLoadedEvent();
-        responseEvent.economicActivity = dbHelper.getEconomicActivity(event.economicActivityId);
+        responseEvent.economicActivity = economicActivityRepo.get(event.economicActivityId);
         responseEvent.actionId = event.actionId;
         bus.post(responseEvent);
     }
 
     public void onEvent(LoadEconomicActivitiesEvent event) {
         EconomicActivitiesLoadedEvent responseEvent = new EconomicActivitiesLoadedEvent();
-        responseEvent.economicActivities = dbHelper.getEconomicActivities();
+        responseEvent.economicActivities = economicActivityRepo.getAll();
         bus.post(responseEvent);
     }
 }

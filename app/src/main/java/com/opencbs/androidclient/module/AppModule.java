@@ -5,6 +5,9 @@ import android.content.Context;
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;
+import com.opencbs.androidclient.repo.DistrictRepo;
+import com.opencbs.androidclient.repo.EconomicActivityRepo;
+import com.opencbs.androidclient.repo.RegionRepo;
 import com.opencbs.androidclient.ui.BranchPickerActivity;
 import com.opencbs.androidclient.ui.ClientsFragment;
 import com.opencbs.androidclient.ui.DownloadFragment;
@@ -35,7 +38,10 @@ import de.greenrobot.event.EventBus;
                 BranchPickerActivity.class,
 
                 BranchRepo.class,
-                CityRepo.class
+                CityRepo.class,
+                DistrictRepo.class,
+                RegionRepo.class,
+                EconomicActivityRepo.class,
         },
         library = true
 )

@@ -3,33 +3,35 @@ package com.opencbs.androidclient.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.opencbs.androidclient.model.Region;
+import com.opencbs.androidclient.model.EconomicActivity;
 
 import javax.inject.Inject;
 
-public class RegionRepo extends Repo<Region> {
+public class EconomicActivityRepo extends Repo<EconomicActivity> {
 
     @Inject
-    public RegionRepo() {}
+    public EconomicActivityRepo() {}
 
     @Override
     protected String getTableName() {
-        return "regions";
+        return "economic_activities";
     }
 
     @Override
-    protected ContentValues getContentValues(Region item) {
+    protected ContentValues getContentValues(EconomicActivity item) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("_id", item.id);
         contentValues.put("name", item.name);
+        contentValues.put("parent_id", item.parentId);
         return contentValues;
     }
 
     @Override
-    protected Region itemFromCursor(Cursor cursor) {
-        Region result = new Region();
+    protected EconomicActivity itemFromCursor(Cursor cursor) {
+        EconomicActivity result = new EconomicActivity();
         result.id = cursor.getInt(cursor.getColumnIndex("_id"));
         result.name = cursor.getString(cursor.getColumnIndex("name"));
+        result.parentId = cursor.getInt(cursor.getColumnIndex("parent_id"));
         return result;
     }
 }

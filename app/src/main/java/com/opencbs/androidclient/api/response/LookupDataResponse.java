@@ -9,7 +9,7 @@ import com.opencbs.androidclient.model.Region;
 import java.util.List;
 
 public class LookupDataResponse {
-    public EconomicActivity[] economicActivities;
+    public List<EconomicActivity> economicActivities;
     public List<Branch> branches;
     public List<City> cities;
     public List<District> districts;

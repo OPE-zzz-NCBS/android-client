@@ -12,7 +12,6 @@ import com.opencbs.androidclient.event.LoadEconomicActivitiesEvent;
 import com.opencbs.androidclient.model.EconomicActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class EconomicActivityPickerActivity extends OkCancelActivity {
 
@@ -60,7 +59,7 @@ public class EconomicActivityPickerActivity extends OkCancelActivity {
 
     public void onEvent(EconomicActivitiesLoadedEvent event) {
         economicActivities.clear();
-        Collections.addAll(economicActivities, event.economicActivities);
+        economicActivities.addAll(event.economicActivities);
         adapter.notifyDataSetChanged();
 
         // Select the proper economic activity

@@ -2,83 +2,36 @@ package com.opencbs.androidclient.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.model.City;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
-public class CityRepo {
-
-    @Inject
-    DbHelper dbHelper;
+public class CityRepo extends Repo<City> {
 
     @Inject
     public CityRepo() {}
 
-    public void deleteAll() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.execSQL("delete from cities");
+    @Override
+    protected String getTableName() {
+        return "cities";
     }
 
-    public void add(List<City> cities) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for (City city : cities) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("_id", city.id);
-            contentValues.put("name", city.name);
-            contentValues.put("district_id", city.districtId);
-            db.insert("cities", null, contentValues);
-        }
-    }
-    public City get(int id) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        City result = null;
-        Cursor cursor = null;
-        try {
-            cursor = db.rawQuery("select * from cities where _id = ?", new String[]{id + ""});
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                result = new City();
-                result.id = id;
-                result.name = cursor.getString(cursor.getColumnIndex("name"));
-                result.districtId = cursor.getInt(cursor.getColumnIndex("district_id"));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return result;
+    @Override
+    protected ContentValues getContentValues(City item) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_id", item.id);
+        contentValues.put("name", item.name);
+        contentValues.put("district_id", item.districtId);
+        return contentValues;
     }
 
-    public List<City> getAll() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        ArrayList<City> result = new ArrayList<City>();
-        Cursor cursor = null;
-        try
-        {
-            cursor = db.rawQuery("select * from cities", null);
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    City city = new City();
-                    city.id = cursor.getInt(cursor.getColumnIndex("_id"));
-                    city.name = cursor.getString(cursor.getColumnIndex("name"));
-                    city.districtId = cursor.getInt(cursor.getColumnIndex("district_id"));
-                    result.add(city);
-                    cursor.moveToNext();
-                }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+    @Override
+    protected City itemFromCursor(Cursor cursor) {
+        City result = new City();
+        result.id = cursor.getInt(cursor.getColumnIndex("_id"));
+        result.name = cursor.getString(cursor.getColumnIndex("name"));
+        result.districtId = cursor.getInt(cursor.getColumnIndex("district_id"));
         return result;
     }
 }

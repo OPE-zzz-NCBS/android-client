@@ -2,7 +2,6 @@ package com.opencbs.androidclient.service;
 
 import android.content.Context;
 
-import com.opencbs.androidclient.DbHelper;
 import com.opencbs.androidclient.api.LookupDataApi;
 import com.opencbs.androidclient.api.response.LookupDataResponse;
 import com.opencbs.androidclient.event.DownloadLookupDataEvent;
@@ -10,6 +9,7 @@ import com.opencbs.androidclient.event.LookupDataDownloadedEvent;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;
 import com.opencbs.androidclient.repo.DistrictRepo;
+import com.opencbs.androidclient.repo.EconomicActivityRepo;
 import com.opencbs.androidclient.repo.RegionRepo;
 
 import javax.inject.Inject;
@@ -32,6 +32,9 @@ public class LookupDataService {
     EventBus bus;
 
     @Inject
+    EconomicActivityRepo economicActivityRepo;
+
+    @Inject
     BranchRepo branchRepo;
 
     @Inject
@@ -47,9 +50,8 @@ public class LookupDataService {
         Callback<LookupDataResponse> callback = new Callback<LookupDataResponse>() {
             @Override
             public void success(LookupDataResponse lookupDataResponse, Response response) {
-                DbHelper dbHelper = new DbHelper(context);
-                dbHelper.deleteEconomicActivities();
-                dbHelper.addEconomicActivities(lookupDataResponse.economicActivities);
+                economicActivityRepo.deleteAll();
+                economicActivityRepo.add(lookupDataResponse.economicActivities);
 
                 branchRepo.deleteAll();
                 branchRepo.add(lookupDataResponse.branches);
