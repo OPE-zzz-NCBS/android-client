@@ -1,6 +1,5 @@
 package com.opencbs.androidclient.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -326,25 +325,6 @@ public abstract class EditorActivity extends ActivityWithBus {
         EditText editText = (EditText) getContainer().findViewById(event.selector);
         if (editText == null || event.region == null) return;
         editText.setText(event.region.name);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_ECONOMIC_ACTIVITY_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                LoadEconomicActivityEvent event = new LoadEconomicActivityEvent();
-                event.actionId = data.getIntExtra("economicActivityPickerId", 0);
-                event.economicActivityId = data.getIntExtra("economicActivityId", 0);
-                enqueueEvent(event);
-            }
-        } else if (requestCode == PICK_BRANCH_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                LoadBranchEvent event = new LoadBranchEvent();
-                event.actionId = data.getIntExtra("branchPickerId", 0);
-                event.branchId = data.getIntExtra("branchId", 0);
-                enqueueEvent(event);
-            }
-        }
     }
 
     private LinearLayout.LayoutParams getLabelLayoutParams() {

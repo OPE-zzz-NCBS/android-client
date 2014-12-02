@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.event.EconomicActivitiesLoadedEvent;
+import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.event.LoadEconomicActivitiesEvent;
 import com.opencbs.androidclient.model.EconomicActivity;
 
@@ -33,21 +34,19 @@ public class EconomicActivityPickerActivity extends OkCancelActivity {
         Intent intent = getIntent();
         economicActivityPickerId = intent.getIntExtra("economicActivityPickerId", 0);
 
-        enqueueEvent(new LoadEconomicActivitiesEvent());
+        bus.post(new LoadEconomicActivitiesEvent());
     }
 
     @Override
     protected void onOk() {
         int position = listView.getCheckedItemPosition();
-        int id = 0;
         if (position != ListView.INVALID_POSITION) {
-            EconomicActivity economicActivity = economicActivities.get(position);
-            id = economicActivity.id;
+            EconomicActivityLoadedEvent event = new EconomicActivityLoadedEvent();
+            event.economicActivity = economicActivities.get(position);
+            event.actionId = economicActivityPickerId;
+            bus.post(event);
         }
-        Intent intent = new Intent();
-        intent.putExtra("economicActivityPickerId", economicActivityPickerId);
-        intent.putExtra("economicActivityId", id);
-        setResult(Activity.RESULT_OK, intent);
+        setResult(Activity.RESULT_OK, null);
         finish();
     }
 

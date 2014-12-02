@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.event.BranchLoadedEvent;
 import com.opencbs.androidclient.event.BranchesLoadedEvent;
 import com.opencbs.androidclient.event.LoadBranchesEvent;
 import com.opencbs.androidclient.model.Branch;
@@ -33,7 +34,7 @@ public class BranchPickerActivity extends OkCancelActivity {
         Intent intent = getIntent();
         branchPickerId = intent.getIntExtra("branchPickerId", 0);
 
-        enqueueEvent(new LoadBranchesEvent());
+        bus.post(new LoadBranchesEvent());
     }
 
     public void onEvent(BranchesLoadedEvent event) {
@@ -62,15 +63,13 @@ public class BranchPickerActivity extends OkCancelActivity {
     @Override
     protected void onOk() {
         int position = listView.getCheckedItemPosition();
-        int id = 0;
         if (position != ListView.INVALID_POSITION) {
-            Branch branch = branches.get(position);
-            id = branch.id;
+            BranchLoadedEvent event = new BranchLoadedEvent();
+            event.branch = branches.get(position);
+            event.actionId = branchPickerId;
+            bus.post(event);
         }
-        Intent intent = new Intent();
-        intent.putExtra("branchPickerId", branchPickerId);
-        intent.putExtra("branchId", id);
-        setResult(Activity.RESULT_OK, intent);
+        setResult(Activity.RESULT_OK, null);
         finish();
     }
 

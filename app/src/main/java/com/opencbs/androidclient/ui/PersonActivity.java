@@ -54,7 +54,7 @@ public class PersonActivity extends EditorActivity {
         if (id > 0) {
             LoadPersonEvent event = new LoadPersonEvent();
             event.id = intent.getIntExtra("id", 0);
-            enqueueEvent(event);
+            bus.post(event);
         } else {
             PersonLoadedEvent event = new PersonLoadedEvent();
             Person person = new Person();
@@ -62,7 +62,7 @@ public class PersonActivity extends EditorActivity {
             person.address2 = new Address();
             person.customInformation = new ArrayList<CustomValue>();
             event.person = person;
-            enqueueEvent(event);
+            bus.post(event);
         }
     }
 
