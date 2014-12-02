@@ -58,6 +58,20 @@ public class DbHelper extends SQLiteOpenHelper {
                         "name text not null" +
                         ")"
         );
+
+        db.execSQL(
+                "create table custom_fields (" +
+                        "_id integer primary key, " +
+                        "caption text not null, " +
+                        "type text not null, " +
+                        "owner text not null, " +
+                        "tab text not null, " +
+                        "is_unique int not null, " +
+                        "required int not null, " +
+                        "field_order int not null, " +
+                        "extra text not null " +
+                        ")"
+        );
     }
 
     @Override

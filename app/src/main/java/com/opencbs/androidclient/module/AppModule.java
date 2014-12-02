@@ -5,6 +5,7 @@ import android.content.Context;
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;
+import com.opencbs.androidclient.repo.CustomFieldRepo;
 import com.opencbs.androidclient.repo.DistrictRepo;
 import com.opencbs.androidclient.repo.EconomicActivityRepo;
 import com.opencbs.androidclient.repo.RegionRepo;
@@ -42,6 +43,7 @@ import de.greenrobot.event.EventBus;
                 DistrictRepo.class,
                 RegionRepo.class,
                 EconomicActivityRepo.class,
+                CustomFieldRepo.class
         },
         library = true
 )

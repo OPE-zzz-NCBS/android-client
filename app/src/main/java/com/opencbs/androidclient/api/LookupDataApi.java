@@ -6,6 +6,6 @@ import retrofit.Callback;
 import retrofit.http.GET;
 
 public interface LookupDataApi {
-    @GET("/api/lookupdata")
+    @GET("/api/lookup-data")
     void get(Callback<LookupDataResponse> callback);
 }
