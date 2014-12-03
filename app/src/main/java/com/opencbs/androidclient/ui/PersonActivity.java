@@ -43,13 +43,15 @@ public class PersonActivity extends EditorActivity {
     private static final int DISTRICT_1_VIEW_ID = 15;
     private static final int CITY_1_VIEW_ID = 16;
     private static final int ADDRESS_1_VIEW_ID = 17;
-    private static final int POSTAL_1_CODE_ID = 18;
+    private static final int POSTAL_CODE_1_VIEW_ID = 18;
 
     private static final int REGION_2_VIEW_ID = 19;
     private static final int DISTRICT_2_VIEW_ID = 20;
     private static final int CITY_2_VIEW_ID = 21;
     private static final int ADDRESS_2_VIEW_ID = 22;
-    private static final int POSTAL_2_CODE_ID = 23;
+    private static final int POSTAL_CODE_2_VIEW_ID = 23;
+
+    private static final int CUSTOM_VIEW_BASE_ID = 1000;
 
     private ViewGroup container;
     private List<CustomField> customFields;
@@ -174,7 +176,7 @@ public class PersonActivity extends EditorActivity {
         addTextEditor(ADDRESS_1_VIEW_ID, person.address1.address).setSingleLine(false);
 
         addLabel("Postal code");
-        addTextEditor(POSTAL_1_CODE_ID, person.address1.postalCode);
+        addTextEditor(POSTAL_CODE_1_VIEW_ID, person.address1.postalCode);
 
         addSection("ADDRESS 2");
 
@@ -191,7 +193,7 @@ public class PersonActivity extends EditorActivity {
         addTextEditor(ADDRESS_2_VIEW_ID, person.address2.address).setSingleLine(false);
 
         addLabel("Postal code");
-        addTextEditor(POSTAL_2_CODE_ID, person.address2.postalCode);
+        addTextEditor(POSTAL_CODE_2_VIEW_ID, person.address2.postalCode);
 
         String currentCustomSection = "";
         for (CustomField field : customFields) {
@@ -199,7 +201,7 @@ public class PersonActivity extends EditorActivity {
                 addSection(field.tab.toUpperCase());
                 currentCustomSection = field.tab;
             }
-            addCustomValue(field, person.getCustomFieldValue(field.id));
+            addCustomValue(field, CUSTOM_VIEW_BASE_ID + field.id, person.getCustomFieldValue(field.id));
         }
     }
 
@@ -216,9 +218,55 @@ public class PersonActivity extends EditorActivity {
         validator.addRule(new DateValidationRule(container, BIRTH_DATE_VIEW_ID, dateFormat, errorInvalidEntry));
         validator.addRule(new RequiredValidationRule(container, IDENTIFICATION_DATA_VIEW_ID, errorRequiredField));
         validator.addRule(new RequiredValidationRule(container, CITY_1_VIEW_ID, errorRequiredField));
+
+        for (CustomField field : customFields) {
+            int fieldId = CUSTOM_VIEW_BASE_ID + field.id;
+            if (field.type.equals("Text")) {
+                if (field.mandatory) {
+                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                }
+            } else if (field.type.equals("Number")) {
+                if (field.mandatory) {
+                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                }
+            } else if (field.type.equals("Date")) {
+                if (field.mandatory) {
+                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                }
+                validator.addRule(new DateValidationRule(container, fieldId, dateFormat, errorInvalidEntry));
+            }
+        }
+    }
+
+    private Person getPerson() {
+        Person person = new Person();
+        person.firstName = getTextValue(FIRST_NAME_VIEW_ID);
+        person.fatherName = getTextValue(FATHER_NAME_VIEW_ID);
+        person.lastName = getTextValue(LAST_NAME_VIEW_ID);
+        person.birthDate = getDateValue(BIRTH_DATE_VIEW_ID);
+        person.birthPlace = getTextValue(BIRTH_PLACE_VIEW_ID);
+        person.sex = getSpinnerValue(SEX_VIEW_ID);
+        person.identificationData = getTextValue(IDENTIFICATION_DATA_VIEW_ID);
+        person.nationality = getTextValue(NATIONALITY_VIEW_ID);
+        person.activityId = getEconomicActivityId(ECONOMIC_ACTIVITY_VIEW_ID);
+        person.branchId = getBranchId(BRANCH_VIEW_ID);
+        person.homePhone = getTextValue(HOME_PHONE_VIEW_ID);
+        person.personalPhone = getTextValue(PERSONAL_PHONE_VIEW_ID);
+        person.email = getTextValue(EMAIL_VIEW_ID);
+        person.address1 = new Address();
+        person.address1.cityId = getCityId(CITY_1_VIEW_ID);
+        person.address1.address = getTextValue(ADDRESS_1_VIEW_ID);
+        person.address1.postalCode = getTextValue(POSTAL_CODE_1_VIEW_ID);
+        person.address2 = new Address();
+        person.address2.cityId = getCityId(CITY_2_VIEW_ID);
+        person.address2.address = getTextValue(ADDRESS_2_VIEW_ID);
+        person.address2.postalCode = getTextValue(POSTAL_CODE_2_VIEW_ID);
+        return person;
     }
 
     private void save() {
         validator.validate();
+
+        Person person = getPerson();
     }
 }

@@ -50,8 +50,6 @@ public abstract class EditorActivity extends ActivityWithBus {
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
     private static final int PICK_BRANCH_REQUEST = 2;
 
-    private static final int CUSTOM_VIEW_BASE_ID = 1000;
-
     public void onEvent(EconomicActivityLoadedEvent event) {
         ViewGroup viewGroup = getContainer();
         Button button = (Button) viewGroup.findViewById(event.actionId);
@@ -106,6 +104,12 @@ public abstract class EditorActivity extends ActivityWithBus {
         return editText;
     }
 
+    protected String getTextValue(int viewId) {
+        EditText editText = (EditText) getContainer().findViewById(viewId);
+        if (editText == null) return "";
+        return editText.getText().toString();
+    }
+
     protected void addDateEditor(int id, Date value) {
         EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
@@ -120,6 +124,19 @@ public abstract class EditorActivity extends ActivityWithBus {
         getContainer().addView(editText);
     }
 
+    protected Date getDateValue(int viewId) {
+        EditText editText = (EditText) getContainer().findViewById(viewId);
+        if (editText == null) return null;
+        Format dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+        String pattern = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.parse(editText.getText().toString());
+        } catch (ParseException ignored) {
+            return null;
+        }
+    }
+
     protected void addSpinner(int id, List<String> items, String value) {
         Spinner spinner = new Spinner(this);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
@@ -132,6 +149,12 @@ public abstract class EditorActivity extends ActivityWithBus {
         spinner.setId(id);
         spinner.setLayoutParams(getEditorLayoutParams());
         getContainer().addView(spinner);
+    }
+
+    protected String getSpinnerValue(int viewId) {
+        Spinner spinner = (Spinner) getContainer().findViewById(viewId);
+        if (spinner == null) return "";
+        return spinner.getSelectedItem().toString();
     }
 
     protected void addEconomicActivityPicker(final int id, final int economicActivityId) {
@@ -160,6 +183,14 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(event);
     }
 
+    protected int getEconomicActivityId(int viewId) {
+        Button button = (Button) getContainer().findViewById(viewId);
+        if (button == null) return 0;
+        Object tag = button.getTag();
+        if (tag == null) return 0;
+        return (Integer) tag;
+    }
+
     protected void addBranchPicker(final int id, final int branchId) {
         LayoutInflater inflater = LayoutInflater.from(this);
         final Button button = (Button) inflater.inflate(R.layout.spinner_button, getContainer(), false);
@@ -186,6 +217,14 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(event);
     }
 
+    protected int getBranchId(int viewId) {
+        Button button = (Button) getContainer().findViewById(viewId);
+        if (button == null) return 0;
+        Object tag = button.getTag();
+        if (tag == null) return 0;
+        return (Integer) tag;
+    }
+
     protected void addCityPicker(int id, int cityId) {
         AutoCompleteTextView textView = new AutoCompleteTextView(this);
         textView.setId(id);
@@ -204,6 +243,14 @@ public abstract class EditorActivity extends ActivityWithBus {
         bus.post(loadCityEvent);
     }
 
+    protected int getCityId(int viewId) {
+        TextView textView = (TextView) getContainer().findViewById(viewId);
+        if (textView == null) return 0;
+        Object tag = textView.getTag();
+        if (tag == null) return 0;
+        return (Integer) tag;
+    }
+
     protected void addCheckBox(int id, String label, boolean value) {
         CheckBox checkBox = new CheckBox(this);
         checkBox.setText(label);
@@ -213,47 +260,47 @@ public abstract class EditorActivity extends ActivityWithBus {
         getContainer().addView(checkBox);
     }
 
-    protected void addCustomValue(CustomField field, String value) {
+    protected void addCustomValue(CustomField field, int viewId, String value) {
         String fieldType = field.type;
         boolean required = field.mandatory;
         if (fieldType.equals("List")) {
             addLabel(field.caption, required);
-            addListCustomValue(field, value);
+            addListCustomValue(field, viewId, value);
         } else if (fieldType.equals("Text")) {
             addLabel(field.caption, required);
-            addTextCustomValue(field, value);
+            addTextCustomValue(field, viewId, value);
         } else if (fieldType.equals("Number")) {
             addLabel(field.caption, required);
-            addNumberCustomValue(field, value);
+            addNumberCustomValue(field, viewId, value);
         } else if (fieldType.equals("Date")) {
             addLabel(field.caption, required);
-            addDateCustomValue(field, value);
+            addDateCustomValue(field, viewId, value);
         } else if (fieldType.equals("Boolean")) {
-            addBooleanCustomValue(field, value);
+            addBooleanCustomValue(field, viewId, value);
         }
     }
 
-    protected void addListCustomValue(CustomField field, String value) {
+    protected void addListCustomValue(CustomField field, int viewId, String value) {
         String extra = "|" + field.extra;
         List<String> items = Arrays.asList(extra.split(Pattern.quote("|")));
-        addSpinner(CUSTOM_VIEW_BASE_ID + field.id, items, value);
+        addSpinner(viewId, items, value);
     }
 
-    protected void addTextCustomValue(CustomField field, String value) {
-        addTextEditor(CUSTOM_VIEW_BASE_ID + field.id, value);
+    protected void addTextCustomValue(CustomField field, int viewId, String value) {
+        addTextEditor(viewId, value);
     }
 
-    protected void addNumberCustomValue(CustomField field, String value) {
-        EditText editText = addTextEditor(CUSTOM_VIEW_BASE_ID + field.id, value);
+    protected void addNumberCustomValue(CustomField field, int viewId, String value) {
+        EditText editText = addTextEditor(viewId, value);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
-    protected void addBooleanCustomValue(CustomField field, String value) {
+    protected void addBooleanCustomValue(CustomField field, int viewId, String value) {
         boolean checked = Boolean.parseBoolean(value);
-        addCheckBox(CUSTOM_VIEW_BASE_ID + field.id, field.caption, checked);
+        addCheckBox(viewId, field.caption, checked);
     }
 
-    protected void addDateCustomValue(CustomField field, String value) {
+    protected void addDateCustomValue(CustomField field, int viewId, String value) {
         Date date = null;
         if (!value.isEmpty()) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -262,7 +309,7 @@ public abstract class EditorActivity extends ActivityWithBus {
             } catch (ParseException ignored) {
             }
         }
-        addDateEditor(CUSTOM_VIEW_BASE_ID + field.id, date);
+        addDateEditor(viewId, date);
     }
 
     public void onEvent(BranchLoadedEvent event) {
@@ -285,7 +332,7 @@ public abstract class EditorActivity extends ActivityWithBus {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 City city = adapter.getItem(position);
                 if (city == null) return;
-                view.setTag(city.id);
+                textView.setTag(city.id);
 
                 LoadDistrictEvent loadDistrictEvent = new LoadDistrictEvent();
                 loadDistrictEvent.selector = textView.getId() - 1;
@@ -303,6 +350,7 @@ public abstract class EditorActivity extends ActivityWithBus {
             return;
         }
         textView.setText(event.city.name);
+        textView.setTag(event.city.id);
 
         LoadDistrictEvent loadDistrictEvent = new LoadDistrictEvent();
         loadDistrictEvent.selector = event.selector - 1;
