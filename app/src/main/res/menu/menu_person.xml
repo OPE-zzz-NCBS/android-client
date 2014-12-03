@@ -4,6 +4,6 @@
         android:id="@+id/action_save"
         android:icon="@drawable/ic_action_accept"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always|withText"
         android:title="@string/save" />
 </menu>

@@ -15,7 +15,11 @@ import com.opencbs.androidclient.model.Address;
 import com.opencbs.androidclient.model.CustomField;
 import com.opencbs.androidclient.model.CustomValue;
 import com.opencbs.androidclient.model.Person;
+import com.opencbs.androidclient.ui.validation.DateValidationRule;
+import com.opencbs.androidclient.ui.validation.RequiredValidationRule;
+import com.opencbs.androidclient.ui.validation.Validator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +53,14 @@ public class PersonActivity extends EditorActivity {
 
     private ViewGroup container;
     private List<CustomField> customFields;
+    private Validator validator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person);
+
+        validator = new Validator();
 
         LoadPersonCustomFieldsEvent event = new LoadPersonCustomFieldsEvent();
         bus.post(event);
@@ -101,6 +108,7 @@ public class PersonActivity extends EditorActivity {
 
     public void onEvent(PersonLoadedEvent event) {
         setPerson(event.person);
+        setupValidator();
     }
 
     private void setPerson(Person person) {
@@ -195,6 +203,22 @@ public class PersonActivity extends EditorActivity {
         }
     }
 
+    private void setupValidator() {
+        ViewGroup container = getContainer();
+
+        String errorRequiredField = getString(R.string.error_required_field);
+        String errorInvalidEntry = getString(R.string.error_invalid_entry);
+        SimpleDateFormat dateFormat = (SimpleDateFormat) android.text.format.DateFormat.getDateFormat(getApplicationContext());
+
+        validator.addRule(new RequiredValidationRule(container, FIRST_NAME_VIEW_ID, errorRequiredField));
+        validator.addRule(new RequiredValidationRule(container, LAST_NAME_VIEW_ID, errorRequiredField));
+        validator.addRule(new RequiredValidationRule(container, BIRTH_DATE_VIEW_ID, errorRequiredField));
+        validator.addRule(new DateValidationRule(container, BIRTH_DATE_VIEW_ID, dateFormat, errorInvalidEntry));
+        validator.addRule(new RequiredValidationRule(container, IDENTIFICATION_DATA_VIEW_ID, errorRequiredField));
+        validator.addRule(new RequiredValidationRule(container, CITY_1_VIEW_ID, errorRequiredField));
+    }
+
     private void save() {
+        validator.validate();
     }
 }

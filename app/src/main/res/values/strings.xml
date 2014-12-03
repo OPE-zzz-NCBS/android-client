@@ -27,4 +27,7 @@
     <string name="action_new">New</string>
     <string name="new_client">New client</string>
 
+    <string name="error_required_field">This field is required.</string>
+    <string name="error_invalid_entry">Invalid entry.</string>
+
 </resources>
