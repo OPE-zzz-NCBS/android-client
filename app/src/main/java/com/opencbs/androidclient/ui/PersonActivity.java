@@ -2,16 +2,22 @@ package com.opencbs.androidclient.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.event.PersonCustomFieldsLoadedEvent;
+import com.opencbs.androidclient.event.LoadPersonCustomFieldsEvent;
 import com.opencbs.androidclient.event.LoadPersonEvent;
 import com.opencbs.androidclient.event.PersonLoadedEvent;
 import com.opencbs.androidclient.model.Address;
+import com.opencbs.androidclient.model.CustomField;
 import com.opencbs.androidclient.model.CustomValue;
 import com.opencbs.androidclient.model.Person;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PersonActivity extends EditorActivity {
 
@@ -42,28 +48,31 @@ public class PersonActivity extends EditorActivity {
     private static final int POSTAL_2_CODE_ID = 23;
 
     private ViewGroup container;
+    private List<CustomField> customFields;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person);
 
-        Intent intent = getIntent();
-        int id = intent.getIntExtra("id", 0);
+        LoadPersonCustomFieldsEvent event = new LoadPersonCustomFieldsEvent();
+        bus.post(event);
+    }
 
-        if (id > 0) {
-            LoadPersonEvent event = new LoadPersonEvent();
-            event.id = intent.getIntExtra("id", 0);
-            bus.post(event);
-        } else {
-            PersonLoadedEvent event = new PersonLoadedEvent();
-            Person person = new Person();
-            person.address1 = new Address();
-            person.address2 = new Address();
-            person.customInformation = new ArrayList<CustomValue>();
-            event.person = person;
-            bus.post(event);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_person, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                save();
+                return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -71,6 +80,23 @@ public class PersonActivity extends EditorActivity {
         if (container != null) return container;
         container = (ViewGroup) findViewById(R.id.person_layout);
         return container;
+    }
+
+    public void onEvent(PersonCustomFieldsLoadedEvent event) {
+        customFields = event.customFields;
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("id", 0);
+        if (id > 0) {
+            LoadPersonEvent loadPersonEvent = new LoadPersonEvent(id);
+            bus.post(loadPersonEvent);
+        } else {
+            Person person = new Person();
+            person.address1 = new Address();
+            person.address2 = new Address();
+            person.customInformation = new ArrayList<CustomValue>();
+            bus.post(new PersonLoadedEvent(person));
+        }
     }
 
     public void onEvent(PersonLoadedEvent event) {
@@ -160,12 +186,15 @@ public class PersonActivity extends EditorActivity {
         addTextEditor(POSTAL_2_CODE_ID, person.address2.postalCode);
 
         String currentCustomSection = "";
-        for (CustomValue value : person.customInformation) {
-            if (!currentCustomSection.equals(value.field.tab)) {
-                addSection(value.field.tab.toUpperCase());
-                currentCustomSection = value.field.tab;
+        for (CustomField field : customFields) {
+            if (!currentCustomSection.equals(field.tab)) {
+                addSection(field.tab.toUpperCase());
+                currentCustomSection = field.tab;
             }
-            addCustomValue(value);
+            addCustomValue(field, person.getCustomFieldValue(field.id));
         }
+    }
+
+    private void save() {
     }
 }

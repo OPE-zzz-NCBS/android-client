@@ -35,7 +35,7 @@ import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.event.LoadRegionEvent;
 import com.opencbs.androidclient.event.RegionLoadedEvent;
 import com.opencbs.androidclient.model.City;
-import com.opencbs.androidclient.model.CustomValue;
+import com.opencbs.androidclient.model.CustomField;
 
 import java.text.Format;
 import java.text.ParseException;
@@ -213,56 +213,56 @@ public abstract class EditorActivity extends ActivityWithBus {
         getContainer().addView(checkBox);
     }
 
-    protected void addCustomValue(CustomValue value) {
-        String fieldType = value.field.type;
-        boolean required = value.field.mandatory;
+    protected void addCustomValue(CustomField field, String value) {
+        String fieldType = field.type;
+        boolean required = field.mandatory;
         if (fieldType.equals("List")) {
-            addLabel(value.field.caption, required);
-            addListCustomValue(value);
+            addLabel(field.caption, required);
+            addListCustomValue(field, value);
         } else if (fieldType.equals("Text")) {
-            addLabel(value.field.caption, required);
-            addTextCustomValue(value);
+            addLabel(field.caption, required);
+            addTextCustomValue(field, value);
         } else if (fieldType.equals("Number")) {
-            addLabel(value.field.caption, required);
-            addNumberCustomValue(value);
+            addLabel(field.caption, required);
+            addNumberCustomValue(field, value);
         } else if (fieldType.equals("Date")) {
-            addLabel(value.field.caption, required);
-            addDateCustomValue(value);
+            addLabel(field.caption, required);
+            addDateCustomValue(field, value);
         } else if (fieldType.equals("Boolean")) {
-            addBooleanCustomValue(value);
+            addBooleanCustomValue(field, value);
         }
     }
 
-    protected void addListCustomValue(CustomValue value) {
-        String extra = "|" + value.field.extra;
+    protected void addListCustomValue(CustomField field, String value) {
+        String extra = "|" + field.extra;
         List<String> items = Arrays.asList(extra.split(Pattern.quote("|")));
-        addSpinner(CUSTOM_VIEW_BASE_ID + value.field.id, items, value.value);
+        addSpinner(CUSTOM_VIEW_BASE_ID + field.id, items, value);
     }
 
-    protected void addTextCustomValue(CustomValue value) {
-        addTextEditor(CUSTOM_VIEW_BASE_ID + value.field.id, value.value);
+    protected void addTextCustomValue(CustomField field, String value) {
+        addTextEditor(CUSTOM_VIEW_BASE_ID + field.id, value);
     }
 
-    protected void addNumberCustomValue(CustomValue value) {
-        EditText editText = addTextEditor(CUSTOM_VIEW_BASE_ID + value.field.id, value.value);
+    protected void addNumberCustomValue(CustomField field, String value) {
+        EditText editText = addTextEditor(CUSTOM_VIEW_BASE_ID + field.id, value);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
-    protected void addBooleanCustomValue(CustomValue value) {
-        boolean checked = Boolean.parseBoolean(value.value);
-        addCheckBox(CUSTOM_VIEW_BASE_ID + value.field.id, value.field.caption, checked);
+    protected void addBooleanCustomValue(CustomField field, String value) {
+        boolean checked = Boolean.parseBoolean(value);
+        addCheckBox(CUSTOM_VIEW_BASE_ID + field.id, field.caption, checked);
     }
 
-    protected void addDateCustomValue(CustomValue value) {
+    protected void addDateCustomValue(CustomField field, String value) {
         Date date = null;
-        if (!value.value.isEmpty()) {
+        if (!value.isEmpty()) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                date = format.parse(value.value);
+                date = format.parse(value);
             } catch (ParseException ignored) {
             }
         }
-        addDateEditor(CUSTOM_VIEW_BASE_ID + value.field.id, date);
+        addDateEditor(CUSTOM_VIEW_BASE_ID + field.id, date);
     }
 
     public void onEvent(BranchLoadedEvent event) {

@@ -21,4 +21,13 @@ public class Person {
     public Address address1;
     public Address address2;
     public List<CustomValue> customInformation;
+
+    public String getCustomFieldValue(int fieldId) {
+        for (CustomValue value : customInformation) {
+            if (value.field.id == fieldId) {
+                return value.value;
+            }
+        }
+        return "";
+    }
 }

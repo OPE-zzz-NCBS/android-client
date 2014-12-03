@@ -27,8 +27,7 @@ public class PersonService {
         Callback<Person> callback = new Callback<Person>() {
             @Override
             public void success(Person person, Response response) {
-                PersonLoadedEvent event = new PersonLoadedEvent();
-                event.person = person;
+                PersonLoadedEvent event = new PersonLoadedEvent(person);
                 bus.post(event);
             }
 
