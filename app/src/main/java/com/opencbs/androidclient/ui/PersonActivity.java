@@ -265,7 +265,7 @@ public class PersonActivity extends EditorActivity {
     }
 
     private void save() {
-        validator.validate();
+        if (!validator.validate()) return;
 
         Person person = getPerson();
     }
