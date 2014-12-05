@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.model;
 
 public class CustomValue {
-    public CustomField field;
+    public CustomFieldHeader field;
     public String value;
 }

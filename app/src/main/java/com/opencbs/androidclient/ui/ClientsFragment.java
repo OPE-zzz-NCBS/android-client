@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.opencbs.androidclient.Client;
+import com.opencbs.androidclient.model.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
 import com.opencbs.androidclient.OnLoadMoreListener;
 import com.opencbs.androidclient.R;
@@ -21,13 +20,14 @@ import com.opencbs.androidclient.event.LoadClientsEvent;
 import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
 import com.opencbs.androidclient.model.ClientRange;
+import com.opencbs.androidclient.repo.ClientRepo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
-public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
+public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout progressLayout;
@@ -35,9 +35,15 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
     private ArrayList<Client> clients;
     private ClientArrayAdapter adapter;
 
+    private int offset = 0;
+    private final static int LIMIT = 25;
+
     private final static int BATCH_SIZE = 25;
     private String query = "";
     private ClientRange nextRange;
+
+    @Inject
+    ClientRepo clientRepo;
 
     @Inject
     public ClientsFragment() {}
@@ -60,14 +66,34 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         progressLayout = (LinearLayout) view.findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
 
-        nextRange = new ClientRange(0, BATCH_SIZE - 1);
+//        nextRange = new ClientRange(0, BATCH_SIZE - 1);
 
-        LoadClientsEvent event = new LoadClientsEvent();
-        event.query = query;
-        event.clientRange = nextRange;
-        enqueueEvent(event);
-
+//        LoadClientsEvent event = new LoadClientsEvent();
+//        event.query = query;
+//        event.clientRange = nextRange;
+//        enqueueEvent(event);
+//
+        fetchClients();
         return view;
+    }
+
+    private void fetchClients() {
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.GONE);
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+        List<Client> clients = clientRepo.getAll(offset, LIMIT);
+        if (offset == 0) {
+            this.clients.clear();
+        }
+        this.clients.addAll(clients);
+        adapter.setComplete(clients.size() < LIMIT);
+        adapter.setLoading(false);
+        adapter.notifyDataSetChanged();
+
+        offset += LIMIT;
     }
 
     public void onEvent(ClientsLoadedEvent event) {
@@ -114,15 +140,18 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        nextRange = new ClientRange(0, BATCH_SIZE - 1);
-        postLoadClientsEvent();
+        offset = 0;
+        fetchClients();
+//        nextRange = new ClientRange(0, BATCH_SIZE - 1);
+//        postLoadClientsEvent();
     }
 
     @Override
     public void onLoadMore() {
         adapter.setLoading(true);
         adapter.notifyDataSetChanged();
-        postLoadClientsEvent();
+        fetchClients();
+        //postLoadClientsEvent();
     }
 
     private void postLoadClientsEvent() {

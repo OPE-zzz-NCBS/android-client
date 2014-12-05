@@ -1,4 +1,4 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.model;
 
 public class Client {
     public int id;

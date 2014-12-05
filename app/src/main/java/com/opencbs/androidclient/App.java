@@ -90,8 +90,8 @@ public class App extends Application {
 
     protected List<Object> getModules() {
         return Arrays.asList(
-                new AppModule(this),
-                new ApiModule(this)
+                new ApiModule(this),
+                new AppModule(this)
         );
     }
 }

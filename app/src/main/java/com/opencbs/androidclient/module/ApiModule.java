@@ -2,9 +2,11 @@ package com.opencbs.androidclient.module;
 
 import android.content.Context;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.ApiRequestInterceptor;
+import com.opencbs.androidclient.JacksonConverter;
 import com.opencbs.androidclient.api.LookupDataApi;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.SessionApi;
@@ -56,11 +58,6 @@ public class ApiModule {
     }
 
     @Provides
-    public PersonApi providePersonApi() {
-        return getRestAdapter().create(PersonApi.class);
-    }
-
-    @Provides
     public LookupDataApi provideLookupDataApi() {
         return getRestAdapter().create(LookupDataApi.class);
     }
@@ -70,11 +67,14 @@ public class ApiModule {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
+        JacksonConverter converter = new JacksonConverter(new ObjectMapper());
+
         return new RestAdapter
                 .Builder()
                 .setEndpoint(Settings.getEndpoint(context))
                 .setRequestInterceptor(new ApiRequestInterceptor(context))
-                .setConverter(new GsonConverter(gson))
+                //.setConverter(new GsonConverter(gson))
+                .setConverter(converter)
                 .build();
     }
 }

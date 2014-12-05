@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.event;
 
-import com.opencbs.androidclient.Client;
+import com.opencbs.androidclient.model.Client;
 import com.opencbs.androidclient.model.ClientRange;
 
 import java.util.List;

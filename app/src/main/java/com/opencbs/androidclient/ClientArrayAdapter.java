@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.opencbs.androidclient.model.Client;
+
 import java.util.ArrayList;
 
 public class ClientArrayAdapter extends ProgressAdapter<Client> {

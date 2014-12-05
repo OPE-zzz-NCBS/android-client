@@ -25,10 +25,13 @@ import android.widget.TextView;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.event.CancelSearchEvent;
+import com.opencbs.androidclient.event.DataCachedEvent;
 import com.opencbs.androidclient.event.LogoutEvent;
 import com.opencbs.androidclient.event.LogoutSuccessEvent;
 import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
+import com.opencbs.androidclient.jobs.CacheDataJob;
+import com.path.android.jobqueue.JobManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +39,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class MainActivity extends ActivityWithBus implements ListView.OnItemClickListener {
 
@@ -53,6 +57,15 @@ public class MainActivity extends ActivityWithBus implements ListView.OnItemClic
 
     @Inject
     DownloadFragment downloadFragment;
+
+    @Inject
+    CacheFragment cacheFragment;
+
+    @Inject
+    JobManager jobManager;
+
+    @Inject
+    Provider<CacheDataJob> cacheDataJobProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +92,24 @@ public class MainActivity extends ActivityWithBus implements ListView.OnItemClic
         drawerLayout.setDrawerListener(drawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        int dataState = Settings.getDataState(this);
+        switch (dataState) {
+            case Settings.NOT_CACHED:
+                jobManager.addJobInBackground(cacheDataJobProvider.get());
+                showCacheFragment();
+                break;
+
+            case Settings.CACHING:
+                showCacheFragment();
+                break;
+
+            case Settings.CACHED:
+                showClientsFragment();
+                break;
+        }
+    }
+
+    public void onEventMainThread(DataCachedEvent event) {
         showClientsFragment();
     }
 
@@ -195,7 +226,7 @@ public class MainActivity extends ActivityWithBus implements ListView.OnItemClic
             Drawable searchIcon = getResources().getDrawable(R.drawable.ic_action_search);
             Method textSizeMethod = clazz.getMethod("getTextSize");
             Float rawTextSize = (Float) textSizeMethod.invoke(searchPlate);
-            int textSize = (int) (rawTextSize*1.25);
+            int textSize = (int) (rawTextSize * 1.25);
             searchIcon.setBounds(0, 0, textSize, textSize);
 
             SpannableStringBuilder stopHint = new SpannableStringBuilder("   ");
@@ -230,5 +261,12 @@ public class MainActivity extends ActivityWithBus implements ListView.OnItemClic
         transaction.replace(R.id.main_frame_layout, downloadFragment);
         transaction.commit();
         setTitle(getString(R.string.download));
+    }
+
+    private void showCacheFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame_layout, cacheFragment);
+        transaction.commit();
+        setTitle("Loading data...");
     }
 }
