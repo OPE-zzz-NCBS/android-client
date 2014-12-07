@@ -109,7 +109,7 @@ public class MainActivity extends ActivityWithBus implements ListView.OnItemClic
         }
     }
 
-    public void onEventMainThread(DataCachedEvent event) {
+    public void onEvent(DataCachedEvent event) {
         showClientsFragment();
     }
 
