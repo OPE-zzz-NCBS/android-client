@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.ApiRequestInterceptor;
 import com.opencbs.androidclient.JacksonConverter;
-import com.opencbs.androidclient.api.LookupDataApi;
-import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.SessionApi;
 import com.opencbs.androidclient.service.BranchService;
 import com.opencbs.androidclient.service.CityService;
@@ -17,7 +15,6 @@ import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.api.ClientApi;
 import com.opencbs.androidclient.service.CustomFieldService;
 import com.opencbs.androidclient.service.EconomicActivityService;
-import com.opencbs.androidclient.service.LookupDataService;
 import com.opencbs.androidclient.service.PersonService;
 import com.opencbs.androidclient.service.SessionService;
 
@@ -31,7 +28,6 @@ import retrofit.converter.GsonConverter;
                 ClientService.class,
                 SessionService.class,
                 PersonService.class,
-                LookupDataService.class,
                 EconomicActivityService.class,
                 BranchService.class,
                 CityService.class,
@@ -55,11 +51,6 @@ public class ApiModule {
     @Provides
     public SessionApi provideSessionApi() {
         return getRestAdapter().create(SessionApi.class);
-    }
-
-    @Provides
-    public LookupDataApi provideLookupDataApi() {
-        return getRestAdapter().create(LookupDataApi.class);
     }
 
     private RestAdapter getRestAdapter() {

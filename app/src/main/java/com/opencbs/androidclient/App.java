@@ -9,7 +9,6 @@ import com.opencbs.androidclient.service.CityService;
 import com.opencbs.androidclient.service.ClientService;
 import com.opencbs.androidclient.service.CustomFieldService;
 import com.opencbs.androidclient.service.EconomicActivityService;
-import com.opencbs.androidclient.service.LookupDataService;
 import com.opencbs.androidclient.service.PersonService;
 import com.opencbs.androidclient.service.SessionService;
 
@@ -27,7 +26,6 @@ public class App extends Application {
     private ClientService clientService;
     private SessionService sessionService;
     private PersonService personService;
-    private LookupDataService lookupDataService;
     private EconomicActivityService economicActivityService;
     private BranchService branchService;
     private CityService cityService;
@@ -51,9 +49,6 @@ public class App extends Application {
         personService = get(PersonService.class);
         bus.register(personService);
 
-        lookupDataService = get(LookupDataService.class);
-        bus.register(lookupDataService);
-
         economicActivityService = get(EconomicActivityService.class);
         bus.register(economicActivityService);
 
@@ -73,7 +68,6 @@ public class App extends Application {
         bus.unregister(clientService);
         bus.unregister(sessionService);
         bus.unregister(personService);
-        bus.unregister(lookupDataService);
         bus.unregister(economicActivityService);
         bus.unregister(branchService);
         bus.unregister(cityService);
