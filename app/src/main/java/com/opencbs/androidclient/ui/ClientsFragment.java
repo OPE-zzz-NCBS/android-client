@@ -2,6 +2,7 @@ package com.opencbs.androidclient.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,8 @@ import com.opencbs.androidclient.event.ClientsLoadedEvent;
 import com.opencbs.androidclient.event.LoadClientsEvent;
 import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
-import com.opencbs.androidclient.model.ClientRange;
-import com.opencbs.androidclient.repo.ClientRepo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -38,12 +36,7 @@ public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLay
     private int offset = 0;
     private final static int LIMIT = 25;
 
-    private final static int BATCH_SIZE = 25;
     private String query = "";
-    private ClientRange nextRange;
-
-    @Inject
-    ClientRepo clientRepo;
 
     @Inject
     public ClientsFragment() {}
@@ -66,72 +59,59 @@ public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLay
         progressLayout = (LinearLayout) view.findViewById(R.id.progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
 
-//        nextRange = new ClientRange(0, BATCH_SIZE - 1);
-
-//        LoadClientsEvent event = new LoadClientsEvent();
-//        event.query = query;
-//        event.clientRange = nextRange;
-//        enqueueEvent(event);
-//
-        fetchClients();
         return view;
     }
 
-    private void fetchClients() {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        postLoadClientsEvent();
+    }
+
+    public void onEventMainThread(ClientsLoadedEvent event) {
         swipeRefreshLayout.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.GONE);
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        List<Client> clients = clientRepo.getAll(offset, LIMIT);
         if (offset == 0) {
-            this.clients.clear();
+            clients.clear();
         }
-        this.clients.addAll(clients);
-        adapter.setComplete(clients.size() < LIMIT);
+
+        clients.addAll(event.clients);
+        adapter.setComplete(event.clients.size() < LIMIT);
         adapter.setLoading(false);
         adapter.notifyDataSetChanged();
 
         offset += LIMIT;
     }
 
-    public void onEvent(ClientsLoadedEvent event) {
-        swipeRefreshLayout.setVisibility(View.VISIBLE);
-        progressLayout.setVisibility(View.GONE);
-        if (swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-
-        if (event.thisRange.from == 0) {
-            clients.clear();
-        }
-
-        nextRange = event.nextRange;
-
-        clients.addAll(event.clients);
-        adapter.setComplete(event.nextRange == null);
-        adapter.setLoading(false);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void onEvent(SearchEvent event) {
+    public void onEventMainThread(SearchEvent event) {
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = event.query;
-        nextRange = new ClientRange(0, BATCH_SIZE - 1);
-        postLoadClientsEvent();
+        offset = 0;
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                postLoadClientsEvent();
+            }
+        }, 100);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void onEvent(CancelSearchEvent event) {
         if (query.isEmpty()) return;
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
         query = "";
-        nextRange = new ClientRange(0, BATCH_SIZE - 1);
+        offset = 0;
         postLoadClientsEvent();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void onEvent(NewPersonEvent event) {
         Intent intent = new Intent(getActivity(), PersonActivity.class);
         intent.putExtra("id", 0);
@@ -141,23 +121,21 @@ public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLay
     @Override
     public void onRefresh() {
         offset = 0;
-        fetchClients();
-//        nextRange = new ClientRange(0, BATCH_SIZE - 1);
-//        postLoadClientsEvent();
+        postLoadClientsEvent();
     }
 
     @Override
     public void onLoadMore() {
         adapter.setLoading(true);
         adapter.notifyDataSetChanged();
-        fetchClients();
-        //postLoadClientsEvent();
+        postLoadClientsEvent();
     }
 
     private void postLoadClientsEvent() {
         LoadClientsEvent event = new LoadClientsEvent();
+        event.offset = offset;
+        event.limit = LIMIT;
         event.query = query;
-        event.clientRange = nextRange;
         bus.post(event);
     }
 

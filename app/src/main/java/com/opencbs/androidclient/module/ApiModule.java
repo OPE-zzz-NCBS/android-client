@@ -12,7 +12,6 @@ import com.opencbs.androidclient.service.BranchService;
 import com.opencbs.androidclient.service.CityService;
 import com.opencbs.androidclient.service.ClientService;
 import com.opencbs.androidclient.Settings;
-import com.opencbs.androidclient.api.ClientApi;
 import com.opencbs.androidclient.service.CustomFieldService;
 import com.opencbs.androidclient.service.EconomicActivityService;
 import com.opencbs.androidclient.service.PersonService;
@@ -41,11 +40,6 @@ public class ApiModule {
 
     public ApiModule(Context context) {
         this.context = context;
-    }
-
-    @Provides
-    public ClientApi provideClientApi() {
-        return getRestAdapter().create(ClientApi.class);
     }
 
     @Provides
