@@ -19,6 +19,10 @@ public class PersonRepo {
     public void deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.execSQL("delete from people");
+        db.execSQL(
+                "delete from custom_field_values " +
+                        "where owner_id in (select _id from people)"
+        );
     }
 
     public void add(List<Person> people) {

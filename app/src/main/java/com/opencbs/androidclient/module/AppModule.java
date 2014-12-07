@@ -7,7 +7,13 @@ import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.ApiRequestInterceptor;
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.api.BranchApi;
+import com.opencbs.androidclient.api.CityApi;
+import com.opencbs.androidclient.api.CustomFieldApi;
+import com.opencbs.androidclient.api.DistrictApi;
+import com.opencbs.androidclient.api.EconomicActivityApi;
 import com.opencbs.androidclient.api.PersonApi;
+import com.opencbs.androidclient.api.RegionApi;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;
 import com.opencbs.androidclient.repo.ClientRepo;
@@ -94,6 +100,36 @@ public class AppModule {
     @Provides
     public PersonApi providePersonApi() {
         return getRestAdapter().create(PersonApi.class);
+    }
+
+    @Provides
+    public EconomicActivityApi provideEconomicActivityApi() {
+        return getRestAdapter().create(EconomicActivityApi.class);
+    }
+
+    @Provides
+    public BranchApi provideBranchApi() {
+        return getRestAdapter().create(BranchApi.class);
+    }
+
+    @Provides
+    public CityApi provideCityApi() {
+        return getRestAdapter().create(CityApi.class);
+    }
+
+    @Provides
+    public DistrictApi provideDistrictApi() {
+        return getRestAdapter().create(DistrictApi.class);
+    }
+
+    @Provides
+    public RegionApi provideRegionApi() {
+        return getRestAdapter().create(RegionApi.class);
+    }
+
+    @Provides
+    public CustomFieldApi provideCustomFieldApi() {
+        return getRestAdapter().create(CustomFieldApi.class);
     }
 
     private RestAdapter getRestAdapter() {
