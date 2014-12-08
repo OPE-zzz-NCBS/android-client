@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.app.Activity;
 import android.os.Bundle;

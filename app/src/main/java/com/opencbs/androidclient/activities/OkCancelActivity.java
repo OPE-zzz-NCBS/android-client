@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.activities.ActivityWithBus;
 
 public abstract class OkCancelActivity extends ActivityWithBus {
 

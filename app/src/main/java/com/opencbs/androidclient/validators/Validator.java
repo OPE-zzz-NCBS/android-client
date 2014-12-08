@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui.validation;
+package com.opencbs.androidclient.validators;
 
 import java.util.ArrayList;
 import java.util.List;

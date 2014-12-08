@@ -12,11 +12,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.opencbs.androidclient.ui.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/dashboard" >
         </activity>
         <activity
-            android:name="com.opencbs.androidclient.ui.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,14 +25,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.opencbs.androidclient.ui.PersonActivity"
+            android:name=".activities.PersonActivity"
             android:label="@string/person" >
         </activity>
         <activity
-            android:name="com.opencbs.androidclient.ui.EconomicActivityPickerActivity">
+            android:name=".activities.EconomicActivityPickerActivity">
         </activity>
         <activity
-            android:name="com.opencbs.androidclient.ui.BranchPickerActivity">
+            android:name=".activities.BranchPickerActivity">
         </activity>
     </application>
 

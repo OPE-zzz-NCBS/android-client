@@ -16,7 +16,7 @@
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="0dp"
-            tools:context="com.opencbs.androidclient.ui.PersonActivity">
+            tools:context="com.opencbs.androidclient.activities.PersonActivity">
             </LinearLayout>
     </ScrollView>
 </RelativeLayout>

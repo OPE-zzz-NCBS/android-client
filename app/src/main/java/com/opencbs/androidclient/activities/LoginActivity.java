@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -11,6 +11,8 @@ import com.opencbs.androidclient.EndpointListener;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.event.LoginSuccessEvent;
+import com.opencbs.androidclient.fragments.EndpointFragment;
+import com.opencbs.androidclient.fragments.LoginFragment;
 
 import javax.inject.Inject;
 

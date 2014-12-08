@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import com.opencbs.androidclient.model.Address;
 import com.opencbs.androidclient.model.CustomField;
 import com.opencbs.androidclient.model.CustomValue;
 import com.opencbs.androidclient.model.Person;
-import com.opencbs.androidclient.ui.validation.DateValidationRule;
-import com.opencbs.androidclient.ui.validation.RequiredValidationRule;
-import com.opencbs.androidclient.ui.validation.Validator;
+import com.opencbs.androidclient.validators.DateValidationRule;
+import com.opencbs.androidclient.validators.RequiredValidationRule;
+import com.opencbs.androidclient.validators.Validator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.activities.ActivityWithBus;
+import com.opencbs.androidclient.activities.BranchPickerActivity;
+import com.opencbs.androidclient.activities.EconomicActivityPickerActivity;
 import com.opencbs.androidclient.event.BranchLoadedEvent;
 import com.opencbs.androidclient.event.CitiesLoadedEvent;
 import com.opencbs.androidclient.event.CityLoadedEvent;

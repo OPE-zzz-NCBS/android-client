@@ -5,7 +5,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="com.opencbs.androidclient.ui.BranchPickerActivity">
+    tools:context="com.opencbs.androidclient.activities.BranchPickerActivity">
 
     <ListView
         android:id="@+id/branch_list_view"

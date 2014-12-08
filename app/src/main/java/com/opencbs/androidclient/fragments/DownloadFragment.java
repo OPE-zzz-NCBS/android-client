@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

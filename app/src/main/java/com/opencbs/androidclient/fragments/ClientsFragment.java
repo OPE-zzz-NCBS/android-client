@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.opencbs.androidclient.activities.PersonActivity;
 import com.opencbs.androidclient.model.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
 import com.opencbs.androidclient.OnLoadMoreListener;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
+public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayout.OnRefreshListener, OnLoadMoreListener, ListView.OnItemClickListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout progressLayout;

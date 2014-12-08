@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.ui;
+package com.opencbs.androidclient.activities;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -31,6 +31,9 @@ import com.opencbs.androidclient.event.LogoutSuccessEvent;
 import com.opencbs.androidclient.event.NewPersonEvent;
 import com.opencbs.androidclient.event.SearchEvent;
 import com.opencbs.androidclient.jobs.CacheDataJob;
+import com.opencbs.androidclient.fragments.CacheFragment;
+import com.opencbs.androidclient.fragments.ClientsFragment;
+import com.opencbs.androidclient.fragments.DownloadFragment;
 import com.path.android.jobqueue.JobManager;
 
 import java.lang.reflect.Field;
