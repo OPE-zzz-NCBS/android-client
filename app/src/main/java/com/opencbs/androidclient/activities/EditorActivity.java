@@ -45,7 +45,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public abstract class EditorActivity extends ActivityWithBus {
+public abstract class EditorActivity extends BaseActivity {
 
     private static final int PICK_ECONOMIC_ACTIVITY_REQUEST = 1;
     private static final int PICK_BRANCH_REQUEST = 2;

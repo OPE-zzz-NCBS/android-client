@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-public class MainActivity extends ActivityWithBus implements ListView.OnItemClickListener {
+public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
 
     private static final int MENU_CLIENTS = 10;
     private static final int MENU_DOWNLOAD = 20;

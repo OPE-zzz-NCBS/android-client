@@ -23,9 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.activities.ActivityWithBus;
 
-public abstract class OkCancelActivity extends ActivityWithBus {
+public abstract class OkCancelActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
