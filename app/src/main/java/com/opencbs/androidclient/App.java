@@ -2,8 +2,8 @@ package com.opencbs.androidclient;
 
 import android.app.Application;
 
-import com.opencbs.androidclient.module.ApiModule;
-import com.opencbs.androidclient.module.AppModule;
+import com.opencbs.androidclient.modules.ApiModule;
+import com.opencbs.androidclient.modules.AppModule;
 import com.opencbs.androidclient.services.BranchService;
 import com.opencbs.androidclient.services.CityService;
 import com.opencbs.androidclient.services.ClientService;

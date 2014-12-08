@@ -34,8 +34,8 @@ import com.opencbs.androidclient.events.LoadDistrictEvent;
 import com.opencbs.androidclient.events.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.events.LoadRegionEvent;
 import com.opencbs.androidclient.events.RegionLoadedEvent;
-import com.opencbs.androidclient.model.City;
-import com.opencbs.androidclient.model.CustomField;
+import com.opencbs.androidclient.models.City;
+import com.opencbs.androidclient.models.CustomField;
 
 import java.text.Format;
 import java.text.ParseException;

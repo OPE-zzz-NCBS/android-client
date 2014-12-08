@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.model.EconomicActivity;
+import com.opencbs.androidclient.models.EconomicActivity;
 
 import java.util.List;
 

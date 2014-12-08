@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.model.District;
+import com.opencbs.androidclient.models.District;
 
 import java.util.List;
 

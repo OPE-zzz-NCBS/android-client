@@ -1,13 +1,13 @@
-package com.opencbs.androidclient.repo;
+package com.opencbs.androidclient.repos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.opencbs.androidclient.model.Address;
-import com.opencbs.androidclient.model.CustomFieldHeader;
-import com.opencbs.androidclient.model.CustomValue;
-import com.opencbs.androidclient.model.Person;
+import com.opencbs.androidclient.models.Address;
+import com.opencbs.androidclient.models.CustomFieldHeader;
+import com.opencbs.androidclient.models.CustomValue;
+import com.opencbs.androidclient.models.Person;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

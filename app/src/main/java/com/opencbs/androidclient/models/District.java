@@ -1,9 +1,9 @@
-package com.opencbs.androidclient.model;
+package com.opencbs.androidclient.models;
 
-public class EconomicActivity {
+public class District {
     public int id;
     public String name;
-    public int parentId;
+    public int regionId;
 
     @Override
     public String toString() {

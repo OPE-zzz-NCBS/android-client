@@ -1,10 +1,10 @@
-package com.opencbs.androidclient.repo;
+package com.opencbs.androidclient.repos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.opencbs.androidclient.model.CustomField;
+import com.opencbs.androidclient.models.CustomField;
 
 import java.util.ArrayList;
 import java.util.List;

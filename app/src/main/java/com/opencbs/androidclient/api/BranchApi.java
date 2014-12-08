@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.model.Branch;
+import com.opencbs.androidclient.models.Branch;
 
 import java.util.List;
 

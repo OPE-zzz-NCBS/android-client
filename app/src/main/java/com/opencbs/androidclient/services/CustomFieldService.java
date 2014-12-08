@@ -2,7 +2,7 @@ package com.opencbs.androidclient.services;
 
 import com.opencbs.androidclient.events.PersonCustomFieldsLoadedEvent;
 import com.opencbs.androidclient.events.LoadPersonCustomFieldsEvent;
-import com.opencbs.androidclient.repo.CustomFieldRepo;
+import com.opencbs.androidclient.repos.CustomFieldRepo;
 
 import javax.inject.Inject;
 

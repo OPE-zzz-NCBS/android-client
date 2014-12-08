@@ -4,7 +4,7 @@ import com.opencbs.androidclient.events.EconomicActivitiesLoadedEvent;
 import com.opencbs.androidclient.events.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.events.LoadEconomicActivitiesEvent;
 import com.opencbs.androidclient.events.LoadEconomicActivityEvent;
-import com.opencbs.androidclient.repo.EconomicActivityRepo;
+import com.opencbs.androidclient.repos.EconomicActivityRepo;
 
 import javax.inject.Inject;
 

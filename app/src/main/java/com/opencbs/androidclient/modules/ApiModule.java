@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.module;
+package com.opencbs.androidclient.modules;
 
 import android.content.Context;
 

@@ -10,7 +10,7 @@ import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.events.BranchLoadedEvent;
 import com.opencbs.androidclient.events.BranchesLoadedEvent;
 import com.opencbs.androidclient.events.LoadBranchesEvent;
-import com.opencbs.androidclient.model.Branch;
+import com.opencbs.androidclient.models.Branch;
 
 import java.util.ArrayList;
 

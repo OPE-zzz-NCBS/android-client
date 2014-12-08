@@ -1,9 +1,9 @@
-package com.opencbs.androidclient.repo;
+package com.opencbs.androidclient.repos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.opencbs.androidclient.model.Branch;
+import com.opencbs.androidclient.models.Branch;
 
 import javax.inject.Inject;
 

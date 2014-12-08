@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.module;
+package com.opencbs.androidclient.modules;
 
 import android.content.Context;
 
@@ -14,14 +14,14 @@ import com.opencbs.androidclient.api.DistrictApi;
 import com.opencbs.androidclient.api.EconomicActivityApi;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.RegionApi;
-import com.opencbs.androidclient.repo.BranchRepo;
-import com.opencbs.androidclient.repo.CityRepo;
-import com.opencbs.androidclient.repo.ClientRepo;
-import com.opencbs.androidclient.repo.CustomFieldRepo;
-import com.opencbs.androidclient.repo.DistrictRepo;
-import com.opencbs.androidclient.repo.EconomicActivityRepo;
-import com.opencbs.androidclient.repo.PersonRepo;
-import com.opencbs.androidclient.repo.RegionRepo;
+import com.opencbs.androidclient.repos.BranchRepo;
+import com.opencbs.androidclient.repos.CityRepo;
+import com.opencbs.androidclient.repos.ClientRepo;
+import com.opencbs.androidclient.repos.CustomFieldRepo;
+import com.opencbs.androidclient.repos.DistrictRepo;
+import com.opencbs.androidclient.repos.EconomicActivityRepo;
+import com.opencbs.androidclient.repos.PersonRepo;
+import com.opencbs.androidclient.repos.RegionRepo;
 import com.opencbs.androidclient.activities.BranchPickerActivity;
 import com.opencbs.androidclient.fragments.ClientsFragment;
 import com.opencbs.androidclient.fragments.DownloadFragment;

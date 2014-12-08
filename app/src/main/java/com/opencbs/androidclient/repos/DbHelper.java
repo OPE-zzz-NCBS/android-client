@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.repo;
+package com.opencbs.androidclient.repos;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

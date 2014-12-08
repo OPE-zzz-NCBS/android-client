@@ -1,9 +1,9 @@
-package com.opencbs.androidclient.repo;
+package com.opencbs.androidclient.repos;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.opencbs.androidclient.model.Client;
+import com.opencbs.androidclient.models.Client;
 
 import java.util.ArrayList;
 import java.util.List;

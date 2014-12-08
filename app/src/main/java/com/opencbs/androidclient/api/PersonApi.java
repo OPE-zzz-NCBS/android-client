@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.model.Person;
+import com.opencbs.androidclient.models.Person;
 
 import java.util.List;
 

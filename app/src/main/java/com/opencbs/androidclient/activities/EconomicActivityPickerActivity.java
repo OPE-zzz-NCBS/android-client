@@ -10,7 +10,7 @@ import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.events.EconomicActivitiesLoadedEvent;
 import com.opencbs.androidclient.events.EconomicActivityLoadedEvent;
 import com.opencbs.androidclient.events.LoadEconomicActivitiesEvent;
-import com.opencbs.androidclient.model.EconomicActivity;
+import com.opencbs.androidclient.models.EconomicActivity;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.api;
 
-import com.opencbs.androidclient.model.CustomField;
+import com.opencbs.androidclient.models.CustomField;
 
 import java.util.List;
 

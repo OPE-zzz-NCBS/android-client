@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.model;
+package com.opencbs.androidclient.models;
 
 public class Address {
     public int cityId;

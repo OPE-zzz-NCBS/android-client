@@ -8,9 +8,9 @@ import com.opencbs.androidclient.events.LoadCityEvent;
 import com.opencbs.androidclient.events.LoadDistrictEvent;
 import com.opencbs.androidclient.events.LoadRegionEvent;
 import com.opencbs.androidclient.events.RegionLoadedEvent;
-import com.opencbs.androidclient.repo.CityRepo;
-import com.opencbs.androidclient.repo.DistrictRepo;
-import com.opencbs.androidclient.repo.RegionRepo;
+import com.opencbs.androidclient.repos.CityRepo;
+import com.opencbs.androidclient.repos.DistrictRepo;
+import com.opencbs.androidclient.repos.RegionRepo;
 
 import javax.inject.Inject;
 

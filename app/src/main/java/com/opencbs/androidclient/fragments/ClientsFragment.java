@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.opencbs.androidclient.activities.PersonActivity;
-import com.opencbs.androidclient.model.Client;
+import com.opencbs.androidclient.models.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
 import com.opencbs.androidclient.OnLoadMoreListener;
 import com.opencbs.androidclient.R;

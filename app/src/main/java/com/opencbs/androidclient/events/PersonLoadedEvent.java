@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.events;
 
-import com.opencbs.androidclient.model.Person;
+import com.opencbs.androidclient.models.Person;
 
 public class PersonLoadedEvent extends BusEvent {
     public Person person;

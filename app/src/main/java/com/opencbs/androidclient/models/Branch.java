@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.model;
+package com.opencbs.androidclient.models;
 
 public class Branch {
     public int id;

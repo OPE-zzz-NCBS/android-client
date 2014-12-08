@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.events;
 
-import com.opencbs.androidclient.model.Client;
+import com.opencbs.androidclient.models.Client;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.opencbs.androidclient.events;
 
-import com.opencbs.androidclient.model.EconomicActivity;
+import com.opencbs.androidclient.models.EconomicActivity;
 
 public class EconomicActivityLoadedEvent extends BusEvent {
     public EconomicActivity economicActivity;

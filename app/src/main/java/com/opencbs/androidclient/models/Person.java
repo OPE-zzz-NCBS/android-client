@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.model;
+package com.opencbs.androidclient.models;
 
 import java.util.Date;
 import java.util.List;

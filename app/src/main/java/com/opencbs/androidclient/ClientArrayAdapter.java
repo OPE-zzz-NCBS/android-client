@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.opencbs.androidclient.model.Client;
+import com.opencbs.androidclient.models.Client;
 
 import java.util.ArrayList;
 
