@@ -4,13 +4,13 @@ import android.app.Application;
 
 import com.opencbs.androidclient.module.ApiModule;
 import com.opencbs.androidclient.module.AppModule;
-import com.opencbs.androidclient.service.BranchService;
-import com.opencbs.androidclient.service.CityService;
-import com.opencbs.androidclient.service.ClientService;
-import com.opencbs.androidclient.service.CustomFieldService;
-import com.opencbs.androidclient.service.EconomicActivityService;
-import com.opencbs.androidclient.service.PersonService;
-import com.opencbs.androidclient.service.SessionService;
+import com.opencbs.androidclient.services.BranchService;
+import com.opencbs.androidclient.services.CityService;
+import com.opencbs.androidclient.services.ClientService;
+import com.opencbs.androidclient.services.CustomFieldService;
+import com.opencbs.androidclient.services.EconomicActivityService;
+import com.opencbs.androidclient.services.PersonService;
+import com.opencbs.androidclient.services.SessionService;
 
 import java.util.Arrays;
 import java.util.List;

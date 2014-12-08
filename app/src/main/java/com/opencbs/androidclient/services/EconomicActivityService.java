@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.service;
+package com.opencbs.androidclient.services;
 
 import com.opencbs.androidclient.events.EconomicActivitiesLoadedEvent;
 import com.opencbs.androidclient.events.EconomicActivityLoadedEvent;

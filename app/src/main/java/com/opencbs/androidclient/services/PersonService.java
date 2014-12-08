@@ -1,4 +1,4 @@
-package com.opencbs.androidclient.service;
+package com.opencbs.androidclient.services;
 
 import com.opencbs.androidclient.events.PersonLoadedEvent;
 import com.opencbs.androidclient.model.Person;

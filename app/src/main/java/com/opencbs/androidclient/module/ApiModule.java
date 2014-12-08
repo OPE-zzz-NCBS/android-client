@@ -8,19 +8,18 @@ import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.ApiRequestInterceptor;
 import com.opencbs.androidclient.JacksonConverter;
 import com.opencbs.androidclient.api.SessionApi;
-import com.opencbs.androidclient.service.BranchService;
-import com.opencbs.androidclient.service.CityService;
-import com.opencbs.androidclient.service.ClientService;
+import com.opencbs.androidclient.services.BranchService;
+import com.opencbs.androidclient.services.CityService;
+import com.opencbs.androidclient.services.ClientService;
 import com.opencbs.androidclient.Settings;
-import com.opencbs.androidclient.service.CustomFieldService;
-import com.opencbs.androidclient.service.EconomicActivityService;
-import com.opencbs.androidclient.service.PersonService;
-import com.opencbs.androidclient.service.SessionService;
+import com.opencbs.androidclient.services.CustomFieldService;
+import com.opencbs.androidclient.services.EconomicActivityService;
+import com.opencbs.androidclient.services.PersonService;
+import com.opencbs.androidclient.services.SessionService;
 
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 
 @Module(
         injects = {
