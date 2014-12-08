@@ -5,43 +5,59 @@ import android.content.SharedPreferences;
 
 public class Settings {
 
+    private final static String NAME = "opencbs";
+
     public static final int NOT_CACHED = 0;
     public static final int CACHING = 1;
     public static final int CACHED = 2;
 
-    public static String getEndpoint(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        return preferences.getString("endpoint", "");
+    private Context context;
+
+    public Settings(Context context) {
+        this.context = context;
     }
 
-    public static void setEndpoint(Context context, String endpoint) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("endpoint", endpoint);
+    private String getStringValue(String name) {
+        return context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getString(name, "");
+    }
+
+    private void putStringValue(String name, String value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(name, value);
         editor.commit();
     }
 
-    public static String getAccessToken(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        return preferences.getString("access_token", "");
+    private int getIntValue(String name) {
+        return context.getSharedPreferences(NAME, Context.MODE_PRIVATE).getInt(name, 0);
     }
 
-    public static void setAccessToken(Context context, String accessToken) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("access_token", accessToken);
+    private void putIntValue(String name, int value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit();
+        editor.putInt(name, value);
         editor.commit();
     }
 
-    public static int getDataState(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        return preferences.getInt("data_state", NOT_CACHED);
+    public String getEndpoint() {
+        return getStringValue("endpoint");
     }
 
-    public static void setDataState(Context context, int dataState) {
-        SharedPreferences preferences = context.getSharedPreferences("opencbs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("data_state", dataState);
-        editor.commit();
+    public void setEndpoint(String endpoint) {
+        putStringValue("endpoint", endpoint);
+    }
+
+    public String getAccessToken() {
+        return getStringValue("access_token");
+    }
+
+    public void setAccessToken(String accessToken) {
+        putStringValue("access_token", accessToken);
+    }
+
+    public int getDataState() {
+        return getIntValue("data_state");
+    }
+
+    public void setDataState(int dataState) {
+        putIntValue("data_state", dataState);
     }
 }

@@ -1,12 +1,15 @@
 package com.opencbs.androidclient.modules;
 
-import android.content.Context;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.ApiRequestInterceptor;
-import com.opencbs.androidclient.JacksonConverter;
+import com.opencbs.androidclient.api.BranchApi;
+import com.opencbs.androidclient.api.CityApi;
+import com.opencbs.androidclient.api.CustomFieldApi;
+import com.opencbs.androidclient.api.DistrictApi;
+import com.opencbs.androidclient.api.EconomicActivityApi;
+import com.opencbs.androidclient.api.PersonApi;
+import com.opencbs.androidclient.api.RegionApi;
 import com.opencbs.androidclient.api.SessionApi;
 import com.opencbs.androidclient.services.BranchService;
 import com.opencbs.androidclient.services.CityService;
@@ -20,6 +23,7 @@ import com.opencbs.androidclient.services.SessionService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 @Module(
         injects = {
@@ -29,36 +33,63 @@ import retrofit.RestAdapter;
                 EconomicActivityService.class,
                 BranchService.class,
                 CityService.class,
-                CustomFieldService.class,
+                CustomFieldService.class
         },
         library = true,
         complete = false
 )
 public class ApiModule {
-    private Context context;
 
-    public ApiModule(Context context) {
-        this.context = context;
+    @Provides
+    public SessionApi provideSessionApi(Settings settings) {
+        return getRestAdapter(settings).create(SessionApi.class);
     }
 
     @Provides
-    public SessionApi provideSessionApi() {
-        return getRestAdapter().create(SessionApi.class);
+    public PersonApi providePersonApi(Settings settings) {
+        return getRestAdapter(settings).create(PersonApi.class);
     }
 
-    private RestAdapter getRestAdapter() {
+    @Provides
+    public EconomicActivityApi provideEconomicActivityApi(Settings settings) {
+        return getRestAdapter(settings).create(EconomicActivityApi.class);
+    }
+
+    @Provides
+    public BranchApi provideBranchApi(Settings settings) {
+        return getRestAdapter(settings).create(BranchApi.class);
+    }
+
+    @Provides
+    public CityApi provideCityApi(Settings settings) {
+        return getRestAdapter(settings).create(CityApi.class);
+    }
+
+    @Provides
+    public DistrictApi provideDistrictApi(Settings settings) {
+        return getRestAdapter(settings).create(DistrictApi.class);
+    }
+
+    @Provides
+    public RegionApi provideRegionApi(Settings settings) {
+        return getRestAdapter(settings).create(RegionApi.class);
+    }
+
+    @Provides
+    public CustomFieldApi provideCustomFieldApi(Settings settings) {
+        return getRestAdapter(settings).create(CustomFieldApi.class);
+    }
+
+    private RestAdapter getRestAdapter(Settings settings) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
-        JacksonConverter converter = new JacksonConverter(new ObjectMapper());
-
         return new RestAdapter
                 .Builder()
-                .setEndpoint(Settings.getEndpoint(context))
-                .setRequestInterceptor(new ApiRequestInterceptor(context))
-                //.setConverter(new GsonConverter(gson))
-                .setConverter(converter)
+                .setEndpoint(settings.getEndpoint())
+                .setRequestInterceptor(new ApiRequestInterceptor(settings))
+                .setConverter(new GsonConverter(gson))
                 .build();
     }
 }

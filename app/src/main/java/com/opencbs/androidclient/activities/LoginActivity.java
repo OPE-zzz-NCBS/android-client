@@ -25,6 +25,9 @@ public class LoginActivity extends BaseActivity implements EndpointListener {
     State state;
 
     @Inject
+    Settings settings;
+
+    @Inject
     LoginFragment loginFragment;
 
     @Inject
@@ -37,11 +40,11 @@ public class LoginActivity extends BaseActivity implements EndpointListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String accessToken = Settings.getAccessToken(this);
+        String accessToken = settings.getAccessToken();
         if (!accessToken.isEmpty()) {
             openMainActivity();
         } else {
-            String endpoint = Settings.getEndpoint(this);
+            String endpoint = settings.getEndpoint();
             if (endpoint.isEmpty()) {
                 setState(State.ENDPOINT);
             } else {
@@ -89,7 +92,7 @@ public class LoginActivity extends BaseActivity implements EndpointListener {
     }
 
     public void onEvent(LoginSuccessEvent event) {
-        Settings.setAccessToken(this, event.session.token);
+        settings.setAccessToken(event.session.token);
         openMainActivity();
     }
 

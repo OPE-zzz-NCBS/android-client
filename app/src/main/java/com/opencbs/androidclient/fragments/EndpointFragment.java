@@ -17,6 +17,9 @@ import javax.inject.Inject;
 public class EndpointFragment extends Fragment {
 
     @Inject
+    Settings settings;
+
+    @Inject
     public EndpointFragment() {}
 
     @Override
@@ -34,14 +37,14 @@ public class EndpointFragment extends Fragment {
             public void onClick(View v) {
                 EditText endpointEditText = (EditText) view.findViewById(R.id.endpoint_edit_text);
                 String endpoint = endpointEditText.getText().toString();
-                Settings.setEndpoint(getActivity(), endpoint);
+                settings.setEndpoint(endpoint);
 
                 EndpointListener listener = (EndpointListener) getActivity();
                 listener.saveEndpoint();
             }
         });
 
-        String endpoint = Settings.getEndpoint(getActivity());
+        String endpoint = settings.getEndpoint();
         EditText endpointEditText = (EditText) view.findViewById(R.id.endpoint_edit_text);
         endpointEditText.setText(endpoint);
 

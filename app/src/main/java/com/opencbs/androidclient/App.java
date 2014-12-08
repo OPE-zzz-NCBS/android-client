@@ -84,7 +84,7 @@ public class App extends Application {
 
     protected List<Object> getModules() {
         return Arrays.asList(
-                new ApiModule(this),
+                new ApiModule(),
                 new AppModule(this)
         );
     }

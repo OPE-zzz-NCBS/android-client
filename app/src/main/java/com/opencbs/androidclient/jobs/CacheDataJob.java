@@ -1,6 +1,5 @@
 package com.opencbs.androidclient.jobs;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.opencbs.androidclient.Settings;
@@ -35,7 +34,7 @@ public class CacheDataJob extends Job {
     private static final int LIMIT = 1000;
 
     @Inject
-    Context context;
+    Settings settings;
 
     @Inject
     PersonApi personApi;
@@ -93,7 +92,7 @@ public class CacheDataJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        Settings.setDataState(context, Settings.CACHING);
+        settings.setDataState(Settings.CACHING);
 
         int count;
         personRepo.deleteAll();
@@ -103,7 +102,7 @@ public class CacheDataJob extends Job {
             count = people.size();
             offset += LIMIT;
         } while (count == LIMIT);
-        Settings.setDataState(context, Settings.CACHED);
+        settings.setDataState(Settings.CACHED);
 
         economicActivityRepo.deleteAll();
         economicActivityRepo.add(economicActivityApi.getAll());

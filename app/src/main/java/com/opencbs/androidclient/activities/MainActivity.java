@@ -56,6 +56,9 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     private ArrayList<Integer> drawerIds;
 
     @Inject
+    Settings settings;
+
+    @Inject
     ClientsFragment clientsFragment;
 
     @Inject
@@ -95,7 +98,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerLayout.setDrawerListener(drawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int dataState = Settings.getDataState(this);
+        int dataState = settings.getDataState();
         switch (dataState) {
             case Settings.NOT_CACHED:
                 jobManager.addJobInBackground(cacheDataJobProvider.get());
@@ -159,7 +162,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     }
 
     public void onEvent(LogoutSuccessEvent event) {
-        Settings.setAccessToken(this, "");
+        settings.setAccessToken("");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

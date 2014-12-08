@@ -1,20 +1,18 @@
 package com.opencbs.androidclient;
 
-import android.content.Context;
-
 import retrofit.RequestInterceptor;
 
 public class ApiRequestInterceptor implements RequestInterceptor {
 
-    private Context mContext;
+    private Settings settings;
 
-    public ApiRequestInterceptor(Context context) {
-        mContext = context;
+    public ApiRequestInterceptor(Settings settings) {
+        this.settings = settings;
     }
 
     @Override
     public void intercept(RequestFacade request) {
-        String accessToken = Settings.getAccessToken(mContext);
+        String accessToken = settings.getAccessToken();
         if (accessToken.isEmpty()) return;
         request.addHeader("x-access-token", accessToken);
     }
