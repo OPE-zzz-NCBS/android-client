@@ -11,7 +11,7 @@ import com.opencbs.androidclient.api.DistrictApi;
 import com.opencbs.androidclient.api.EconomicActivityApi;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.RegionApi;
-import com.opencbs.androidclient.event.DataCachedEvent;
+import com.opencbs.androidclient.events.DataCachedEvent;
 import com.opencbs.androidclient.model.Person;
 import com.opencbs.androidclient.repo.BranchRepo;
 import com.opencbs.androidclient.repo.CityRepo;

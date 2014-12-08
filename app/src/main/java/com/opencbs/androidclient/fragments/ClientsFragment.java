@@ -16,11 +16,11 @@ import com.opencbs.androidclient.model.Client;
 import com.opencbs.androidclient.ClientArrayAdapter;
 import com.opencbs.androidclient.OnLoadMoreListener;
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.event.CancelSearchEvent;
-import com.opencbs.androidclient.event.ClientsLoadedEvent;
-import com.opencbs.androidclient.event.LoadClientsEvent;
-import com.opencbs.androidclient.event.NewPersonEvent;
-import com.opencbs.androidclient.event.SearchEvent;
+import com.opencbs.androidclient.events.CancelSearchEvent;
+import com.opencbs.androidclient.events.ClientsLoadedEvent;
+import com.opencbs.androidclient.events.LoadClientsEvent;
+import com.opencbs.androidclient.events.NewPersonEvent;
+import com.opencbs.androidclient.events.SearchEvent;
 
 import java.util.ArrayList;
 

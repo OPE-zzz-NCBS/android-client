@@ -1,13 +1,13 @@
 package com.opencbs.androidclient.service;
 
-import com.opencbs.androidclient.event.CitiesLoadedEvent;
-import com.opencbs.androidclient.event.CityLoadedEvent;
-import com.opencbs.androidclient.event.DistrictLoadedEvent;
-import com.opencbs.androidclient.event.LoadCitiesEvent;
-import com.opencbs.androidclient.event.LoadCityEvent;
-import com.opencbs.androidclient.event.LoadDistrictEvent;
-import com.opencbs.androidclient.event.LoadRegionEvent;
-import com.opencbs.androidclient.event.RegionLoadedEvent;
+import com.opencbs.androidclient.events.CitiesLoadedEvent;
+import com.opencbs.androidclient.events.CityLoadedEvent;
+import com.opencbs.androidclient.events.DistrictLoadedEvent;
+import com.opencbs.androidclient.events.LoadCitiesEvent;
+import com.opencbs.androidclient.events.LoadCityEvent;
+import com.opencbs.androidclient.events.LoadDistrictEvent;
+import com.opencbs.androidclient.events.LoadRegionEvent;
+import com.opencbs.androidclient.events.RegionLoadedEvent;
 import com.opencbs.androidclient.repo.CityRepo;
 import com.opencbs.androidclient.repo.DistrictRepo;
 import com.opencbs.androidclient.repo.RegionRepo;

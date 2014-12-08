@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.opencbs.androidclient.EndpointListener;
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
-import com.opencbs.androidclient.event.LoginSuccessEvent;
+import com.opencbs.androidclient.events.LoginSuccessEvent;
 import com.opencbs.androidclient.fragments.EndpointFragment;
 import com.opencbs.androidclient.fragments.LoginFragment;
 

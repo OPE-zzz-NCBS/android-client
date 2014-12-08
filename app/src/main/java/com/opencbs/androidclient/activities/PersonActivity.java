@@ -7,10 +7,10 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.event.PersonCustomFieldsLoadedEvent;
-import com.opencbs.androidclient.event.LoadPersonCustomFieldsEvent;
-import com.opencbs.androidclient.event.LoadPersonEvent;
-import com.opencbs.androidclient.event.PersonLoadedEvent;
+import com.opencbs.androidclient.events.PersonCustomFieldsLoadedEvent;
+import com.opencbs.androidclient.events.LoadPersonCustomFieldsEvent;
+import com.opencbs.androidclient.events.LoadPersonEvent;
+import com.opencbs.androidclient.events.PersonLoadedEvent;
 import com.opencbs.androidclient.model.Address;
 import com.opencbs.androidclient.model.CustomField;
 import com.opencbs.androidclient.model.CustomValue;

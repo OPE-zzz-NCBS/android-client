@@ -2,11 +2,11 @@ package com.opencbs.androidclient.service;
 
 import com.opencbs.androidclient.Session;
 import com.opencbs.androidclient.api.SessionApi;
-import com.opencbs.androidclient.event.LoginEvent;
-import com.opencbs.androidclient.event.LoginFailureEvent;
-import com.opencbs.androidclient.event.LoginSuccessEvent;
-import com.opencbs.androidclient.event.LogoutEvent;
-import com.opencbs.androidclient.event.LogoutSuccessEvent;
+import com.opencbs.androidclient.events.LoginEvent;
+import com.opencbs.androidclient.events.LoginFailureEvent;
+import com.opencbs.androidclient.events.LoginSuccessEvent;
+import com.opencbs.androidclient.events.LogoutEvent;
+import com.opencbs.androidclient.events.LogoutSuccessEvent;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

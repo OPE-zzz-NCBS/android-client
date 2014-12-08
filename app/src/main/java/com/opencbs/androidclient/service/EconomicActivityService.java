@@ -1,9 +1,9 @@
 package com.opencbs.androidclient.service;
 
-import com.opencbs.androidclient.event.EconomicActivitiesLoadedEvent;
-import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
-import com.opencbs.androidclient.event.LoadEconomicActivitiesEvent;
-import com.opencbs.androidclient.event.LoadEconomicActivityEvent;
+import com.opencbs.androidclient.events.EconomicActivitiesLoadedEvent;
+import com.opencbs.androidclient.events.EconomicActivityLoadedEvent;
+import com.opencbs.androidclient.events.LoadEconomicActivitiesEvent;
+import com.opencbs.androidclient.events.LoadEconomicActivityEvent;
 import com.opencbs.androidclient.repo.EconomicActivityRepo;
 
 import javax.inject.Inject;

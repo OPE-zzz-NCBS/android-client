@@ -1,8 +1,8 @@
 package com.opencbs.androidclient.service;
 
-import com.opencbs.androidclient.event.PersonLoadedEvent;
+import com.opencbs.androidclient.events.PersonLoadedEvent;
 import com.opencbs.androidclient.model.Person;
-import com.opencbs.androidclient.event.LoadPersonEvent;
+import com.opencbs.androidclient.events.LoadPersonEvent;
 import com.opencbs.androidclient.repo.PersonRepo;
 
 import javax.inject.Inject;

@@ -1,7 +1,7 @@
 package com.opencbs.androidclient.service;
 
-import com.opencbs.androidclient.event.ClientsLoadedEvent;
-import com.opencbs.androidclient.event.LoadClientsEvent;
+import com.opencbs.androidclient.events.ClientsLoadedEvent;
+import com.opencbs.androidclient.events.LoadClientsEvent;
 import com.opencbs.androidclient.model.Client;
 import com.opencbs.androidclient.repo.ClientRepo;
 

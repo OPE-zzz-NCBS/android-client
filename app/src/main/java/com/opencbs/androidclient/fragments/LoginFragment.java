@@ -11,9 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.event.LoginEvent;
-import com.opencbs.androidclient.event.LoginFailureEvent;
-import com.opencbs.androidclient.event.LoginSuccessEvent;
+import com.opencbs.androidclient.events.LoginEvent;
+import com.opencbs.androidclient.events.LoginFailureEvent;
+import com.opencbs.androidclient.events.LoginSuccessEvent;
 
 import javax.inject.Inject;
 

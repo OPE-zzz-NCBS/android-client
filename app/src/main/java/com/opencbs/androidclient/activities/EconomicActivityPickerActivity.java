@@ -7,9 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.event.EconomicActivitiesLoadedEvent;
-import com.opencbs.androidclient.event.EconomicActivityLoadedEvent;
-import com.opencbs.androidclient.event.LoadEconomicActivitiesEvent;
+import com.opencbs.androidclient.events.EconomicActivitiesLoadedEvent;
+import com.opencbs.androidclient.events.EconomicActivityLoadedEvent;
+import com.opencbs.androidclient.events.LoadEconomicActivitiesEvent;
 import com.opencbs.androidclient.model.EconomicActivity;
 
 import java.util.ArrayList;

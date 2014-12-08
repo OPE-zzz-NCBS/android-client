@@ -2,7 +2,7 @@ package com.opencbs.androidclient.fragments;
 
 import android.app.Fragment;
 
-import com.opencbs.androidclient.event.BusEvent;
+import com.opencbs.androidclient.events.BusEvent;
 
 import java.util.LinkedList;
 import java.util.Queue;

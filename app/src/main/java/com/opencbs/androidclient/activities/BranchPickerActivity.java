@@ -7,9 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.opencbs.androidclient.R;
-import com.opencbs.androidclient.event.BranchLoadedEvent;
-import com.opencbs.androidclient.event.BranchesLoadedEvent;
-import com.opencbs.androidclient.event.LoadBranchesEvent;
+import com.opencbs.androidclient.events.BranchLoadedEvent;
+import com.opencbs.androidclient.events.BranchesLoadedEvent;
+import com.opencbs.androidclient.events.LoadBranchesEvent;
 import com.opencbs.androidclient.model.Branch;
 
 import java.util.ArrayList;

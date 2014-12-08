@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
-import com.opencbs.androidclient.event.CancelSearchEvent;
-import com.opencbs.androidclient.event.DataCachedEvent;
-import com.opencbs.androidclient.event.LogoutEvent;
-import com.opencbs.androidclient.event.LogoutSuccessEvent;
-import com.opencbs.androidclient.event.NewPersonEvent;
-import com.opencbs.androidclient.event.SearchEvent;
+import com.opencbs.androidclient.events.CancelSearchEvent;
+import com.opencbs.androidclient.events.DataCachedEvent;
+import com.opencbs.androidclient.events.LogoutEvent;
+import com.opencbs.androidclient.events.LogoutSuccessEvent;
+import com.opencbs.androidclient.events.NewPersonEvent;
+import com.opencbs.androidclient.events.SearchEvent;
 import com.opencbs.androidclient.jobs.CacheDataJob;
 import com.opencbs.androidclient.fragments.CacheFragment;
 import com.opencbs.androidclient.fragments.ClientsFragment;
