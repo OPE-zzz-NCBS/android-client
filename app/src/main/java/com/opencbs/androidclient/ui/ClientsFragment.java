@@ -81,6 +81,7 @@ public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLay
         clients.addAll(event.clients);
         adapter.setComplete(event.clients.size() < LIMIT);
         adapter.setLoading(false);
+        adapter.setSearchString(query);
         adapter.notifyDataSetChanged();
 
         offset += LIMIT;
@@ -102,7 +103,7 @@ public class ClientsFragment extends FragmentWithBus  implements SwipeRefreshLay
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEvent(CancelSearchEvent event) {
+    public void onEventMainThread(CancelSearchEvent event) {
         if (query.isEmpty()) return;
         swipeRefreshLayout.setVisibility(View.GONE);
         progressLayout.setVisibility(View.VISIBLE);
