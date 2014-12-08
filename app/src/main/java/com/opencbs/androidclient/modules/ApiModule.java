@@ -2,7 +2,7 @@ package com.opencbs.androidclient.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.opencbs.androidclient.ApiRequestInterceptor;
+import com.opencbs.androidclient.api.ApiRequestInterceptor;
 import com.opencbs.androidclient.api.BranchApi;
 import com.opencbs.androidclient.api.CityApi;
 import com.opencbs.androidclient.api.CustomFieldApi;

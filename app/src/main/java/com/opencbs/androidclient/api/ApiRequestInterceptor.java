@@ -1,4 +1,6 @@
-package com.opencbs.androidclient;
+package com.opencbs.androidclient.api;
+
+import com.opencbs.androidclient.Settings;
 
 import retrofit.RequestInterceptor;
 
