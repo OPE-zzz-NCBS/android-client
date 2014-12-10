@@ -64,18 +64,6 @@ public class LoginActivity extends BaseActivity implements EndpointListener {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 

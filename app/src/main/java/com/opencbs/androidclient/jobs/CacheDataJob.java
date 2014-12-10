@@ -10,7 +10,7 @@ import com.opencbs.androidclient.api.DistrictApi;
 import com.opencbs.androidclient.api.EconomicActivityApi;
 import com.opencbs.androidclient.api.PersonApi;
 import com.opencbs.androidclient.api.RegionApi;
-import com.opencbs.androidclient.events.DataCachedEvent;
+import com.opencbs.androidclient.events.CacheInitializedEvent;
 import com.opencbs.androidclient.models.Person;
 import com.opencbs.androidclient.repos.BranchRepo;
 import com.opencbs.androidclient.repos.CityRepo;
@@ -92,7 +92,7 @@ public class CacheDataJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        settings.setDataState(Settings.CACHING);
+        settings.setCacheState(Settings.CacheState.INITIALIZING);
 
         int count;
         personRepo.deleteAll();
@@ -102,7 +102,6 @@ public class CacheDataJob extends Job {
             count = people.size();
             offset += LIMIT;
         } while (count == LIMIT);
-        settings.setDataState(Settings.CACHED);
 
         economicActivityRepo.deleteAll();
         economicActivityRepo.add(economicActivityApi.getAll());
@@ -122,7 +121,9 @@ public class CacheDataJob extends Job {
         customFieldRepo.deleteAll();
         customFieldRepo.add(customFieldApi.getAll());
 
-        bus.post(new DataCachedEvent());
+        settings.setCacheState(Settings.CacheState.INITIALIZED);
+
+        bus.post(new CacheInitializedEvent());
     }
 
     @Override

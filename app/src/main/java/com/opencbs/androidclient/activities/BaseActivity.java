@@ -14,6 +14,8 @@ public abstract class BaseActivity extends Activity {
     @Inject
     EventBus bus;
 
+    private boolean visible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,22 @@ public abstract class BaseActivity extends Activity {
     protected void onDestroy() {
         bus.unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        visible = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        visible = false;
+    }
+
+    protected boolean isVisible() {
+        return visible;
     }
 
     protected <T> T get(Class<T> type) {

@@ -7,6 +7,24 @@ public class Settings {
 
     private final static String NAME = "opencbs";
 
+    public enum CacheState {
+        NOT_INITIALIZED(0), INITIALIZING(1), INITIALIZED(2);
+
+        private final int value;
+
+        private CacheState(int value) {
+            this.value = value;
+        }
+
+        public int getId() {
+            return value;
+        }
+
+        public static CacheState getValue(int id) {
+            return CacheState.values()[id];
+        }
+    }
+
     public static final int NOT_CACHED = 0;
     public static final int CACHING = 1;
     public static final int CACHED = 2;
@@ -24,7 +42,7 @@ public class Settings {
     private void putStringValue(String name, String value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit();
         editor.putString(name, value);
-        editor.commit();
+        editor.apply();
     }
 
     private int getIntValue(String name) {
@@ -34,7 +52,7 @@ public class Settings {
     private void putIntValue(String name, int value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(NAME, Context.MODE_PRIVATE).edit();
         editor.putInt(name, value);
-        editor.commit();
+        editor.apply();
     }
 
     public String getEndpoint() {
@@ -53,11 +71,11 @@ public class Settings {
         putStringValue("access_token", accessToken);
     }
 
-    public int getDataState() {
-        return getIntValue("data_state");
+    public CacheState getCacheState() {
+        return CacheState.getValue(getIntValue("cache_state"));
     }
 
-    public void setDataState(int dataState) {
-        putIntValue("data_state", dataState);
+    public void setCacheState(CacheState cacheState) {
+        putIntValue("cache_state", cacheState.getId());
     }
 }

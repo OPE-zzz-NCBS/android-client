@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Spannable;
@@ -24,17 +26,14 @@ import android.widget.TextView;
 
 import com.opencbs.androidclient.R;
 import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.events.CacheInitializedEvent;
 import com.opencbs.androidclient.events.CancelSearchEvent;
-import com.opencbs.androidclient.events.DataCachedEvent;
 import com.opencbs.androidclient.events.LogoutEvent;
 import com.opencbs.androidclient.events.LogoutSuccessEvent;
 import com.opencbs.androidclient.events.NewPersonEvent;
 import com.opencbs.androidclient.events.SearchEvent;
-import com.opencbs.androidclient.jobs.CacheDataJob;
-import com.opencbs.androidclient.fragments.CacheFragment;
 import com.opencbs.androidclient.fragments.ClientsFragment;
 import com.opencbs.androidclient.fragments.DownloadFragment;
-import com.path.android.jobqueue.JobManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,9 +41,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
+    @Inject
+    Settings settings;
+
+    @Inject
+    ClientsFragment clientsFragment;
+
+    @Inject
+    DownloadFragment downloadFragment;
 
     private static final int MENU_CLIENTS = 10;
     private static final int MENU_DOWNLOAD = 20;
@@ -55,23 +61,11 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     private ArrayList<String> drawerItems;
     private ArrayList<Integer> drawerIds;
 
-    @Inject
-    Settings settings;
+    private interface FragmentActivator {
+        void execute();
+    }
 
-    @Inject
-    ClientsFragment clientsFragment;
-
-    @Inject
-    DownloadFragment downloadFragment;
-
-    @Inject
-    CacheFragment cacheFragment;
-
-    @Inject
-    JobManager jobManager;
-
-    @Inject
-    Provider<CacheDataJob> cacheDataJobProvider;
+    FragmentActivator fragmentActivator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +77,10 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
 
         drawerItems = new ArrayList<String>();
         drawerItems.add(getString(R.string.clients));
-        drawerItems.add(getString(R.string.download));
         drawerItems.add(getString(R.string.logout));
 
         drawerIds = new ArrayList<Integer>();
         drawerIds.add(MENU_CLIENTS);
-        drawerIds.add(MENU_DOWNLOAD);
         drawerIds.add(MENU_LOGOUT);
 
         ListView listView = (ListView) findViewById(R.id.left_drawer);
@@ -98,25 +90,35 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerLayout.setDrawerListener(drawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int dataState = settings.getDataState();
-        switch (dataState) {
-            case Settings.NOT_CACHED:
-                jobManager.addJobInBackground(cacheDataJobProvider.get());
-                showCacheFragment();
-                break;
-
-            case Settings.CACHING:
-                showCacheFragment();
-                break;
-
-            case Settings.CACHED:
-                showClientsFragment();
-                break;
+        Settings.CacheState cacheState = settings.getCacheState();
+        if (cacheState == Settings.CacheState.INITIALIZED) {
+            fragmentActivator = getClientsFragmentActivator();
+        } else {
+            fragmentActivator = getDownloadFragmentActivator();
         }
     }
 
-    public void onEvent(DataCachedEvent event) {
-        showClientsFragment();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (fragmentActivator != null) {
+            fragmentActivator.execute();
+            fragmentActivator = null;
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEvent(CacheInitializedEvent event) {
+        if (isVisible()) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    getClientsFragmentActivator().execute();
+                }
+            });
+        } else {
+            fragmentActivator = getClientsFragmentActivator();
+        }
     }
 
     @Override
@@ -147,7 +149,6 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         drawerLayout.closeDrawers();
@@ -161,6 +162,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void onEvent(LogoutSuccessEvent event) {
         settings.setAccessToken("");
         Intent intent = new Intent(this, LoginActivity.class);
@@ -269,10 +271,29 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         setTitle(getString(R.string.download));
     }
 
-    private void showCacheFragment() {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame_layout, cacheFragment);
-        transaction.commit();
-        setTitle("Loading data...");
+    private FragmentActivator getClientsFragmentActivator() {
+        return new FragmentActivator() {
+            @Override
+            public void execute() {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_frame_layout, clientsFragment)
+                        .commit();
+                setTitle(getString(R.string.clients));
+            }
+        };
+    }
+
+    private FragmentActivator getDownloadFragmentActivator() {
+        return new FragmentActivator() {
+            @Override
+            public void execute() {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_frame_layout, downloadFragment)
+                        .commit();
+                setTitle(getString(R.string.download));
+            }
+        };
     }
 }

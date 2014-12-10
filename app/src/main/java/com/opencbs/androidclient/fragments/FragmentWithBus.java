@@ -3,6 +3,7 @@ package com.opencbs.androidclient.fragments;
 import android.app.Fragment;
 
 import com.opencbs.androidclient.events.BusEvent;
+import com.opencbs.androidclient.events.NoOpEvent;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -29,6 +30,10 @@ public class FragmentWithBus extends Fragment {
     public void onPause() {
         super.onPause();
         bus.unregister(this);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEvent(NoOpEvent event) {
     }
 
     protected void processEventQueue() {
