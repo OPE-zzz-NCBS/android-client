@@ -16,7 +16,7 @@ public interface PersonApi {
     void getById(@Path("id") int id, Callback<Person> callback);
 
     @POST("/api/people")
-    void add(@Body Person person, Callback<Person> callback);
+    Person add(@Body Person person);
 
     @GET("/api/people")
     List<Person> getAll(@Query("offset") int offset, @Query("limit") int limit);

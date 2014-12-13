@@ -8,10 +8,11 @@
         android:title="@string/action_search" />
 
     <item
-        android:id="@+id/action_new"
+        android:id="@+id/action_new_person"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="ifRoom"
         android:title="@string/action_new">
+        <!--
         <menu>
             <item
                 android:id="@+id/action_new_person"
@@ -29,5 +30,6 @@
                 android:id="@+id/action_new_company"
                 android:title="New company" />
         </menu>
+        -->
     </item>
 </menu>

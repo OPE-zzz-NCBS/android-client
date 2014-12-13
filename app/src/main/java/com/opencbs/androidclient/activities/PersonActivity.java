@@ -11,6 +11,7 @@ import com.opencbs.androidclient.events.PersonCustomFieldsLoadedEvent;
 import com.opencbs.androidclient.events.LoadPersonCustomFieldsEvent;
 import com.opencbs.androidclient.events.LoadPersonEvent;
 import com.opencbs.androidclient.events.PersonLoadedEvent;
+import com.opencbs.androidclient.jobs.PostPersonJob;
 import com.opencbs.androidclient.models.Address;
 import com.opencbs.androidclient.models.CustomField;
 import com.opencbs.androidclient.models.CustomValue;
@@ -18,10 +19,14 @@ import com.opencbs.androidclient.models.Person;
 import com.opencbs.androidclient.validators.DateValidationRule;
 import com.opencbs.androidclient.validators.RequiredValidationRule;
 import com.opencbs.androidclient.validators.Validator;
+import com.path.android.jobqueue.JobManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class PersonActivity extends EditorActivity {
 
@@ -52,6 +57,12 @@ public class PersonActivity extends EditorActivity {
     private static final int POSTAL_CODE_2_VIEW_ID = 23;
 
     private static final int CUSTOM_VIEW_BASE_ID = 1000;
+
+    @Inject
+    JobManager jobManager;
+
+    @Inject
+    Provider<PostPersonJob> postPersonJobProvider;
 
     private ViewGroup container;
     private List<CustomField> customFields;
@@ -267,6 +278,9 @@ public class PersonActivity extends EditorActivity {
     private void save() {
         if (!validator.validate()) return;
 
-        //Person person = getPerson();
+        Person person = getPerson();
+        PostPersonJob job = postPersonJobProvider.get();
+        job.setPerson(person);
+        jobManager.addJobInBackground(job);
     }
 }
