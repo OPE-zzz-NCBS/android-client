@@ -75,7 +75,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.execSQL(
                 "create table people (" +
-                        "_id integer primary key, " +
+                        "id integer not null, " +
+                        "uuid text primary key, " +
                         "first_name text not null, " +
                         "last_name text not null, " +
                         "father_name text not null, " +
@@ -100,7 +101,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "create table custom_field_values (" +
                         "field_id int not null, " +
-                        "owner_id int not null, " +
+                        "owner_id string not null, " +
                         "value text not null " +
                         ")"
         );

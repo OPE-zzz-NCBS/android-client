@@ -1,9 +1,9 @@
 package com.opencbs.androidclient.events;
 
 public class LoadPersonEvent extends BusEvent {
-    public int id;
+    public String uuid;
 
-    public LoadPersonEvent(int id) {
-        this.id = id;
+    public LoadPersonEvent(String uuid) {
+        this.uuid = uuid;
     }
 }

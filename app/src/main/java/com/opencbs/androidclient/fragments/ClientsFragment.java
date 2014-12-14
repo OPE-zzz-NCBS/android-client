@@ -146,7 +146,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
         Client client = adapter.getItem(position);
         if (client.type.equals("PERSON")) {
             Intent intent = new Intent(getActivity(), PersonActivity.class);
-            intent.putExtra("id", client.id);
+            intent.putExtra("uuid", client.uuid);
             startActivity(intent);
         }
     }

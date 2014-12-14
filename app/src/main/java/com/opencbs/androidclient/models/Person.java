@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Person {
     public int id;
+    public String uuid;
     public String firstName;
     public String lastName;
     public String fatherName;

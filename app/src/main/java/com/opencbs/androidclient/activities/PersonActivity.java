@@ -107,15 +107,15 @@ public class PersonActivity extends EditorActivity {
         customFields = event.customFields;
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra("id", 0);
-        if (id > 0) {
-            LoadPersonEvent loadPersonEvent = new LoadPersonEvent(id);
+        String uuid = intent.getStringExtra("uuid");
+        if (!uuid.isEmpty()) {
+            LoadPersonEvent loadPersonEvent = new LoadPersonEvent(uuid);
             bus.post(loadPersonEvent);
         } else {
             Person person = new Person();
             person.address1 = new Address();
             person.address2 = new Address();
-            person.customInformation = new ArrayList<CustomValue>();
+            person.customInformation = new ArrayList<>();
             bus.post(new PersonLoadedEvent(person));
         }
     }
@@ -147,7 +147,7 @@ public class PersonActivity extends EditorActivity {
         addTextEditor(BIRTH_PLACE_VIEW_ID, person.birthPlace);
 
         addLabel("Sex", true);
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("Male");
         list.add("Female");
         addSpinner(SEX_VIEW_ID, list, person.sex);

@@ -18,7 +18,7 @@ public class PersonService {
     PersonRepo personRepo;
 
     public void onEvent(LoadPersonEvent event) {
-        Person person = personRepo.get(event.id);
+        Person person = personRepo.get(event.uuid);
         PersonLoadedEvent responseEvent = new PersonLoadedEvent(person);
         bus.post(responseEvent);
     }

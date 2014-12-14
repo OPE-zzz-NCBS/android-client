@@ -26,7 +26,7 @@ public class PersonRepo {
         db.execSQL("delete from people");
         db.execSQL(
                 "delete from custom_field_values " +
-                        "where owner_id in (select _id from people)"
+                        "where owner_id in (select uuid from people)"
         );
     }
 
@@ -37,7 +37,8 @@ public class PersonRepo {
             try {
                 db.beginTransaction();
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("_id", person.id);
+                contentValues.put("id", person.id);
+                contentValues.put("uuid", person.uuid);
                 contentValues.put("first_name", person.firstName);
                 contentValues.put("last_name", person.lastName);
                 contentValues.put("father_name", person.fatherName);
@@ -62,7 +63,7 @@ public class PersonRepo {
                     for (CustomValue customValue : person.customInformation) {
                         ContentValues customContentValues = new ContentValues();
                         customContentValues.put("field_id", customValue.field.id);
-                        customContentValues.put("owner_id", person.id);
+                        customContentValues.put("owner_id", person.uuid);
                         customContentValues.put("value", customValue.value);
                         db.insert("custom_field_values", null, customContentValues);
                     }
@@ -74,19 +75,20 @@ public class PersonRepo {
         }
     }
 
-    public Person get(int id) {
+    public Person get(String uuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Person person = null;
         Cursor cursor = null;
         try {
-            cursor = db.rawQuery("select * from people where _id = ?", new String[]{id + ""});
+            cursor = db.rawQuery("select * from people where uuid = ?", new String[]{uuid});
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 person = new Person();
                 person.address1 = new Address();
                 person.address2 = new Address();
-                person.id = cursor.getInt(cursor.getColumnIndex("_id"));
+                person.id = cursor.getInt(cursor.getColumnIndex("id"));
+                person.uuid = cursor.getString(cursor.getColumnIndex("uuid"));
                 person.firstName = cursor.getString(cursor.getColumnIndex("first_name"));
                 person.lastName = cursor.getString(cursor.getColumnIndex("last_name"));
                 person.fatherName = cursor.getString(cursor.getColumnIndex("father_name"));
@@ -113,11 +115,11 @@ public class PersonRepo {
             }
         }
         if (person != null) {
-            person.customInformation = new ArrayList<CustomValue>();
+            person.customInformation = new ArrayList<>();
             try {
                 cursor = db.rawQuery(
                         "select field_id, value from custom_field_values where owner_id = ?",
-                        new String[]{person.id + ""});
+                        new String[]{person.uuid});
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
