@@ -116,7 +116,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
     @SuppressWarnings("UnusedDeclaration")
     public void onEvent(NewPersonEvent event) {
         Intent intent = new Intent(getActivity(), PersonActivity.class);
-        intent.putExtra("id", 0);
+        intent.putExtra("uuid", "");
         startActivity(intent);
     }
 

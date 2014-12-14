@@ -108,15 +108,15 @@ public class PersonActivity extends EditorActivity {
 
         Intent intent = getIntent();
         String uuid = intent.getStringExtra("uuid");
-        if (!uuid.isEmpty()) {
-            LoadPersonEvent loadPersonEvent = new LoadPersonEvent(uuid);
-            bus.post(loadPersonEvent);
-        } else {
+        if (uuid == null || uuid.isEmpty()) {
             Person person = new Person();
             person.address1 = new Address();
             person.address2 = new Address();
             person.customInformation = new ArrayList<>();
             bus.post(new PersonLoadedEvent(person));
+        } else {
+            LoadPersonEvent loadPersonEvent = new LoadPersonEvent(uuid);
+            bus.post(loadPersonEvent);
         }
     }
 
@@ -233,19 +233,23 @@ public class PersonActivity extends EditorActivity {
 
         for (CustomField field : customFields) {
             int fieldId = CUSTOM_VIEW_BASE_ID + field.id;
-            if (field.type.equals("Text")) {
-                if (field.mandatory) {
-                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
-                }
-            } else if (field.type.equals("Number")) {
-                if (field.mandatory) {
-                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
-                }
-            } else if (field.type.equals("Date")) {
-                if (field.mandatory) {
-                    validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
-                }
-                validator.addRule(new DateValidationRule(container, fieldId, dateFormat, errorInvalidEntry));
+            switch (field.type) {
+                case "Text":
+                    if (field.mandatory) {
+                        validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                    }
+                    break;
+                case "Number":
+                    if (field.mandatory) {
+                        validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                    }
+                    break;
+                case "Date":
+                    if (field.mandatory) {
+                        validator.addRule(new RequiredValidationRule(container, fieldId, errorRequiredField));
+                    }
+                    validator.addRule(new DateValidationRule(container, fieldId, dateFormat, errorInvalidEntry));
+                    break;
             }
         }
     }
@@ -273,7 +277,7 @@ public class PersonActivity extends EditorActivity {
         person.address2.cityId = getCityId(CITY_2_VIEW_ID);
         person.address2.address = getTextValue(ADDRESS_2_VIEW_ID);
         person.address2.postalCode = getTextValue(POSTAL_CODE_2_VIEW_ID);
-        person.customInformation = new ArrayList<CustomValue>();
+        person.customInformation = new ArrayList<>();
 
         for (CustomField customField : customFields) {
             String value = getCustomFieldValue(CUSTOM_VIEW_BASE_ID + customField.id);
