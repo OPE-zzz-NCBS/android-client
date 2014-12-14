@@ -110,6 +110,19 @@ public abstract class EditorActivity extends BaseActivity {
         return editText.getText().toString();
     }
 
+    protected String getCustomFieldValue(int viewId) {
+        View view = getContainer().findViewById(viewId);
+        if (view == null) return "";
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString();
+        } else if (view instanceof Spinner) {
+            return ((Spinner) view).getSelectedItem().toString();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).isChecked() ? "True" : "False";
+        }
+        return "";
+    }
+
     protected void addDateEditor(int id, Date value) {
         EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);

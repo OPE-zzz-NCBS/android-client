@@ -14,6 +14,7 @@ import com.opencbs.androidclient.events.PersonLoadedEvent;
 import com.opencbs.androidclient.jobs.PostPersonJob;
 import com.opencbs.androidclient.models.Address;
 import com.opencbs.androidclient.models.CustomField;
+import com.opencbs.androidclient.models.CustomFieldHeader;
 import com.opencbs.androidclient.models.CustomValue;
 import com.opencbs.androidclient.models.Person;
 import com.opencbs.androidclient.validators.DateValidationRule;
@@ -272,6 +273,18 @@ public class PersonActivity extends EditorActivity {
         person.address2.cityId = getCityId(CITY_2_VIEW_ID);
         person.address2.address = getTextValue(ADDRESS_2_VIEW_ID);
         person.address2.postalCode = getTextValue(POSTAL_CODE_2_VIEW_ID);
+        person.customInformation = new ArrayList<CustomValue>();
+
+        for (CustomField customField : customFields) {
+            String value = getCustomFieldValue(CUSTOM_VIEW_BASE_ID + customField.id);
+            if (value.isEmpty()) continue;
+            CustomValue customValue = new CustomValue();
+            customValue.field = new CustomFieldHeader();
+            customValue.field.id = customField.id;
+            customValue.value = value;
+            person.customInformation.add(customValue);
+        }
+
         return person;
     }
 
