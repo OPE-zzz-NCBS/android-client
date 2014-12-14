@@ -7,11 +7,11 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.events.AddPersonEvent;
 import com.opencbs.androidclient.events.PersonCustomFieldsLoadedEvent;
 import com.opencbs.androidclient.events.LoadPersonCustomFieldsEvent;
 import com.opencbs.androidclient.events.LoadPersonEvent;
 import com.opencbs.androidclient.events.PersonLoadedEvent;
-import com.opencbs.androidclient.jobs.PostPersonJob;
 import com.opencbs.androidclient.models.Address;
 import com.opencbs.androidclient.models.CustomField;
 import com.opencbs.androidclient.models.CustomFieldHeader;
@@ -20,14 +20,11 @@ import com.opencbs.androidclient.models.Person;
 import com.opencbs.androidclient.validators.DateValidationRule;
 import com.opencbs.androidclient.validators.RequiredValidationRule;
 import com.opencbs.androidclient.validators.Validator;
-import com.path.android.jobqueue.JobManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Provider;
+import java.util.UUID;
 
 public class PersonActivity extends EditorActivity {
 
@@ -59,15 +56,13 @@ public class PersonActivity extends EditorActivity {
 
     private static final int CUSTOM_VIEW_BASE_ID = 1000;
 
-    @Inject
-    JobManager jobManager;
-
-    @Inject
-    Provider<PostPersonJob> postPersonJobProvider;
-
     private ViewGroup container;
     private List<CustomField> customFields;
     private Validator validator;
+
+    private String getUuid() {
+        return getIntent().getStringExtra("uuid");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +101,7 @@ public class PersonActivity extends EditorActivity {
     public void onEvent(PersonCustomFieldsLoadedEvent event) {
         customFields = event.customFields;
 
-        Intent intent = getIntent();
-        String uuid = intent.getStringExtra("uuid");
+        String uuid = getUuid();
         if (uuid == null || uuid.isEmpty()) {
             Person person = new Person();
             person.address1 = new Address();
@@ -255,7 +249,13 @@ public class PersonActivity extends EditorActivity {
     }
 
     private Person getPerson() {
+        String uuid = getUuid();
+        if (uuid == null || uuid.isEmpty()) {
+            uuid = UUID.randomUUID().toString();
+        }
+
         Person person = new Person();
+        person.uuid = uuid;
         person.firstName = getTextValue(FIRST_NAME_VIEW_ID);
         person.fatherName = getTextValue(FATHER_NAME_VIEW_ID);
         person.lastName = getTextValue(LAST_NAME_VIEW_ID);
@@ -296,8 +296,10 @@ public class PersonActivity extends EditorActivity {
         if (!validator.validate()) return;
 
         Person person = getPerson();
-        PostPersonJob job = postPersonJobProvider.get();
-        job.setPerson(person);
-        jobManager.addJobInBackground(job);
+        bus.post(new AddPersonEvent(person));
+
+        Intent intent = new Intent(this, PersonSavedActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

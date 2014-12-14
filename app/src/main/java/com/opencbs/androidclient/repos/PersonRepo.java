@@ -30,6 +30,12 @@ public class PersonRepo {
         );
     }
 
+    public void add(Person person) {
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(person);
+        add(people);
+    }
+
     public void add(List<Person> people) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,5 +144,13 @@ public class PersonRepo {
             }
         }
         return person;
+    }
+
+    public void sync(Person person) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL(
+                "update people set id = ? where uuid = ?",
+                new String[]{person.id + "", person.uuid}
+        );
     }
 }

@@ -2,6 +2,7 @@ package com.opencbs.androidclient;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
@@ -51,6 +52,10 @@ public class ClientArrayAdapter extends ProgressAdapter<Client> {
                 nameTextView.setText(client.name);
             }
         }
+        if (!client.isSynced()) {
+            nameTextView.setTypeface(nameTextView.getTypeface(), Typeface.BOLD);
+        }
+
         typeTextView.setText(client.type);
         return rowView;
     }

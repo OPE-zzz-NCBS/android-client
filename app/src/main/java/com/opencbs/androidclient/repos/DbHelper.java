@@ -105,6 +105,17 @@ public class DbHelper extends SQLiteOpenHelper {
                         "value text not null " +
                         ")"
         );
+
+        db.execSQL(
+                "create table jobs (" +
+                        "uuid text primary key, " +
+                        "job_type text not null, " +
+                        "extra text not null, " +
+                        "created_at text not null, " +
+                        "description text not null, " +
+                        "status int not null" +
+                        ")"
+        );
     }
 
     @Override

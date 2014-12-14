@@ -4,12 +4,14 @@ import android.content.Context;
 
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.Settings;
+import com.opencbs.androidclient.activities.PersonSavedActivity;
 import com.opencbs.androidclient.repos.BranchRepo;
 import com.opencbs.androidclient.repos.CityRepo;
 import com.opencbs.androidclient.repos.ClientRepo;
 import com.opencbs.androidclient.repos.CustomFieldRepo;
 import com.opencbs.androidclient.repos.DistrictRepo;
 import com.opencbs.androidclient.repos.EconomicActivityRepo;
+import com.opencbs.androidclient.repos.JobRepo;
 import com.opencbs.androidclient.repos.PersonRepo;
 import com.opencbs.androidclient.repos.RegionRepo;
 import com.opencbs.androidclient.activities.BranchPickerActivity;
@@ -40,6 +42,7 @@ import de.greenrobot.event.EventBus;
                 DownloadFragment.class,
                 EndpointFragment.class,
                 PersonActivity.class,
+                PersonSavedActivity.class,
                 EconomicActivityPickerActivity.class,
                 BranchPickerActivity.class,
 
@@ -50,7 +53,8 @@ import de.greenrobot.event.EventBus;
                 EconomicActivityRepo.class,
                 CustomFieldRepo.class,
                 PersonRepo.class,
-                ClientRepo.class
+                ClientRepo.class,
+                JobRepo.class
         },
         library = true,
         complete = false
@@ -91,5 +95,4 @@ public class AppModule {
                 .build();
         return new JobManager(app, configuration);
     }
-
 }

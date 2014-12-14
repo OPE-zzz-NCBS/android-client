@@ -20,7 +20,7 @@ public class ClientRepo {
         ArrayList<Client> result = new ArrayList<>();
         Cursor cursor = null;
         try {
-            String query = "select uuid, last_name || ', ' || first_name name " +
+            String query = "select id, uuid, last_name || ', ' || first_name name " +
                     "from people " +
                     "order by last_name || ', ' || first_name " +
                     "limit " + limit + " offset " + offset;
@@ -29,6 +29,7 @@ public class ClientRepo {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     Client client = new Client();
+                    client.id = cursor.getInt(cursor.getColumnIndex("id"));
                     client.uuid = cursor.getString(cursor.getColumnIndex("uuid"));
                     client.name = cursor.getString(cursor.getColumnIndex("name"));
                     client.type = "PERSON";
@@ -49,7 +50,7 @@ public class ClientRepo {
         ArrayList<Client> result = new ArrayList<>();
         Cursor cursor = null;
         try {
-            String query = "select uuid, last_name || ', ' || first_name name " +
+            String query = "select id, uuid, last_name || ', ' || first_name name " +
                     "from people " +
                     "where first_name || ' ' || last_name like ?" +
                     "order by last_name || ', ' || first_name " +
@@ -59,6 +60,7 @@ public class ClientRepo {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     Client client = new Client();
+                    client.id = cursor.getInt(cursor.getColumnIndex("id"));
                     client.uuid = cursor.getString(cursor.getColumnIndex("uuid"));
                     client.name = cursor.getString(cursor.getColumnIndex("name"));
                     client.type = "PERSON";
