@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.opencbs.androidclient.JobArrayAdapter;
 import com.opencbs.androidclient.R;
+import com.opencbs.androidclient.events.JobStatusChangedEvent;
 import com.opencbs.androidclient.events.JobsLoadedEvent;
 import com.opencbs.androidclient.events.LoadJobsEvent;
 import com.opencbs.androidclient.models.JobInfo;
@@ -39,13 +40,27 @@ public class JobsFragment extends FragmentWithBus {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
         bus.post(new LoadJobsEvent());
     }
 
     public void onEventMainThread(JobsLoadedEvent event) {
         jobs.clear();
         jobs.addAll(event.getJobs());
+        adapter.notifyDataSetChanged();
+    }
+
+    public void onEventMainThread(JobStatusChangedEvent event) {
+        JobInfo found = null;
+        for (JobInfo jobInfo : jobs) {
+            if (jobInfo.equals(event.getJobInfo())) {
+                found = jobInfo;
+                break;
+            }
+        }
+        if (found == null) return;
+        found.status = event.getJobInfo().status;
         adapter.notifyDataSetChanged();
     }
 }

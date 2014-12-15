@@ -13,4 +13,11 @@ public class JobInfo {
     public Date createdAt;
     public String description;
     public int status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        JobInfo compareTo = (JobInfo) o;
+        return uuid.equals(compareTo.uuid);
+    }
 }

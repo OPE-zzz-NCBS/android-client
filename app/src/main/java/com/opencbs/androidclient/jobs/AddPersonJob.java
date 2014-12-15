@@ -1,6 +1,7 @@
 package com.opencbs.androidclient.jobs;
 
 import com.opencbs.androidclient.api.PersonApi;
+import com.opencbs.androidclient.events.JobStatusChangedEvent;
 import com.opencbs.androidclient.models.JobInfo;
 import com.opencbs.androidclient.models.Person;
 import com.opencbs.androidclient.repos.JobRepo;
@@ -13,6 +14,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
+
 public class AddPersonJob extends Job {
 
     @Inject
@@ -23,6 +26,9 @@ public class AddPersonJob extends Job {
 
     @Inject
     JobRepo jobRepo;
+
+    @Inject
+    EventBus bus;
 
     private Person person;
     private JobInfo jobInfo;
@@ -54,12 +60,14 @@ public class AddPersonJob extends Job {
         personRepo.sync(newPerson);
         jobInfo.status = JobInfo.STATUS_DONE;
         jobRepo.updateStatus(jobInfo);
+        bus.post(new JobStatusChangedEvent(jobInfo));
     }
 
     @Override
     protected void onCancel() {
         jobInfo.status = JobInfo.STATUS_FAILED;
         jobRepo.updateStatus(jobInfo);
+        bus.post(new JobStatusChangedEvent(jobInfo));
     }
 
     @Override
