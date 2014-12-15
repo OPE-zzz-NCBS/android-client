@@ -41,19 +41,20 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class MainActivity extends BaseActivity implements ListView.OnItemClickListener {
     @Inject
     Settings settings;
 
     @Inject
-    ClientsFragment clientsFragment;
+    Provider<ClientsFragment> clientsFragmentProvider;
 
     @Inject
-    DownloadFragment downloadFragment;
+    Provider<DownloadFragment> downloadFragmentProvider;
 
     @Inject
-    JobsFragment jobsFragment;
+    Provider<JobsFragment> jobsFragmentProvider;
 
     private static final int MENU_CLIENTS = 10;
     private static final int MENU_JOBS = 15;
@@ -271,7 +272,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
             public void execute() {
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.main_frame_layout, clientsFragment)
+                        .replace(R.id.main_frame_layout, clientsFragmentProvider.get())
                         .commit();
                 setTitle(getString(R.string.clients));
             }
@@ -284,7 +285,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
             public void execute() {
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.main_frame_layout, downloadFragment)
+                        .replace(R.id.main_frame_layout, downloadFragmentProvider.get())
                         .commit();
                 setTitle(getString(R.string.download));
             }
@@ -297,7 +298,7 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
             public void execute() {
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.main_frame_layout, jobsFragment)
+                        .replace(R.id.main_frame_layout, jobsFragmentProvider.get())
                         .commit();
                 setTitle("Jobs");
             }
