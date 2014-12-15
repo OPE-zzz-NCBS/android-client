@@ -30,5 +30,9 @@
     <string name="error_invalid_entry">Invalid entry.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_person_saved">PersonSavedActivity</string>
+    <string name="done">Done</string>
+    <string name="failed">Failed</string>
+    <string name="pending">Pending</string>
+    <string name="add_person">Add person</string>
 
 </resources>
