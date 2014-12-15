@@ -1,6 +1,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
     <dimen name="button_horizontal_padding">32dp</dimen>
     <dimen name="list_header_text_size">18sp</dimen>
     <dimen name="list_content_text_size">15sp</dimen>

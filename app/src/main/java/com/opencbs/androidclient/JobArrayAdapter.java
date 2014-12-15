@@ -49,7 +49,7 @@ public class JobArrayAdapter extends ArrayAdapter<JobInfo> {
     private String getStatusText(JobInfo job) {
         switch (job.status) {
             case JobInfo.STATUS_DONE:
-                return context.getString(R.string.done).toUpperCase();
+                return context.getString(R.string.synced).toUpperCase();
 
             case JobInfo.STATUS_FAILED:
                 return context.getString(R.string.failed).toUpperCase();
@@ -63,6 +63,7 @@ public class JobArrayAdapter extends ArrayAdapter<JobInfo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+        Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "Roboto-Bold.ttf");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.layout_job_row, parent, false);
         JobInfo jobInfo = jobs.get(position);
@@ -82,6 +83,7 @@ public class JobArrayAdapter extends ArrayAdapter<JobInfo> {
         TextView statusTextView = (TextView) rowView.findViewById(R.id.job_status_text_view);
         statusTextView.setText(getStatusText(jobInfo));
         statusTextView.setTextColor(getStatusColor(jobInfo));
+        statusTextView.setTypeface(fontBold);
 
         return rowView;
     }
