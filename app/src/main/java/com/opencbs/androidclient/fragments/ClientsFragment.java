@@ -46,7 +46,7 @@ public class ClientsFragment extends FragmentWithBus implements SwipeRefreshLayo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clients, container, false);
 
-        clients = new ArrayList<Client>();
+        clients = new ArrayList<>();
         adapter = new ClientArrayAdapter(getActivity(), clients);
         adapter.setOnLoadMoreListener(this);
         ListView listView = (ListView) view.findViewById(R.id.clients_list_view);

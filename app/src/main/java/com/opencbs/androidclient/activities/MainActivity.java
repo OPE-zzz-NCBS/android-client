@@ -1,6 +1,5 @@
 package com.opencbs.androidclient.activities;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -34,6 +33,7 @@ import com.opencbs.androidclient.events.NewPersonEvent;
 import com.opencbs.androidclient.events.SearchEvent;
 import com.opencbs.androidclient.fragments.ClientsFragment;
 import com.opencbs.androidclient.fragments.DownloadFragment;
+import com.opencbs.androidclient.fragments.JobsFragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +52,11 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
     @Inject
     DownloadFragment downloadFragment;
 
+    @Inject
+    JobsFragment jobsFragment;
+
     private static final int MENU_CLIENTS = 10;
+    private static final int MENU_JOBS = 15;
     private static final int MENU_DOWNLOAD = 20;
     private static final int MENU_LOGOUT = 100;
 
@@ -75,16 +79,18 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, 0, 0);
 
-        drawerItems = new ArrayList<String>();
+        drawerItems = new ArrayList<>();
         drawerItems.add(getString(R.string.clients));
+        drawerItems.add("Jobs");
         drawerItems.add(getString(R.string.logout));
 
-        drawerIds = new ArrayList<Integer>();
+        drawerIds = new ArrayList<>();
         drawerIds.add(MENU_CLIENTS);
+        drawerIds.add(MENU_JOBS);
         drawerIds.add(MENU_LOGOUT);
 
         ListView listView = (ListView) findViewById(R.id.left_drawer);
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_option_item, drawerItems));
+        listView.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_option_item, drawerItems));
         listView.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(drawerToggle);
@@ -154,9 +160,11 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         drawerLayout.closeDrawers();
         int itemId = drawerIds.get(position);
         if (itemId == MENU_CLIENTS) {
-            showClientsFragment();
+            getClientsFragmentActivator().execute();
+        } else if (itemId == MENU_JOBS) {
+            getJobsFragmentActivator().execute();
         } else if (itemId == MENU_DOWNLOAD) {
-            showDownloadFragment();
+            getDownloadFragmentActivator().execute();
         } else if (itemId == MENU_LOGOUT) {
             logout();
         }
@@ -257,20 +265,6 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
         bus.post(new LogoutEvent());
     }
 
-    private void showClientsFragment() {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame_layout, clientsFragment);
-        transaction.commit();
-        setTitle(getString(R.string.clients));
-    }
-
-    private void showDownloadFragment() {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame_layout, downloadFragment);
-        transaction.commit();
-        setTitle(getString(R.string.download));
-    }
-
     private FragmentActivator getClientsFragmentActivator() {
         return new FragmentActivator() {
             @Override
@@ -293,6 +287,19 @@ public class MainActivity extends BaseActivity implements ListView.OnItemClickLi
                         .replace(R.id.main_frame_layout, downloadFragment)
                         .commit();
                 setTitle(getString(R.string.download));
+            }
+        };
+    }
+
+    private FragmentActivator getJobsFragmentActivator() {
+        return new FragmentActivator() {
+            @Override
+            public void execute() {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_frame_layout, jobsFragment)
+                        .commit();
+                setTitle("Jobs");
             }
         };
     }

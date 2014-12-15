@@ -9,6 +9,7 @@ import com.opencbs.androidclient.services.CityService;
 import com.opencbs.androidclient.services.ClientService;
 import com.opencbs.androidclient.services.CustomFieldService;
 import com.opencbs.androidclient.services.EconomicActivityService;
+import com.opencbs.androidclient.services.JobService;
 import com.opencbs.androidclient.services.PersonService;
 import com.opencbs.androidclient.services.SessionService;
 
@@ -30,6 +31,7 @@ public class App extends Application {
     private BranchService branchService;
     private CityService cityService;
     private CustomFieldService customFieldService;
+    private JobService jobService;
 
     @Inject
     EventBus bus;
@@ -60,6 +62,9 @@ public class App extends Application {
 
         customFieldService = get(CustomFieldService.class);
         bus.register(customFieldService);
+
+        jobService = get(JobService.class);
+        bus.register(jobService);
     }
 
     @Override
@@ -72,6 +77,7 @@ public class App extends Application {
         bus.unregister(branchService);
         bus.unregister(cityService);
         bus.unregister(customFieldService);
+        bus.unregister(jobService);
     }
 
     public void inject(Object object) {

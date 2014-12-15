@@ -17,6 +17,7 @@ import com.opencbs.androidclient.services.ClientService;
 import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.services.CustomFieldService;
 import com.opencbs.androidclient.services.EconomicActivityService;
+import com.opencbs.androidclient.services.JobService;
 import com.opencbs.androidclient.services.PersonService;
 import com.opencbs.androidclient.services.SessionService;
 
@@ -33,7 +34,8 @@ import retrofit.converter.GsonConverter;
                 EconomicActivityService.class,
                 BranchService.class,
                 CityService.class,
-                CustomFieldService.class
+                CustomFieldService.class,
+                JobService.class
         },
         library = true,
         complete = false

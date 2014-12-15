@@ -5,6 +5,7 @@ import android.content.Context;
 import com.opencbs.androidclient.App;
 import com.opencbs.androidclient.Settings;
 import com.opencbs.androidclient.activities.PersonSavedActivity;
+import com.opencbs.androidclient.fragments.JobsFragment;
 import com.opencbs.androidclient.repos.BranchRepo;
 import com.opencbs.androidclient.repos.CityRepo;
 import com.opencbs.androidclient.repos.ClientRepo;
@@ -38,6 +39,7 @@ import de.greenrobot.event.EventBus;
                 LoginActivity.class,
                 MainActivity.class,
                 ClientsFragment.class,
+                JobsFragment.class,
                 LoginFragment.class,
                 DownloadFragment.class,
                 EndpointFragment.class,
