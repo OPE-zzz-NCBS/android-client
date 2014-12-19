@@ -28,3 +28,4 @@ proguard/
 .idea/workspace.xml
 .idea/tasks.xml
 *.jks
+*report.txt
