@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.opencbs.androidclient.api.ApiRequestInterceptor;
 import com.opencbs.androidclient.api.BranchApi;
+import com.opencbs.androidclient.api.CacheApi;
 import com.opencbs.androidclient.api.CityApi;
 import com.opencbs.androidclient.api.CustomFieldApi;
 import com.opencbs.androidclient.api.DistrictApi;
@@ -80,6 +81,11 @@ public class ApiModule {
     @Provides
     public CustomFieldApi provideCustomFieldApi(Settings settings) {
         return getRestAdapter(settings).create(CustomFieldApi.class);
+    }
+
+    @Provides
+    public CacheApi provideCacheApi(Settings settings) {
+        return getRestAdapter(settings).create(CacheApi.class);
     }
 
     private RestAdapter getRestAdapter(Settings settings) {
