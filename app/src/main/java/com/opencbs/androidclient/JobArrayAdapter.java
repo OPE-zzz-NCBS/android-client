@@ -62,28 +62,22 @@ public class JobArrayAdapter extends ArrayAdapter<JobInfo> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-        Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "Roboto-Bold.ttf");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.layout_job_row, parent, false);
         JobInfo jobInfo = jobs.get(position);
         TextView nameTextView = (TextView) rowView.findViewById(R.id.job_name_text_view);
         nameTextView.setText(getName(jobInfo));
-        nameTextView.setTypeface(font);
 
         TextView descriptionTextView = (TextView) rowView.findViewById(R.id.job_description_text_view);
         descriptionTextView.setText(jobInfo.description);
-        descriptionTextView.setTypeface(font);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         TextView createdAtTextView = (TextView) rowView.findViewById(R.id.job_created_at_text_view);
         createdAtTextView.setText(dateFormat.format(jobInfo.createdAt));
-        createdAtTextView.setTypeface(font);
 
         TextView statusTextView = (TextView) rowView.findViewById(R.id.job_status_text_view);
         statusTextView.setText(getStatusText(jobInfo));
         statusTextView.setTextColor(getStatusColor(jobInfo));
-        statusTextView.setTypeface(fontBold);
 
         return rowView;
     }
